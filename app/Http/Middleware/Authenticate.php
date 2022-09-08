@@ -14,10 +14,20 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
-    protected function redirectTo($request)
+    protected function redirectTo($request, ...$guards)
     {
+        $guards = empty($guards) ? [null] : $guards;
+
+        foreach ($guards as $guard) {
+            if (Auth::guard($guard)->check()) {
+                if (Auth::user()->role == 0) {
+                    return redirect(RouteServiceProvider::HOME);
+                }
+            }
+        }
+
         if (!$request->expectsJson()) {
-            return route('login');
+            return route('home');
         }
     }
 }

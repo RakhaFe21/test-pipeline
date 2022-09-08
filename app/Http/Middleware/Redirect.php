@@ -22,8 +22,8 @@ class Redirect
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                if (Auth::user()->is_admin == 1) {
-                    return redirect(RouteServiceProvider::DASHBOARD);
+                if (Auth::user()->role == 0) {
+                    return redirect(RouteServiceProvider::HOME);
                 }
             }
         }

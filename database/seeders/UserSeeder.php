@@ -15,12 +15,29 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => "Admin",
-            'username' => "admin",
-            'email' => "admin@mail.id",
+            'name' => "Super Admin",
+            'username' => "superadmin",
+            'email' => "superadmin@gmail.com",
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'is_admin' => 1
+            'role' => 2
+        ]);
+
+        DB::table('users')->insert([
+            'name' => "Admin",
+            'username' => "admin",
+            'email' => "admin@gmail.com",
+            'email_verified_at' => now(),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'role' => 1
+        ]);
+        DB::table('users')->insert([
+            'name' => "User",
+            'username' => "user",
+            'email' => "user@gmail.com",
+            'email_verified_at' => now(),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'role' => 0
         ]);
     }
 }
