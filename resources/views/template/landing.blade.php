@@ -18,10 +18,10 @@
     @include('partial.toast')
     @include('partial.modal')
 
-    <nav class="bg-navbar px-4 z-50">
-        <div class="container flex flex-row justify-between items-center mx-auto h-[100px]">
+    <nav class="bg-navbar px-4 lg:px-[100px] z-50">
+        <div class="container mx-auto flex flex-row justify-between items-center h-[100px]">
             <a href="/" class="flex items-center">
-                <img src="{{ asset('img/logo.png') }}" class="min-w-[130px] h-[70px]" alt="Flowbite Logo" />
+                <img src="{{ asset('img/logo.png') }}" class="min-w-[130px] h-[70px]" alt="" />
             </a>
             <div class="flex flex-row items-center ">
                 <div class="hidden justify-between items-center w-full md:flex md:w-auto z-[0] absolute md:static top-[90px] left-0 right-0" id="mobile-menu-2">
@@ -39,15 +39,15 @@
                 </div>
                 <div class="flex items-center">
                     @if (Auth::user())
-                        <button type="button" class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                        <button type="button" class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                             <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 rounded-full" src="{{ asset('/storage/profile.png') }}" alt="user photo">
+                            <img class="w-8 h-8 rounded-full" src="{{ asset('/storage/profile.png') }}" alt="">
                         </button>
                         <div class="hidden z-60 my-4 text-base list-none bg-white divide-y divide-gray-100" id="user-dropdown">
                             <div class="py-3 px-4">
                                 <span class="block text-sm text-gray-900 dark:text-white">{{ Auth::user()->name }}</span>
                                 <span class="block text-sm font-medium text-gray-500 truncate dark:text-gray-400 mb-2">{{ Auth::user()->email }}</span>
-                                <a href="/" class="text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-3 py-1 focus:outline-none">Sunting Profil</a>
+                                <a href="{{ route('profile') }}" class="text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-3 py-1 focus:outline-none">Sunting Profil</a>
                             </div>
                             <ul class="py-1" aria-labelledby="user-menu-button">
                                 <li>
@@ -71,7 +71,7 @@
             </div>
         </div>
     </nav>
-    <nav class="flex flex-col bg-ld-green w-full items-center whitespace-nowrap px-4 z-10">
+    <nav class="flex flex-col bg-ld-green w-full items-center whitespace-nowrap px-4 lg:px-[100px] z-10">
         <div class="flex flex-row w-full h-[70px] overflow-auto">
             <div class="container mx-auto flex flex-row gap-5 items-center text-white-1">
                 <a href="#" class="font-base pr-4 hover:text-ld-yellow">Home</a>
@@ -104,7 +104,7 @@
     @yield('content')
 
     <footer class="w-full bg-ld-green pt-[50px]">
-        <div class="container mx-auto grid grid-cols-1 gap-10 md:grid-cols-3 px-4">
+        <div class="container mx-auto grid grid-cols-1 gap-10 md:grid-cols-3 px-4 lg:px-[100px]">
             <div class="w-full">
                 <img src="{{ asset('img/logo.png') }}" class="min-w-[130px] h-[70px]" alt="" />
             </div>
@@ -138,7 +138,6 @@
     </footer>
 
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/flowbite.js') }}"></script>
 
     @stack('scripts')
 

@@ -84,7 +84,7 @@
                         </div>
                         <div class="mb-5">
                             <label class="block mb-2 text-xs font-normal text-gray-900 dark:text-gray-300">Konfirmasi Password</label>
-                            <input id="password_confirmation" type="password" name="password_confirmation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-1 focus:border-blue-1 block w-full p-2.5" placeholder="Konfirmasi Password" required>
+                            <input id="passwordConfirmationRegister" type="password" name="password_confirmation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-1 focus:border-blue-1 block w-full p-2.5" placeholder="Konfirmasi Password" required>
                         </div>
                         <button id="submitRegister" type="submit" class="text-white w-full bg-ld-yellow hover:bg-ld-yellow font-medium rounded-xl text-sm px-5 py-2.5 mr-2 mb-4 focus:outline-none">Daftar</button>
                         <div class="flex w-full justify-center mt-2 mb-5">
@@ -172,7 +172,7 @@
                         </div>
                         <div class="mb-5">
                             <label class="block mb-2 text-xs font-normal text-gray-900 dark:text-gray-300">Konfirmasi Password</label>
-                            <input id="password_confirmation" type="password" name="password_confirmation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-1 focus:border-blue-1 block w-full p-2.5" placeholder="Konfirmasi Password" required>
+                            <input id="passwordConfirmationChange" type="password" name="password_confirmation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-1 focus:border-blue-1 block w-full p-2.5" placeholder="Konfirmasi Password" required>
                         </div>
                         <button id="submitChangePassword" type="submit" class="text-white w-full bg-ld-yellow hover:bg-ld-yellow font-medium rounded-xl text-sm px-5 py-2.5 mr-2 mb-4 focus:outline-none">Simpan</button>
                         <div class="flex w-full justify-center mt-2 mb-5">
