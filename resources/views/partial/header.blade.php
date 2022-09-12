@@ -1,6 +1,6 @@
 <header class="bg-center bg-cover bg-no-repeat bg-[url('/img/image-header.png')]">
     <div class="bg-ld-green bg-opacity-50 py-[100px]">
-        <div class="container mx-auto flex flex-col text-white-1 px-4 md:px-[100px]">
+        <div class="container mx-auto flex flex-col text-white-1 px-4 lg:px-[100px]">
             <span class="font-medium text-[22px] text-white-2">Bank Indonesia</span>
             <span class="font-medium text-[40px]">Informasi Penilaian</span>
             <span class="font-medium text-[60px]">Perbankan <span class="text-ld-red grow">Indonesia</span></span>

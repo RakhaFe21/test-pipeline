@@ -3,7 +3,7 @@
 @section('content')
     @include('partial.header')
 
-    <section class="container mx-auto py-[50px] px-4 md:px-[100px]">
+    <section class="container mx-auto py-[50px] px-4 py-10 lg:px-[100px] ">
         <div class="flex flex-col items-center content-center text-center">
             <span class="font-medium text-[30px] text-ld-green">Pahami Data Kami</span>
             <span class="font-medium text-[18px] text-ld-red">Sistem Penilaian Perbankan Indonesia</span>
