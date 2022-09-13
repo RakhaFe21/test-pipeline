@@ -20,7 +20,7 @@
             <div class="flex bg-gray-3 rounded-xl">
                 <div class="py-3 px-4 bg-gray-2 rounded-l-xl rounded-br-[20px]">
                     <div class="flex items-center space-x-4">
-                        <img class="w-10 h-10 rounded-full bg-white-1" src="{{ asset('img/avatar.png') }}" alt="">
+                        <img class="w-10 h-10 rounded-full bg-white-1" src="{{ url('storage/profile', Auth::user()->profile_picture) }}" alt="">
                         <div class="font-medium">
                             <div class="text-white-1">{{ Auth::user()->name }}</div>
                             <div class="text-sm text-white-1">{{ Auth::user()->email }}</div>
@@ -44,7 +44,7 @@
                     </button>
                     <ul id="banking-dropdown" class="py-2 space-y-2">
                         <li>
-                            <a href="{{ route('dashboard.dashboard.bank.variable') }}" class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <a href="{{ route('dashboard.bank.variable') }}" class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                                 <div class="flex justify-center w-[28px] h-[28px]">
                                     <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}" alt="">
                                 </div>
@@ -52,7 +52,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('dashboard.dashboard.bank.data') }}" class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <a href="{{ route('dashboard.bank.data') }}" class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                                 <div class="flex justify-center w-[28px] h-[28px]">
                                     <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}" alt="">
                                 </div>
@@ -60,8 +60,8 @@
                             </a>
                         </li>
                         <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1" aria-controls="data-dropdown" data-collapse-toggle="data-dropdown">
-                            <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}" alt="">
-                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="data-dropdown">Data</span>
+                            <img class="p-1 rounded-full" src="{{ asset('img/icon-ibri.png') }}" alt="">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="data-dropdown">Step IBRI</span>
                             <svg sidebar-toggle-item="data-dropdown" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                             </svg>
@@ -96,15 +96,12 @@
                             </a>
                         </li>
                         <li>
-                            <a class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group" href="{{ route('logout') }}" onclick="event.preventDefault() document.getElementById('logout-form').submit()">
-                                <svg class="w-6 h-6 text-blue-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                                </svg>
+                            <button id="logout" class="flex cursor-pointer items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group">
+                                <div class="flex flex-row items-center justify-center w-[28px] h-[28px]">
+                                    <i class="fa-solid fa-right-from-bracket text-ds-blue"></i>
+                                </div>
                                 <span class="flex-1 ml-3 text-left whitespace-nowrap">Logout</span>
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none">
-                                @csrf
-                            </form>
+                            </button>
                         </li>
                     </ul>
                 </li>
@@ -154,44 +151,23 @@
             /**
              * Set Menu List
              */
-            const bankingDataChild = [{
-                    "url": "fheoritical-framework",
-                    "title": "Fheoritical Framework"
-                },
-                {
-                    "url": "transforming-into-index",
-                    "title": "Transforming into Index"
-                },
-                {
-                    "url": "selecting-based-years",
-                    "title": "Selecting Based Years"
-                }
-            ]
+            const bankIbriMenuList = [{
+                "url": "{{ route('dashboard.bank.ibri.theoretical.framework') }}",
+                "title": "Theoretical Framework"
+            }]
 
-            Object.keys(bankingDataChild).forEach((key, index) => {
+            Object.keys(bankIbriMenuList).forEach((key, index) => {
                 $("#data-dropdown").append(`
                     <li>
-                        <a href="${bankingDataChild[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                        <a href="${bankIbriMenuList[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                             <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
-                            <span class="flex-1 ml-4 text-left whitespace-nowrap">${bankingDataChild[key].title}</span>
+                            <span class="flex-1 ml-4 text-left whitespace-nowrap">${bankIbriMenuList[key].title}</span>
                         </a>
                     </li>
                 `)
             })
 
-            const bankingMacroChild = [{
-                    "url": "fheoritical-framework",
-                    "title": "Fheoritical Framework"
-                },
-                {
-                    "url": "transforming-into-index",
-                    "title": "Transforming into Index"
-                },
-                {
-                    "url": "selecting-based-years",
-                    "title": "Selecting Based Years"
-                }
-            ]
+            const bankingMacroChild = []
 
             Object.keys(bankingMacroChild).forEach((key, index) => {
                 $("#macro-dropdown").append(`
@@ -204,19 +180,7 @@
                 `)
             })
 
-            const bankingIntegrasiChild = [{
-                    "url": "fheoritical-framework",
-                    "title": "Fheoritical Framework"
-                },
-                {
-                    "url": "transforming-into-index",
-                    "title": "Transforming into Index"
-                },
-                {
-                    "url": "selecting-based-years",
-                    "title": "Selecting Based Years"
-                }
-            ]
+            const bankingIntegrasiChild = []
 
             Object.keys(bankingIntegrasiChild).forEach((key, index) => {
                 $("#integrasi-dropdown").append(`
@@ -227,6 +191,27 @@
                         </a>
                     </li>
                 `)
+            })
+
+            /**
+             * Logout
+             */
+            window.logout = logout
+
+            $('#logout').on('click', async function() {
+                try {
+                    const post = await axios({
+                        method: 'post',
+                        url: '{{ route('logout') }}',
+                        headers: {},
+                        data: {}
+                    })
+
+                    window.location = '{{ route('dashboard.home') }}'
+
+                } catch (error) {
+                    toastr.error(error.message)
+                }
             })
 
             /**

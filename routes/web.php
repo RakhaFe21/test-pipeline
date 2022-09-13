@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\Banking\BankVariableController;
 use App\Http\Controllers\Dashboard\Banking\Data\BankDataController;
-
+use App\Http\Controllers\Dashboard\Banking\Ibri\BankTheoreticalController;
 use App\Http\Controllers\Landing\{HomeController, IntegrationController, ProfileController, TentangKamiController};
 use App\Http\Controllers\Landing\Bank\{DataController, TheheatmapController, TheoriticalController, VariableController, VisualizationController};
 use App\Http\Controllers\Landing\Macro\{DataMacroController, TheheatmapMacroController, TheoriticalMacroController, VariableMacroController, VisualizationMacroController};
@@ -48,14 +48,16 @@ Route::prefix('macro')->group(function () {
 });
 
 Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')->group(function () {
-    Route::get('home', [DashboardController::class, 'index'])->name('dashboard.home');
-    Route::get('bank/variable', [BankVariableController::class, 'index'])->name('dashboard.bank.variable');
+    Route::get('home', [DashboardController::class, 'index'])->name('home');
+    Route::get('bank/variable', [BankVariableController::class, 'index'])->name('bank.variable');
 
-    Route::get('bank/data', [BankDataController::class, 'index'])->name('dashboard.bank.data');
-    Route::post('bank/data', [BankDataController::class, 'getByYear'])->name('dashboard.bank.data.getByYear');
-    Route::get('bank/data/create', [BankDataController::class, 'create'])->name('dashboard.bank.data.create');
-    Route::post('bank/data/create', [BankDataController::class, 'store'])->name('dashboard.bank.data.store');
-    Route::get('bank/data/edit/{tahun}/{bulan}', [BankDataController::class, 'edit'])->name('dashboard.bank.data.edit');
-    Route::post('bank/data/update', [BankDataController::class, 'update'])->name('dashboard.bank.data.update');
-    Route::post('bank/data/delete', [BankDataController::class, 'delete'])->name('dashboard.bank.data.delete');
+    Route::get('bank/data', [BankDataController::class, 'index'])->name('bank.data');
+    Route::post('bank/data', [BankDataController::class, 'getByYear'])->name('bank.data.getByYear');
+    Route::get('bank/data/create', [BankDataController::class, 'create'])->name('bank.data.create');
+    Route::post('bank/data/create', [BankDataController::class, 'store'])->name('bank.data.store');
+    Route::get('bank/data/edit/{tahun}/{bulan}', [BankDataController::class, 'edit'])->name('bank.data.edit');
+    Route::post('bank/data/update', [BankDataController::class, 'update'])->name('bank.data.update');
+    Route::post('bank/data/delete', [BankDataController::class, 'delete'])->name('bank.data.delete');
+
+    Route::get('bank/ibri/theoretical-framework', [BankTheoreticalController::class, 'index'])->name('bank.ibri.theoretical.framework');
 });

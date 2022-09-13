@@ -11,7 +11,7 @@
 
         <div class="flex flex-row justify-between items-center content-center w-full mb-6">
             <select id="selectYears" class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2.5"></select>
-            <a id="addNew" href="{{ route('dashboard.dashboard.bank.data.create') }}" class="text-white bg-ds-blue hover:bg-ds-blue-hover font-medium rounded-lg text-sm px-5 py-2.5"><i class="fa-solid fa-plus"></i> Add New</a>
+            <a id="addNew" href="{{ route('dashboard.bank.data.create') }}" class="text-white bg-ds-blue hover:bg-ds-blue-hover font-medium rounded-lg text-sm px-5 py-2.5"><i class="fa-solid fa-plus"></i> Add New</a>
         </div>
 
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
@@ -43,7 +43,7 @@
                     <span class="sr-only">Close modal</span>
                 </button>
                 <div class="p-6 text-center">
-                    <form id="formDelete" action="{{ route('dashboard.dashboard.bank.data.delete') }}" method="post">
+                    <form id="formDelete" action="{{ route('dashboard.bank.data.delete') }}" method="post">
                         <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -160,7 +160,7 @@
 
                     const post = await axios({
                         method: 'post',
-                        url: '{{ route('dashboard.dashboard.bank.data.getByYear') }}',
+                        url: '{{ route('dashboard.bank.data.getByYear') }}',
                         headers: {},
                         data: {
                             'year': year

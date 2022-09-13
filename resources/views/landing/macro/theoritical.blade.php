@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="hidden flex flex-row items-center justify-center pt-10" id="gambar" role="tabpanel" aria-labelledby="gambar-tab">
-                <img src="{{ asset('img/logo.png') }}" alt="">
+                <img src="{{ asset('img/theoritical.png') }}" alt="" class="rounded-lg">
             </div>
         </div>
     </section>
@@ -50,19 +50,59 @@
                 },
                 {
                     "no": "2",
-                    "data": "Developing a Theoretical Framework"
+                    "data": "Tranforming into Index"
                 },
                 {
                     "no": "3",
-                    "data": "Developing a Theoretical Framework"
+                    "data": "Selecting BAse Year"
                 },
                 {
                     "no": "4",
-                    "data": "Developing a Theoretical Framework"
+                    "data": "Determining Weight"
                 },
                 {
                     "no": "5",
-                    "data": "Developing a Theoretical Framework"
+                    "data": "Index Agregation"
+                },
+                {
+                    "no": "6",
+                    "data": "Factor Analysis"
+                },
+                {
+                    "no": "7",
+                    "data": "Setting Threshold"
+                },
+                {
+                    "no": "8",
+                    "data": "Signaling Threshold"
+                },
+                {
+                    "no": "9",
+                    "data": "In Sample Model 5"
+                },
+                {
+                    "no": "10",
+                    "data": "Out Sample Model"
+                },
+                {
+                    "no": "11",
+                    "data": "Out Sample Performance"
+                },
+                {
+                    "no": "12",
+                    "data": "Determining the optimal level in Index Value"
+                },
+                {
+                    "no": "13",
+                    "data": "Calculating the optimal level in Real Value"
+                },
+                {
+                    "no": "14",
+                    "data": "Setting the Heat Map"
+                },
+                {
+                    "no": "15",
+                    "data": "Visualization"
                 },
             ]
 

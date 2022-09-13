@@ -1,9 +1,13 @@
-@extends('template.landing')
+@extends('template.dashboard')
 
 @section('content')
-    <section class="flex flex-col gap-2 container mx-auto px-4 py-10 lg:px-[100px]  h-full min-h-screen">
-        <h1 class="text-[30px] font-medium text-ld-green">Theoritical Framework</h1>
-        <p class="mb-5">Berikut ini ada 15 step untuk membangun Indeks Ketahanan Perbankan Syariah. Data yang kami sajikan berupa Tabel (Constructing The Islamic Banking Resilience Index ) dan gambar (Constructing The Islamic Banking Resilience Index )</p>
+    <section class="p-5">
+        <div class="fle flex-col w-full mb-6">
+            <h1 class="text-3xl font-medium">Theoritical Framework</h1>
+            <div class="flex flex-row gap-2 mt-1">
+                <span>Banking, Step IBRI, Theoritical Framework</span>
+            </div>
+        </div>
 
         <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
             <ul class="flex flex-wrap text-sm font-medium text-center" id="tab" data-tabs-toggle="#tabContent" role="tablist">
@@ -17,24 +21,22 @@
         </div>
         <div id="tabContent">
             <div class="hidden" id="table" role="tabpanel" aria-labelledby="table-tab">
-                <div class="flex flex-col gap-2 overflow-auto">
-                    <div class="overflow-auto w-full flex flex-row text-center text-ld-green">
-                        <table class="w-full">
-                            <thead>
-                                <tr class="bg-ld-green/40">
-                                    <th class="p-4">NO</th>
-                                    <th class="p-4">Constructing The Islamic Banking Resilience Index</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody">
+                <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-center">
+                        <thead class="text-xs uppercase bg-gray-200">
+                            <tr>
+                                <th scope="col" class="py-3 px-6">NO</th>
+                                <th scope="col" class="py-3 px-6">Constructing The Islamic Bankin Resilience Index</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
 
-                            </tbody>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="hidden flex flex-row items-center justify-center pt-10" id="gambar" role="tabpanel" aria-labelledby="gambar-tab">
-                <img src="{{ asset('img/theoritical.png') }}" alt="" class="rounded-lg">
+                <img src="{{ asset('img/theoritical.png') }}" alt="">
             </div>
         </div>
     </section>
@@ -108,12 +110,9 @@
 
             Object.keys(data).forEach((key, index) => {
                 $('#tbody').append(`
-                    <tr>
-                        <td class="colspan-13 p-2"></td>
-                    </tr>
-                    <tr class="bg-ld-green/10">
-                        <td class="p-2">${data[key].no}</td>
-                        <td class="p-2">${data[key].data}</td>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td class="py-4 px-6">${data[key].no}</td>
+                        <td class="py-4 px-6">${data[key].data}</td>
                     </tr>
                 `)
             })
@@ -132,17 +131,14 @@
 
             const options = {
                 defaultTabId: 'settings',
-                activeClasses: 'text-ld-green hover:text-ld-green border-ld-green',
+                activeClasses: 'text-ds-blue hover:text-ds-blue border-ds-blue',
                 inactiveClasses: 'text-gray-500 hover:text-gray-600 border-gray-100 hover:border-gray-300',
-                onShow: () => {
-                    //console.log('tab is shown')
-                }
+                onShow: () => {}
             }
 
             const tabs = new Tabs(tabElements, options)
             tabs.show('table')
             tabs.getTab('gambar')
-            //console.log(tabs.getActiveTab().id);
         })
     </script>
 @endpush

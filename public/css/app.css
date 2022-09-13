@@ -12294,6 +12294,10 @@ input:checked + .toggle-bg {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
+.border-ds-blue {
+  --tw-border-opacity: 1;
+  border-color: rgb(63 140 255 / var(--tw-border-opacity));
+}
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -12681,6 +12685,10 @@ input:checked + .toggle-bg {
   --tw-text-opacity: 1;
   color: rgb(255 30 0 / var(--tw-text-opacity));
 }
+.text-ds-blue {
+  --tw-text-opacity: 1;
+  color: rgb(63 140 255 / var(--tw-text-opacity));
+}
 .opacity-0 {
   opacity: 0;
 }
@@ -12903,6 +12911,11 @@ body {
 .hover\:text-ld-green:hover {
   --tw-text-opacity: 1;
   color: rgb(0 64 41 / var(--tw-text-opacity));
+}
+
+.hover\:text-ds-blue:hover {
+  --tw-text-opacity: 1;
+  color: rgb(63 140 255 / var(--tw-text-opacity));
 }
 
 .focus\:z-10:focus {
