@@ -132,7 +132,7 @@
                     }
                 } catch (error) {
                     this.reset()
-                    toastr.warning(error.message)
+                    toastr.error(error.message)
                 }
 
                 loadingButton(false, '#formSubmit', 'Save Data')

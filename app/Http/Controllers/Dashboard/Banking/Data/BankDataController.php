@@ -191,5 +191,23 @@ class BankDataController extends Controller
 
     public function delete(Request $request)
     {
+        try {
+            $validator = Validator::make($request->all(), [
+                'tahun' => 'required|numeric',
+                'bulan' => 'required|numeric'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['code' => 400, 'message' => 'Data tidak valid' . $request->year, 'data' => $validator->errors()], 200);
+            }
+
+            VariableData::where('tahun', $request->tahun)
+                ->where('bulan', $request->bulan)
+                ->delete();
+
+            return response()->json(['code' => 200, 'message' => 'Berhasil menghapus data', 'data' => null], 200);
+        } catch (Exception $e) {
+            return response()->json(['code' => 500, 'message' => $e->getMessage(), 'data' => null], 200);
+        }
     }
 }
