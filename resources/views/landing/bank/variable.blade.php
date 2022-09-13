@@ -3,7 +3,7 @@
 @section('content')
     <section class="flex flex-col gap-2 container mx-auto px-4 py-10 lg:px-[100px]  h-full min-h-screen">
         <h1 class="text-[30px] font-medium text-ld-green">Variable Used</h1>
-        <p class="mb-5">Islamic Bankin Variable adalah data yang diambil dari Otortias Jasa Keuangan (OJK). Variabel yang di gunakan sistem informasi penilaian perbankan (SIPP) ada 4 variabel yaitu: (NFT), (CAR), (IPR), (FDR).</p>
+        <p class="mb-5">Islamic Bankin Variable adalah data yang diambil dari Otortias Jasa Keuangan (OJK). Variabel yang di gunakan sistem informasi penilaian perbankan (SIPP) ada 4 variabel yaitu: (NPF), (CAR), (IPR), (FDR).</p>
 
         <div class="overflow-auto w-full flex flex-row text-center text-ld-green">
             <table class="w-full">

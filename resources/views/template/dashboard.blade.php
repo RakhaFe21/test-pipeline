@@ -218,7 +218,7 @@
              * Set Navbar Timer
              */
             setInterval(function() {
-                const now = convert(new Date(), "Asia/Jakarta")
+                const now = convert(new Date(), "{{ config('app.timezone') }}")
                 document.getElementById("timer").innerHTML = `${now.getHours()}`.replace(/^(\d)$/, '0$1') + ":" + `${now.getMinutes()}`.replace(/^(\d)$/, '0$1') + ":" + `${now.getSeconds()}`.replace(/^(\d)$/, '0$1')
             }, 1000)
 
