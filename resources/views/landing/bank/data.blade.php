@@ -120,7 +120,7 @@
 
                     const post = await axios({
                         method: 'post',
-                        url: '{{ route('bank.variable.getByYear') }}',
+                        url: '{{ route('bank.data.getByYear') }}',
                         headers: {},
                         data: {
                             'year': year

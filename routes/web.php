@@ -32,8 +32,8 @@ Route::prefix('profile')->middleware(['auth'])->group(function () {
 
 Route::prefix('bank')->group(function () {
     Route::get('variable', [VariableController::class, 'index'])->name('bank.variable');
-    Route::post('variable', [VariableController::class, 'getByYear'])->name('bank.variable.getByYear');
     Route::get('data', [DataController::class, 'index'])->name('bank.data');
+    Route::post('data', [DataController::class, 'getByYear'])->name('bank.data.getByYear');
     Route::get('theoritical', [TheoriticalController::class, 'index'])->name('bank.theoritical');
     Route::get('theheatmap', [TheheatmapController::class, 'index'])->name('bank.theheatmap')->middleware('check');
     Route::get('visualization', [VisualizationController::class, 'index'])->name('bank.visualization')->middleware('check');
