@@ -12,7 +12,6 @@ use App\Http\Controllers\Landing\{HomeController, IntegrationController, Profile
 use App\Http\Controllers\Landing\Bank\{DataController, TheheatmapController, TheoriticalController, VariableController, VisualizationController};
 use App\Http\Controllers\Landing\Macro\{DataMacroController, TheheatmapMacroController, TheoriticalMacroController, VariableMacroController, VisualizationMacroController};
 
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tentang-kami', [TentangKamiController::class, 'index'])->name('tentang.kami');
 Route::get('/integration', [IntegrationController::class, 'index'])->name('integration');

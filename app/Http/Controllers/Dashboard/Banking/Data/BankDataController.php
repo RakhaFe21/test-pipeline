@@ -11,13 +11,14 @@ use Illuminate\Support\Facades\Validator;
 
 class BankDataController extends Controller
 {
+
     public function index(Request $request)
     {
         $tahun = VariableData::select('tahun')
             ->groupBy('tahun')
             ->get();
 
-        $year = $request->year ?? $tahun[0]->tahun;
+        $year = $request->year ?? $tahun[0]->tahun ?? '';
 
         $bulan = VariableData::select('bulan')
             ->where('tahun', '=', $year)
@@ -45,8 +46,7 @@ class BankDataController extends Controller
                 ->groupBy('bulan')
                 ->get();
 
-            $data = VariableData::select('bulan', 'value')
-                ->where('tahun', '=', $request->year)
+            $data = VariableData::where('tahun', '=', $request->year)
                 ->orderBy('tahun', 'asc')
                 ->orderBy('bulan', 'asc')
                 ->orderBy('variable_masters_id', 'asc')
@@ -66,16 +66,16 @@ class BankDataController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'year' => 'required|string|max:255',
-            'month' => 'required|string|max:255',
-            'npf' => 'required|string|max:255',
-            'car' => 'required|string|max:255',
-            'ipr' => 'required|string|max:255',
-            'fdr' => 'required|string|max:255',
+            'year' => 'required|numeric',
+            'month' => 'required|numeric',
+            'npf' => 'required|numeric',
+            'car' => 'required|numeric',
+            'ipr' => 'required|numeric',
+            'fdr' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['code' => 400, 'message' => 'Validate', 'data' => $validator->errors()], 200);
+            return response()->json(['code' => 400, 'message' => 'Validate' . $request->year, 'data' => $validator->errors()], 200);
         }
 
         $check = VariableData::where('tahun', '=', $request->year)
@@ -146,11 +146,50 @@ class BankDataController extends Controller
 
     public function update(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'npf' => 'required|numeric',
+            'car' => 'required|numeric',
+            'ipr' => 'required|numeric',
+            'fdr' => 'required|numeric',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['code' => 400, 'message' => 'Validate', 'data' => $validator->errors()], 200);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            VariableData::where('tahun', request()->tahun)
+                ->where('bulan', request()->bulan)
+                ->where('variable_masters_id', 1)
+                ->update(['value' => $request->npf]);
+
+            VariableData::where('tahun', request()->tahun)
+                ->where('bulan', request()->bulan)
+                ->where('variable_masters_id', 2)
+                ->update(['value' => $request->car]);
+
+            VariableData::where('tahun', request()->tahun)
+                ->where('bulan', request()->bulan)
+                ->where('variable_masters_id', 3)
+                ->update(['value' => $request->ipr]);
+
+            VariableData::where('tahun', request()->tahun)
+                ->where('bulan', request()->bulan)
+                ->where('variable_masters_id', 4)
+                ->update(['value' => $request->fdr]);
+
+            DB::commit();
+
+            return response()->json(['code' => 200, 'message' => 'Berhasil menyimpan data', 'data' => null], 200);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['code' => 500, 'message' => $e->getMessage(), 'data' => null], 200);
+        }
     }
 
     public function delete(Request $request)
     {
-
     }
 }

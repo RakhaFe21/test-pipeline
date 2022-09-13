@@ -33,6 +33,31 @@
         </div>
 
     </section>
+
+    <div id="confirmDeleteModal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
+        <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+            <div class="relative bg-white rounded-lg shadow">
+                <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+                <div class="p-6 text-center">
+                    <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <input id="modalTahun" type="hidden" name="modalTahun" value="">
+                    <input id="modalBulan" type="hidden" name="modalBulan" value="">
+                    <h3 id="modalText" class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda Yakin?</h3>
+                    <button id="modalHapus" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                        Ya
+                    </button>
+                    <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Tidak</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -90,7 +115,7 @@
                     }
                     arr.push(obj)
                 }
-                console.log(arr)
+
                 return arr
             }
 
@@ -110,12 +135,9 @@
                             <td class="py-4 px-6">${data[4]}</td>
                             <td class="py-4 px-6 flex flex-row gap-2 items-center justify-center">
                                 <a href="/dashboard/bank/data/edit/${data[5]}/${data[6]}" class="py-0.5 px-2 bg-ds-yellow/20 text-ds-yellow rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i> Edit</a>
-                                <form action="/dashboard/bank/data/delete/${data[5]}/${data[6]}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="py-0.5 px-2 bg-ds-red/20 text-ds-red rounded-lg cursor-pointer" onclick="return confirm('Are you sure?')">
-                                        <i class="fa-regular fa-trash-can"></i> Delete
-                                    </button>
-                                </form>
+                                <button type="button" class="py-0.5 px-2 bg-ds-red/20 text-ds-red rounded-lg cursor-pointer" onclick="deleteData(${data[5]}, ${data[6]})">
+                                    <i class="fa-regular fa-trash-can"></i> Delete
+                                </button>
                             </td>
                         </tr>
                     `)
@@ -149,6 +171,19 @@
                     toastr.warning(error.message)
                 }
             })
+
+            window.deleteData = deleteData
+
+            function deleteData(tahun, bulan) {
+                console.log(tahun + " - " + bulan);
+                $('#modalTahun').val(tahun)
+                $('#modalBulan').val(bulan)
+
+                const modal = new Modal(document.getElementById('confirmDeleteModal'), {
+                    placement: 'center'
+                })
+                modal.show()
+            }
 
         })
     </script>

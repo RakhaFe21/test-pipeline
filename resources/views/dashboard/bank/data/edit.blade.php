@@ -10,33 +10,33 @@
         </div>
 
         <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md">
-            <form id="formCreate" method="POST" action="{{ route('dashboard.dashboard.bank.data.store') }}">
+            <form id="formCreate" method="POST" action="{{ route('dashboard.dashboard.bank.data.update', ['tahun' => request()->tahun, 'bulan' => request()->bulan]) }}">
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">YEAR & MONTH</label>
                     <div class="flex flex-row gap-4">
-                        <select id="selectYears" name="year" class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"></select>
-                        <select id="selectMonths" name="month" class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"></select>
+                        <select id="selectYears" disabled name="year" class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"></select>
+                        <select id="selectMonths" disabled name="month" class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"></select>
                     </div>
                     <span id="tanggalMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">NPF</label>
-                    <input id="npf" type="text" name="npf" value="" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
+                    <input id="npf" type="text" name="npf" value="{{ $data[0]->value }}" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
                     <span id="npfMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">CAR</label>
-                    <input id="car" type="text" name="car" value="" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
+                    <input id="car" type="text" name="car" value="{{ $data[1]->value }}" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
                     <span id="carMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">IPR</label>
-                    <input id="ipr" type="text" name="ipr" value="" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
+                    <input id="ipr" type="text" name="ipr" value="{{ $data[2]->value }}" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
                     <span id="iprMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">FDR</label>
-                    <input id="fdr" type="text" name="fdr" value="" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
+                    <input id="fdr" type="text" name="fdr" value="{{ $data[3]->value }}" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
                     <span id="fdrMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="flex flex-row justify-start gap-4">
@@ -53,7 +53,6 @@
         $(document).ready(function() {
 
             let data = {!! json_encode($data) !!}
-            console.log(data);
 
             years()
             months()
@@ -62,29 +61,32 @@
              * Set list Years
              */
             function years() {
-                var data = []
                 var now = moment().format('yyyy')
                 var start = 2000
-                const end = parseInt(now)
-                while (start <= end) {
-                    $('#selectYears').append(`<option value="${start}">${start}</option>`)
+                while (start <= now) {
+                    if (start === parseInt(data[0].tahun)) {
+                        $('#selectYears').append(`<option selected value="${start}">${start}</option>`)
+                    } else {
+                        $('#selectYears').append(`<option value="${start}">${start}</option>`)
+                    }
                     start = start + 1
                 }
-                return data
             }
 
             /**
              * Set list Month
              */
             function months() {
-                var data = []
                 var start = 1
                 const end = 12
                 while (start <= end) {
-                    $('#selectMonths').append(`<option value="${start}">${start}</option>`)
+                    if (start === parseInt(data[0].bulan)) {
+                        $('#selectMonths').append(`<option selected value="${start}">${start}</option>`)
+                    } else {
+                        $('#selectMonths').append(`<option value="${start}">${start}</option>`)
+                    }
                     start = start + 1
                 }
-                return data
             }
 
             /**
@@ -108,7 +110,6 @@
 
                     if (data.code === 200) {
                         toastr.success(data.message)
-                        this.reset()
                     } else if (data.code === 400) {
                         if (data.data.npf) {
                             $('#npf').addClass('border-red-500')

@@ -16,6 +16,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
+            'id' => 1,
             'name' => "Super Admin",
             'username' => "superadmin",
             'email' => "superadmin@gmail.com",
@@ -28,6 +29,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'id' => 2,
             'name' => "Admin",
             'username' => "admin",
             'email' => "admin@gmail.com",
@@ -40,6 +42,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'id' => 3,
             'name' => "User",
             'username' => "user",
             'email' => "user@gmail.com",
