@@ -152,9 +152,14 @@
              * Set Menu List
              */
             const bankIbriMenuList = [{
-                "url": "{{ route('dashboard.bank.ibri.theoretical.framework') }}",
-                "title": "Theoretical Framework"
-            }]
+                    "url": "{{ route('dashboard.bank.ibri.theoretical') }}",
+                    "title": "Theoretical Framework"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.ibri.transforming') }}",
+                    "title": "Transforming into Index"
+                },
+            ]
 
             Object.keys(bankIbriMenuList).forEach((key, index) => {
                 $("#data-dropdown").append(`

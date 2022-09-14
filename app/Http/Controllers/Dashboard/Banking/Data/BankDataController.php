@@ -38,7 +38,7 @@ class BankDataController extends Controller
     {
         try {
             if (!$request->year) {
-                return response()->json(['code' => 400, 'message' => 'Data tahun kosong', 'data' => null], 200);
+                return response()->json(['code' => 400, 'message' => 'Year data cannot be empty', 'data' => null], 200);
             }
 
             $bulan = VariableData::select('bulan')
@@ -66,8 +66,8 @@ class BankDataController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'year' => 'required|numeric',
-            'month' => 'required|numeric',
+            'year' => 'required|numeric|digits:4',
+            'month' => 'required|numeric|digits_between:1,12',
             'npf' => 'required|numeric',
             'car' => 'required|numeric',
             'ipr' => 'required|numeric',
@@ -75,7 +75,7 @@ class BankDataController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['code' => 400, 'message' => 'Validate' . $request->year, 'data' => $validator->errors()], 200);
+            return response()->json(['code' => 400, 'message' => 'Invalid data', 'data' => $validator->errors()], 200);
         }
 
         $check = VariableData::where('tahun', '=', $request->year)
@@ -83,12 +83,10 @@ class BankDataController extends Controller
             ->get();
 
         if ($check->count() > 0) {
-            return response()->json(['code' => 500, 'message' => 'Data tahun ' . $request->year . ' bulan ' . $request->month . ' sudah ada', 'data' => null], 200);
+            return response()->json(['code' => 500, 'message' => 'Data for year ' . $request->year . ' month ' . $request->month . ' already exists', 'data' => null], 200);
         }
 
-        DB::beginTransaction();
-
-        try {
+        $insert = DB::transaction(function () use ($request) {
             $npf = new VariableData;
             $npf->negara_masters_id = 1;
             $npf->variable_masters_id = 1;
@@ -121,13 +119,10 @@ class BankDataController extends Controller
             $fdr->value = $request->fdr;
             $fdr->save();
 
-            DB::commit();
+            return "Data saved successfully";
+        });
 
-            return response()->json(['code' => 200, 'message' => 'Berhasil menyimpan data', 'data' => null], 200);
-        } catch (Exception $e) {
-            DB::rollback();
-            return response()->json(['code' => 500, 'message' => $e->getMessage(), 'data' => null], 200);
-        }
+        return response()->json(['code' => 200, 'message' => $insert, 'data' => null], 200);
     }
 
     public function edit(Request $request)
@@ -157,9 +152,7 @@ class BankDataController extends Controller
             return response()->json(['code' => 400, 'message' => 'Validate', 'data' => $validator->errors()], 200);
         }
 
-        DB::beginTransaction();
-
-        try {
+        $update = DB::transaction(function () use ($request) {
             VariableData::where('tahun', request()->tahun)
                 ->where('bulan', request()->bulan)
                 ->where('variable_masters_id', 1)
@@ -180,32 +173,29 @@ class BankDataController extends Controller
                 ->where('variable_masters_id', 4)
                 ->update(['value' => $request->fdr]);
 
-            DB::commit();
+            return "Data updated successfully";
+        });
 
-            return response()->json(['code' => 200, 'message' => 'Berhasil menyimpan data', 'data' => null], 200);
-        } catch (Exception $e) {
-            DB::rollback();
-            return response()->json(['code' => 500, 'message' => $e->getMessage(), 'data' => null], 200);
-        }
+        return response()->json(['code' => 200, 'message' => $update, 'data' => null], 200);
     }
 
     public function delete(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                'tahun' => 'required|numeric',
-                'bulan' => 'required|numeric'
+                'tahun' => 'required|numeric|digits:4',
+                'bulan' => 'required|numeric|digits_between:1,12'
             ]);
 
             if ($validator->fails()) {
-                return response()->json(['code' => 400, 'message' => 'Data tidak valid' . $request->year, 'data' => $validator->errors()], 200);
+                return response()->json(['code' => 400, 'message' => 'Invalid Data' . $request->year, 'data' => $validator->errors()], 200);
             }
 
             VariableData::where('tahun', $request->tahun)
                 ->where('bulan', $request->bulan)
                 ->delete();
 
-            return response()->json(['code' => 200, 'message' => 'Berhasil menghapus data', 'data' => null], 200);
+            return response()->json(['code' => 200, 'message' => 'Data deleted successfully', 'data' => null], 200);
         } catch (Exception $e) {
             return response()->json(['code' => 500, 'message' => $e->getMessage(), 'data' => null], 200);
         }

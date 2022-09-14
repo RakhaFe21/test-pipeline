@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\Banking\BankVariableController;
 use App\Http\Controllers\Dashboard\Banking\Data\BankDataController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankTheoreticalController;
+use App\Http\Controllers\Dashboard\Banking\Ibri\BankTransformingController;
 use App\Http\Controllers\Landing\{HomeController, IntegrationController, ProfileController, TentangKamiController};
 use App\Http\Controllers\Landing\Bank\{DataController, TheheatmapController, TheoriticalController, VariableController, VisualizationController};
 use App\Http\Controllers\Landing\Macro\{DataMacroController, TheheatmapMacroController, TheoriticalMacroController, VariableMacroController, VisualizationMacroController};
@@ -59,5 +60,7 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::post('bank/data/update', [BankDataController::class, 'update'])->name('bank.data.update');
     Route::post('bank/data/delete', [BankDataController::class, 'delete'])->name('bank.data.delete');
 
-    Route::get('bank/ibri/theoretical-framework', [BankTheoreticalController::class, 'index'])->name('bank.ibri.theoretical.framework');
+    Route::get('bank/ibri/theoretical', [BankTheoreticalController::class, 'index'])->name('bank.ibri.theoretical');
+
+    Route::get('bank/ibri/transforming', [BankTransformingController::class, 'index'])->name('bank.ibri.transforming');
 });

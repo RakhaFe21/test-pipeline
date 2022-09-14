@@ -103,6 +103,15 @@
 
                     const data = post.data
 
+                    $('#npf').removeClass('border-red-500')
+                    $('#npfMsg').addClass('hidden')
+                    $('#car').removeClass('border-red-500')
+                    $('#carMsg').addClass('hidden')
+                    $('#ipr').removeClass('border-red-500')
+                    $('#iprMsg').addClass('hidden')
+                    $('#fdr').removeClass('border-red-500')
+                    $('#fdrMsg').addClass('hidden')
+
                     if (data.code === 200) {
                         toastr.success(data.message)
                         this.reset()
