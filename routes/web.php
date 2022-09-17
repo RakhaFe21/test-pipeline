@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\Banking\BankVariableController;
 use App\Http\Controllers\Dashboard\Banking\Data\BankDataController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankTheoreticalController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankTransformingController;
+use App\Http\Controllers\Dashboard\Banking\Ibri\BankBasedYearController;
 use App\Http\Controllers\Landing\{HomeController, IntegrationController, ProfileController, TentangKamiController};
 use App\Http\Controllers\Landing\Bank\{DataController, TheheatmapController, TheoriticalController, VariableController, VisualizationController};
 use App\Http\Controllers\Landing\Macro\{DataMacroController, TheheatmapMacroController, TheoriticalMacroController, VariableMacroController, VisualizationMacroController};
@@ -63,4 +64,7 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::get('bank/ibri/theoretical', [BankTheoreticalController::class, 'index'])->name('bank.ibri.theoretical');
 
     Route::get('bank/ibri/transforming', [BankTransformingController::class, 'index'])->name('bank.ibri.transforming');
+    Route::post('bank/ibri/transforming', [BankTransformingController::class, 'store'])->name('bank.ibri.transforming.store');
+
+    Route::get('bank/ibri/basedYear', [BankBasedYearController::class, 'index'])->name('bank.ibri.basedYear');
 });

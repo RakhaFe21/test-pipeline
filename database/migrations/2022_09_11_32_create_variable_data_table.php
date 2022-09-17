@@ -17,8 +17,8 @@ class CreateVariableDataTable extends Migration
             $table->id();
             $table->foreignId('negara_masters_id')->constrained()->onDelete('cascade');
             $table->foreignId('variable_masters_id')->constrained()->onDelete('cascade');
-            $table->string('tahun');
-            $table->string('bulan');
+            $table->year('tahun');
+            $table->integer('bulan');
             $table->double('value');
             $table->double('value_index')->nullable();
             $table->timestamps();

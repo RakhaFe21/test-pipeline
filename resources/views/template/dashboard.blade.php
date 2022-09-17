@@ -159,6 +159,10 @@
                     "url": "{{ route('dashboard.bank.ibri.transforming') }}",
                     "title": "Transforming into Index"
                 },
+                {
+                    "url": "{{ route('dashboard.bank.ibri.basedYear') }}",
+                    "title": "Selecting Based Years"
+                },
             ]
 
             Object.keys(bankIbriMenuList).forEach((key, index) => {
