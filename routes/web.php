@@ -68,6 +68,8 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::post('bank/ibri/transforming', [BankTransformingController::class, 'store'])->name('bank.ibri.transforming.store');
 
     Route::get('bank/ibri/basedYear', [BankBasedYearController::class, 'index'])->name('bank.ibri.basedYear');
+    Route::post('bank/ibri/basedYear', [BankBasedYearController::class, 'store'])->name('bank.ibri.basedYear.store');
 
     Route::get('bank/ibri/determining', [BankDeterminingController::class, 'index'])->name('bank.ibri.determining');
+    Route::post('bank/ibri/determining', [BankDeterminingController::class, 'store'])->name('bank.ibri.determining.store');
 });

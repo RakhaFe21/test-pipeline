@@ -122,13 +122,18 @@
                 dataVars.push(totalAverage.toFixed(3))
                 dataVarsGroup.push(dataVars)
 
+                let npfWeight = average(npf) / totalAverage
+                let carWeight = average(car) / totalAverage
+                let iprWeight = average(ipr) / totalAverage
+                let fdrWeight = average(fdr) / totalAverage
+
                 dataVars = []
                 dataVars.push('Weight')
-                dataVars.push((average(npf) / totalAverage).toFixed(3))
-                dataVars.push((average(car) / totalAverage).toFixed(3))
-                dataVars.push((average(ipr) / totalAverage).toFixed(3))
-                dataVars.push((average(fdr) / totalAverage).toFixed(3))
-                totalWeight = sum([(average(npf) / totalAverage), (average(car) / totalAverage), (average(ipr) / totalAverage), (average(fdr) / totalAverage)])
+                dataVars.push(npfWeight.toFixed(3))
+                dataVars.push(carWeight.toFixed(3))
+                dataVars.push(iprWeight.toFixed(3))
+                dataVars.push(fdrWeight.toFixed(3))
+                totalWeight = sum([npfWeight, carWeight, iprWeight, fdrWeight])
                 dataVars.push(totalWeight.toFixed(3))
                 dataVarsGroup.push(dataVars)
 
@@ -147,6 +152,36 @@
                         </tr>
                     `)
                 })
+
+                setTimeout(function() {
+                    insert(npfWeight, carWeight, iprWeight, fdrWeight)
+                }, 1000)
+            }
+
+            async function insert(npf, car, ipr, fdr) {
+                try {
+                    const post = await axios({
+                        method: 'post',
+                        url: '{{ route('dashboard.bank.ibri.determining.store') }}',
+                        headers: {},
+                        data: {
+                            npf: npf.toFixed(3),
+                            car: car.toFixed(3),
+                            ipr: ipr.toFixed(3),
+                            fdr: fdr.toFixed(3),
+                        }
+                    })
+
+                    const data = post.data
+
+                    if (data.code === 200) {
+                        toastr.success(data.message)
+                    } else {
+                        toastr.warning(data.message)
+                    }
+                } catch (error) {
+                    toastr.error(error.message)
+                }
             }
 
             function variance(arr) {

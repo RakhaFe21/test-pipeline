@@ -9,8 +9,13 @@ class VariableMaster extends Model
 {
     use HasFactory;
 
-    public function post()
+    public function variableData()
     {
         return $this->belongsTo(VariableData::class);
+    }
+
+    public function variableWeight()
+    {
+        return $this->belongsTo(VariableWeight::class);
     }
 }

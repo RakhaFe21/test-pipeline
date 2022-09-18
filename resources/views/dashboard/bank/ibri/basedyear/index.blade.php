@@ -114,37 +114,67 @@
                     let value = dataStdevsGroup[key]
 
                     if (String(value[1]) === String(min(npf))) {
-                        npfTd = `<td class="py-4 px-6">${value[0]}</td>`
+                        npfTd = value[0]
                     }
                     if (String(value[2]) === String(min(car))) {
-                        carTd = `<td class="py-4 px-6">${value[0]}</td>`
+                        carTd = value[0]
                     }
                     if (String(value[3]) === String(min(ipr))) {
-                        iprTd = `<td class="py-4 px-6">${value[0]}</td>`
+                        iprTd = value[0]
                     }
                     if (String(value[4]) === String(min(fdr))) {
-                        fdrTd = `<td class="py-4 px-6">${value[0]}</td>`
+                        fdrTd = value[0]
                     }
                 })
 
                 $('#tbody').append(`
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="py-4 px-6">INPF</td>
-                        ${npfTd}
+                        <td class="py-4 px-6">${npfTd}</td>
                     </tr>
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="py-4 px-6">ICAR</td>
-                        ${carTd}
+                        <td class="py-4 px-6">${carTd}</td>
                     </tr>
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="py-4 px-6">IIPR</td>
-                        ${iprTd}
+                        <td class="py-4 px-6">${iprTd}</td>
                     </tr>
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="py-4 px-6">IFDR</td>
-                        ${fdrTd}
+                        <td class="py-4 px-6">${fdrTd}</td>
                     </tr>
                 `)
+
+                setTimeout(function() {
+                    insert(npfTd, carTd, iprTd, fdrTd)
+                }, 1000)
+            }
+
+            async function insert(npf, car, ipr, fdr) {
+                try {
+                    const post = await axios({
+                        method: 'post',
+                        url: '{{ route('dashboard.bank.ibri.basedYear.store') }}',
+                        headers: {},
+                        data: {
+                            npf: npf,
+                            car: car,
+                            ipr: ipr,
+                            fdr: fdr,
+                        }
+                    })
+
+                    const data = post.data
+
+                    if (data.code === 200) {
+                        toastr.success(data.message)
+                    } else {
+                        toastr.warning(data.message)
+                    }
+                } catch (error) {
+                    toastr.error(error.message)
+                }
             }
 
             function stdevs(arr, usePopulation = false) {
