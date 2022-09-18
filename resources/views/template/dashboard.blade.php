@@ -107,7 +107,7 @@
                 </li>
             </ul>
         </aside>
-        <nav class="flex flex-row bg-white-1 justify-between items-center h-[110px] shadow-sm p-5 ml-[360px] fixed top-0 right-0 left-0">
+        <nav class="flex flex-row bg-white-1 justify-between items-center h-[110px] shadow-sm p-5 ml-[360px] fixed top-0 right-0 left-0 z-50">
             <div>
                 <form>
                     <div class="flex">
@@ -162,6 +162,10 @@
                 {
                     "url": "{{ route('dashboard.bank.ibri.basedYear') }}",
                     "title": "Selecting Based Years"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.ibri.determining') }}",
+                    "title": "Determining Weight"
                 },
             ]
 

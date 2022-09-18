@@ -199,7 +199,7 @@
 
                 setTimeout(function() {
                     insert(obj)
-                }, 2000)
+                }, 1000)
             }
 
             async function insert(arr) {
