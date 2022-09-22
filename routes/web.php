@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\Banking\BankVariableController;
 use App\Http\Controllers\Dashboard\Banking\Data\BankDataController;
+use App\Http\Controllers\Dashboard\Banking\Ibri\BankAgregationController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankTheoreticalController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankTransformingController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankBasedYearController;
@@ -72,4 +73,7 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
 
     Route::get('bank/ibri/determining', [BankDeterminingController::class, 'index'])->name('bank.ibri.determining');
     Route::post('bank/ibri/determining', [BankDeterminingController::class, 'store'])->name('bank.ibri.determining.store');
+
+    Route::get('bank/ibri/agregation', [BankAgregationController::class, 'index'])->name('bank.ibri.agregation');
+    Route::post('bank/ibri/agregation', [BankAgregationController::class, 'store'])->name('bank.ibri.agregation.store');
 });

@@ -78,7 +78,9 @@ class BankDataController extends Controller
             return response()->json(['code' => 400, 'message' => 'Invalid data', 'data' => $validator->errors()], 200);
         }
 
-        $check = VariableData::where('tahun', '=', $request->year)
+        $check = VariableData::where('negara_masters_id', 1)
+            ->whereIn('variable_masters_id', [1, 2, 3, 4])
+            ->where('tahun', '=', $request->year)
             ->where('bulan', '=', $request->month)
             ->get();
 

@@ -167,6 +167,10 @@
                     "url": "{{ route('dashboard.bank.ibri.determining') }}",
                     "title": "Determining Weight"
                 },
+                {
+                    "url": "{{ route('dashboard.bank.ibri.agregation') }}",
+                    "title": "Index Agregation"
+                },
             ]
 
             Object.keys(bankIbriMenuList).forEach((key, index) => {
