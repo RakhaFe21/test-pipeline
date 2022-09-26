@@ -18,4 +18,9 @@ class NegaraMaster extends Model
     {
         return $this->belongsTo(VariableWeight::class);
     }
+
+    public function additionalData()
+    {
+        return $this->belongsTo(AdditionalData::class);
+    }
 }

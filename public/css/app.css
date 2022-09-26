@@ -12028,6 +12028,9 @@ input:checked + .toggle-bg {
 .flex-shrink {
   flex-shrink: 1;
 }
+.shrink-0 {
+  flex-shrink: 0;
+}
 .grow {
   flex-grow: 1;
 }
@@ -12531,6 +12534,12 @@ input:checked + .toggle-bg {
 .pt-\[50px\] {
   padding-top: 50px;
 }
+.pr-5 {
+  padding-right: 1.25rem;
+}
+.pr-10 {
+  padding-right: 2.5rem;
+}
 .text-left {
   text-align: left;
 }
@@ -12596,6 +12605,9 @@ input:checked + .toggle-bg {
 }
 .font-normal {
   font-weight: 400;
+}
+.font-light {
+  font-weight: 300;
 }
 .font-bold {
   font-weight: 700;

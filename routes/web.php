@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\Banking\Ibri\BankTheoreticalController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankTransformingController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankBasedYearController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankDeterminingController;
+use App\Http\Controllers\Dashboard\Banking\Ibri\BankFactorAnalysisController;
 use App\Http\Controllers\Landing\{HomeController, IntegrationController, ProfileController, TentangKamiController};
 use App\Http\Controllers\Landing\Bank\{DataController, TheheatmapController, TheoriticalController, VariableController, VisualizationController};
 use App\Http\Controllers\Landing\Macro\{DataMacroController, TheheatmapMacroController, TheoriticalMacroController, VariableMacroController, VisualizationMacroController};
@@ -76,4 +77,7 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
 
     Route::get('bank/ibri/agregation', [BankAgregationController::class, 'index'])->name('bank.ibri.agregation');
     Route::post('bank/ibri/agregation', [BankAgregationController::class, 'store'])->name('bank.ibri.agregation.store');
+
+    Route::get('bank/ibri/factorAnalysis', [BankFactorAnalysisController::class, 'index'])->name('bank.ibri.factorAnalysis');
+    Route::post('bank/ibri/factorAnalysis', [BankFactorAnalysisController::class, 'store'])->name('bank.ibri.factorAnalysis.store');
 });

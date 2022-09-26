@@ -24,6 +24,7 @@ module.exports = {
             'ld-red': '#CA3337',
             'ld-yellow': '#F6B800',
             'ld-green': '#004029',
+            'ds-black': '#242421',
             'ds-gray': '#d1d5db',
             'ds-blue': '#3F8CFF',
             'ds-blue-hover': '#3f70ff',

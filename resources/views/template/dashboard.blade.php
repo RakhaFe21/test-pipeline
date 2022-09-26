@@ -171,6 +171,10 @@
                     "url": "{{ route('dashboard.bank.ibri.agregation') }}",
                     "title": "Index Agregation"
                 },
+                {
+                    "url": "{{ route('dashboard.bank.ibri.factorAnalysis') }}",
+                    "title": "Factor Analysis AHP"
+                },
             ]
 
             Object.keys(bankIbriMenuList).forEach((key, index) => {
