@@ -14,34 +14,47 @@
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">YEAR & MONTH</label>
                     <div class="flex flex-row gap-4">
-                        <select id="selectYears" name="year" class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"></select>
-                        <select id="selectMonths" name="month" class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"></select>
+                        <select id="selectYears" name="year"
+                            class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"></select>
+                        <select id="selectMonths" name="month"
+                            class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"></select>
                     </div>
                     <span id="tanggalMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">NPF</label>
-                    <input id="npf" type="text" name="npf" value="" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
+                    <input id="npf" type="text" name="npf" value="" placeholder="Masukkan Data"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5"
+                        required>
                     <span id="npfMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">CAR</label>
-                    <input id="car" type="text" name="car" value="" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
+                    <input id="car" type="text" name="car" value="" placeholder="Masukkan Data"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5"
+                        required>
                     <span id="carMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">IPR</label>
-                    <input id="ipr" type="text" name="ipr" value="" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
+                    <input id="ipr" type="text" name="ipr" value="" placeholder="Masukkan Data"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5"
+                        required>
                     <span id="iprMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">FDR</label>
-                    <input id="fdr" type="text" name="fdr" value="" placeholder="Masukkan Data" class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5" required>
+                    <input id="fdr" type="text" name="fdr" value="" placeholder="Masukkan Data"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5"
+                        required>
                     <span id="fdrMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="flex flex-row justify-start gap-4">
-                    <button id="cancel" type="button" class="bg-gray-50 hover:bg-gray-100 border border-ds-gray focus:ring-ds-gray focus:border-ds-gray font-medium rounded-lg text-sm px-5 py-2.5">Cancel</button>
-                    <button id="formSubmit" type="submit" class="text-white bg-ds-blue hover:bg-ds-blue-hover font-medium rounded-lg text-sm px-5 py-2.5">Save Data</button>
+                    <button id="cancel" type="button"
+                        class="bg-gray-50 hover:bg-gray-100 border border-ds-gray focus:ring-ds-gray focus:border-ds-gray font-medium rounded-lg text-sm px-5 py-2.5">Cancel</button>
+                    <button id="formSubmit" type="submit"
+                        class="text-white bg-ds-blue hover:bg-ds-blue-hover font-medium rounded-lg text-sm px-5 py-2.5">Save
+                        Data</button>
                 </div>
             </form>
         </div>

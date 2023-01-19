@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\Banking\BankVariableController;
 use App\Http\Controllers\Dashboard\Banking\Data\BankDataController;
+use App\Http\Controllers\Dashboard\Banking\Data\NullHypothesisDataController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankAgregationController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankTheoreticalController;
 use App\Http\Controllers\Dashboard\Banking\Ibri\BankTransformingController;
@@ -80,4 +81,8 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
 
     Route::get('bank/ibri/factorAnalysis', [BankFactorAnalysisController::class, 'index'])->name('bank.ibri.factorAnalysis');
     Route::post('bank/ibri/factorAnalysis', [BankFactorAnalysisController::class, 'store'])->name('bank.ibri.factorAnalysis.store');
+
+    Route::get('bank/nullhypothesisdata', [NullHypothesisDataController::class, 'index'])->name('bank.hypothesysdata');
+    Route::get('bank/nullhypothesisdata/create', [NullHypothesisDataController::class, 'create'])->name('bank.hypothesysdata.create');
+    Route::post('bank/nullhypothesisdata/store', [NullHypothesisDataController::class, 'store'])->name('bank.hypothesisdata.store');
 });
