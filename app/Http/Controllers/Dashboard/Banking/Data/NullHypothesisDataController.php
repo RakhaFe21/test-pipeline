@@ -7,6 +7,7 @@ use App\Models\NullHypothesisData;
 use Illuminate\Http\Request;
 use App\Models\VariableMaster;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class NullHypothesisDataController extends Controller
 {
@@ -39,11 +40,42 @@ class NullHypothesisDataController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
 
-        /* $valitator = Validator::make($request->all(), [
-            ''
-        ]); */
+        $validator = Validator::make($request->all(), [
+            'variable_1a' => 'required',
+            'variable_1b' => 'required',
+            'variable_2a' => 'required',
+            'variable_2b' => 'required',
+            'obs' => 'required|numeric',
+            'fStatistic1' => 'required|numeric',
+            'fStatistic2' => 'required|numeric',
+            'prob1' => 'required|numeric',
+            'prob2' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['code' => 400, 'message' => 'Invalid data', 'data' => $validator->errors()], 200);
+        }
+
+        $nS = new NullHypothesisData;
+        $nS->null_hypothesis = $request->variable_1a . ' Does not Granger Cause ' . $request->variable_1b;
+        $nS->obs = $request->obs;
+        $nS->fStatic = $request->fStatistic1;
+        $nS->prob = $request->prob1;
+        $nS->id_negara = 1;
+        $nS->jenis = 'bank';
+        $nS->save();
+
+        $nS2 = new NullHypothesisData;
+        $nS2->null_hypothesis = $request->variable_2a . ' Does not Granger Cause ' . $request->variable_2b;
+        $nS2->fStatic = $request->fStatistic2;
+        $nS2->prob = $request->prob2;
+        $nS2->id_negara = 1;
+        $nS2->jenis = 'bank';
+        $nS2->save();
+
+        return response()->json(['code' => 200, 'message' => 'Data saved', 'data' => null], 200);
     }
 
     /**

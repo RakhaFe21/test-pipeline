@@ -20,7 +20,8 @@
             <div class="flex bg-gray-3 rounded-xl">
                 <div class="py-3 px-4 bg-gray-2 rounded-l-xl rounded-br-[20px]">
                     <div class="flex items-center space-x-4">
-                        <img class="w-10 h-10 rounded-full bg-white-1" src="{{ url('storage/profile', Auth::user()->profile_picture) }}" alt="">
+                        <img class="w-10 h-10 rounded-full bg-white-1"
+                            src="{{ url('storage/profile', Auth::user()->profile_picture) }}" alt="">
                         <div class="font-medium">
                             <div class="text-white-1">{{ Auth::user()->name }}</div>
                             <div class="text-sm text-white-1">{{ Auth::user()->email }}</div>
@@ -33,70 +34,101 @@
             </div>
             <ul class="space-y-2">
                 <li>
-                    <button type="button" class="flex items-center p-2 w-full text-base font-normal text-white-1 rounded-lg transition duration-75 group bg-blue-1 hover:bg-blue-1 hover:text-white-1" data-collapse-toggle="banking-dropdown">
+                    <button type="button"
+                        class="flex items-center p-2 w-full text-base font-normal text-white-1 rounded-lg transition duration-75 group bg-blue-1 hover:bg-blue-1 hover:text-white-1"
+                        data-collapse-toggle="banking-dropdown">
                         <div class="flex justify-center w-[28px] h-[28px]">
-                            <img class="p-1 bg-white-1 rounded-full" src="{{ asset('img/icon-banking.png') }}" alt="">
+                            <img class="p-1 bg-white-1 rounded-full" src="{{ asset('img/icon-banking.png') }}"
+                                alt="">
                         </div>
                         <span class="flex-1 ml-3 text-left whitespace-nowrap">Banking</span>
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
                         </svg>
                     </button>
                     <ul id="banking-dropdown" class="py-2 space-y-2">
                         <li>
-                            <a href="{{ route('dashboard.bank.variable') }}" class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <a href="{{ route('dashboard.bank.variable') }}"
+                                class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                                 <div class="flex justify-center w-[28px] h-[28px]">
-                                    <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}" alt="">
+                                    <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
+                                        alt="">
                                 </div>
                                 <span class="flex-1 ml-3 text-left whitespace-nowrap">Variable</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('dashboard.bank.data') }}" class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <a href="{{ route('dashboard.bank.data') }}"
+                                class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                                 <div class="flex justify-center w-[28px] h-[28px]">
-                                    <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}" alt="">
+                                    <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
+                                        alt="">
                                 </div>
                                 <span class="flex-1 ml-3 text-left whitespace-nowrap">Data</span>
                             </a>
                         </li>
-                        <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1" aria-controls="data-dropdown" data-collapse-toggle="data-dropdown">
+                        <button type="button"
+                            class="flex items-center p-2 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                            aria-controls="data-dropdown" data-collapse-toggle="data-dropdown">
                             <img class="p-1 rounded-full" src="{{ asset('img/icon-ibri.png') }}" alt="">
-                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="data-dropdown">Step IBRI</span>
-                            <svg sidebar-toggle-item="data-dropdown" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                                sidebar-toggle-item="data-dropdown">Step IBRI</span>
+                            <svg sidebar-toggle-item="data-dropdown" class="w-6 h-6" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
                             </svg>
                         </button>
                         <ul id="data-dropdown" class="hidden py-2 space-y-2"></ul>
-                        <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1" aria-controls="macro-dropdown" data-collapse-toggle="macro-dropdown">
+                        <button type="button"
+                            class="flex items-center p-2 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                            aria-controls="macro-dropdown" data-collapse-toggle="macro-dropdown">
                             <div class="flex justify-center w-[28px] h-[28px]">
                                 <img class="p-1 rounded-full" src="{{ asset('img/icon-macro.png') }}" alt="">
                             </div>
-                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="macro-dropdown">Macro</span>
-                            <svg sidebar-toggle-item="macro-dropdown" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                                sidebar-toggle-item="macro-dropdown">Macro</span>
+                            <svg sidebar-toggle-item="macro-dropdown" class="w-6 h-6" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
                             </svg>
                         </button>
                         <ul id="macro-dropdown" class="hidden py-2 space-y-2"></ul>
-                        <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1" aria-controls="integrasi-dropdown" data-collapse-toggle="integrasi-dropdown">
+                        <button type="button"
+                            class="flex items-center p-2 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                            aria-controls="integrasi-dropdown" data-collapse-toggle="integrasi-dropdown">
                             <div class="flex justify-center w-[28px] h-[28px]">
-                                <img class="p-1 rounded-full" src="{{ asset('img/icon-integrasi.png') }}" alt="">
+                                <img class="p-1 rounded-full" src="{{ asset('img/icon-integrasi.png') }}"
+                                    alt="">
                             </div>
-                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="integrasi-dropdown">Integrasi Bank & Macro</span>
-                            <svg sidebar-toggle-item="integrasi-dropdown" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                                sidebar-toggle-item="integrasi-dropdown">Integrasi Bank & Macro</span>
+                            <svg sidebar-toggle-item="integrasi-dropdown" class="w-6 h-6" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
                             </svg>
                         </button>
                         <ul id="integrasi-dropdown" class="hidden py-2 space-y-2"></ul>
                         <li>
-                            <a href="#" class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <a href="#"
+                                class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                                 <div class="flex justify-center w-[28px] h-[28px]">
-                                    <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}" alt="">
+                                    <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
+                                        alt="">
                                 </div>
                                 <span class="flex-1 ml-3 text-left whitespace-nowrap">User Data</span>
                             </a>
                         </li>
                         <li>
-                            <button id="logout" class="flex cursor-pointer items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group">
+                            <button id="logout"
+                                class="flex cursor-pointer items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group">
                                 <div class="flex flex-row items-center justify-center w-[28px] h-[28px]">
                                     <i class="fa-solid fa-right-from-bracket text-ds-blue"></i>
                                 </div>
@@ -107,15 +139,21 @@
                 </li>
             </ul>
         </aside>
-        <nav class="flex flex-row bg-white-1 justify-between items-center h-[110px] shadow-sm p-5 ml-[360px] fixed top-0 right-0 left-0 z-50">
+        <nav
+            class="flex flex-row bg-white-1 justify-between items-center h-[110px] shadow-sm p-5 ml-[360px] fixed top-0 right-0 left-0 z-50">
             <div>
                 <form>
                     <div class="flex">
                         <div class="relative w-[300px]">
-                            <input type="text" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-100 rounded-lg border-gray-100 focus:border-none" placeholder="Search menu" required>
-                            <button type="submit" class="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-1 rounded-lg border border-blue-1 hover:bg-blue-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            <input type="text"
+                                class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-100 rounded-lg border-gray-100 focus:border-none"
+                                placeholder="Search menu" required>
+                            <button type="submit"
+                                class="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-1 rounded-lg border border-blue-1 hover:bg-blue-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
                             </button>
                         </div>
@@ -124,14 +162,19 @@
             </div>
             <div class="flex flex-row gap-4">
                 <div class="bg-gray-100 p-2 rounded-lg cursor-pointer">
-                    <svg class="w-6 h-6 text-gray-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    <svg class="w-6 h-6 text-gray-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
                     </svg>
                 </div>
                 <div class="flex flex-row gap-1 items-center text-gray-1 bg-gray-100 p-2 rounded-lg cursor-pointer">
                     <span id="timer">00:00:00</span>
-                    <svg class="w-6 h-6 text-gray-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <svg class="w-6 h-6 text-gray-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
             </div>
@@ -174,6 +217,10 @@
                 {
                     "url": "{{ route('dashboard.bank.ibri.factorAnalysis') }}",
                     "title": "Factor Analysis AHP"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.hypothesysdata') }}",
+                    "title": "Setting Treshold"
                 },
             ]
 
@@ -240,7 +287,9 @@
              */
             setInterval(function() {
                 const now = convert(new Date(), "{{ config('app.timezone') }}")
-                document.getElementById("timer").innerHTML = `${now.getHours()}`.replace(/^(\d)$/, '0$1') + ":" + `${now.getMinutes()}`.replace(/^(\d)$/, '0$1') + ":" + `${now.getSeconds()}`.replace(/^(\d)$/, '0$1')
+                document.getElementById("timer").innerHTML = `${now.getHours()}`.replace(/^(\d)$/, '0$1') +
+                    ":" + `${now.getMinutes()}`.replace(/^(\d)$/, '0$1') + ":" + `${now.getSeconds()}`
+                    .replace(/^(\d)$/, '0$1')
             }, 1000)
 
             function convert(date, timezone) {

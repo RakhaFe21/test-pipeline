@@ -16,9 +16,9 @@ class CreateNullHypothesisDataTable extends Migration
         Schema::create('null_hypothesis_data', function (Blueprint $table) {
             $table->id();
             $table->string('null_hypothesis');
-            $table->decimal('obs', 8, 2);
-            $table->decimal('f-static', 8, 2);
-            $table->decimal('prob', 8, 2);
+            $table->decimal('obs', 8, 2)->nullable();
+            $table->decimal('fStatic', 8, 2)->nullable();
+            $table->decimal('prob', 8, 2)->nullable();
             $table->string('jenis');
             $table->unsignedBigInteger('id_negara')->nullable();
             $table->foreign('id_negara')->references('id')->on('negara_masters');

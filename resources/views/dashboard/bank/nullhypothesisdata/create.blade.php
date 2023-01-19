@@ -20,7 +20,7 @@
                                 class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"
                                 required>
                                 @foreach ($var as $vItem)
-                                    <option value="{{ $vItem->id }}">{{ $vItem->nama_variable }}</option>
+                                    <option value="{{ $vItem->nama_variable }}">{{ $vItem->nama_variable }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -33,7 +33,7 @@
                                 class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"
                                 required>
                                 @foreach ($var as $vItem)
-                                    <option value="{{ $vItem->id }}">{{ $vItem->nama_variable }}</option>
+                                    <option value="{{ $vItem->nama_variable }}">{{ $vItem->nama_variable }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -68,7 +68,7 @@
                                 class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"
                                 required>
                                 @foreach ($var as $vItem)
-                                    <option value="{{ $vItem->id }}">{{ $vItem->nama_variable }}</option>
+                                    <option value="{{ $vItem->nama_variable }}">{{ $vItem->nama_variable }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -81,7 +81,7 @@
                                 class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2"
                                 required>
                                 @foreach ($var as $vItem)
-                                    <option value="{{ $vItem->id }}">{{ $vItem->nama_variable }}</option>
+                                    <option value="{{ $vItem->nama_variable }}">{{ $vItem->nama_variable }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -149,21 +149,25 @@
                         toastr.success(data.message)
                         this.reset()
                     } else if (data.code === 400) {
-                        if (data.data.npf) {
-                            $('#npf').addClass('border-red-500')
-                            $('#npfMsg').removeClass('hidden').text(data.data.npf[0])
+                        if (data.data.fStatistic1) {
+                            $('#fStatistic1').addClass('border-red-500')
+                            $('#fStatistic1Msg').removeClass('hidden').text(data.data.fStatistic1[0])
                         }
-                        if (data.data.car) {
-                            $('#car').addClass('border-red-500')
-                            $('#carMsg').removeClass('hidden').text(data.data.car[0])
+                        if (data.data.fStatistic2) {
+                            $('#fStatistic2').addClass('border-red-500')
+                            $('#fStatistic2Msg').removeClass('hidden').text(data.data.fStatistic2[0])
                         }
-                        if (data.data.ipr) {
-                            $('#ipr').addClass('border-red-500')
-                            $('#iprMsg').removeClass('hidden').text(data.data.ipr[0])
+                        if (data.data.prob1) {
+                            $('#prob1').addClass('border-red-500')
+                            $('#prob1Msg').removeClass('hidden').text(data.data.prob1[0])
                         }
-                        if (data.data.fdr) {
-                            $('#fdr').addClass('border-red-500')
-                            $('#fdrMsg').removeClass('hidden').text(data.data.fdr[0])
+                        if (data.data.prob2) {
+                            $('#prob2').addClass('border-red-500')
+                            $('#prob2Msg').removeClass('hidden').text(data.data.prob2[0])
+                        }
+                        if (data.data.obs) {
+                            $('#obs').addClass('border-red-500')
+                            $('#obsMsg').removeClass('hidden').text(data.data.obs[0])
                         }
                     } else {
                         toastr.warning(data.message)
@@ -180,7 +184,7 @@
              * Back
              */
             $('#cancel').on('click', function() {
-                window.location = '{{ route('dashboard.bank.data') }}'
+                window.location = '{{ route('dashboard.bank.hypothesysdata') }}'
             })
 
         })
