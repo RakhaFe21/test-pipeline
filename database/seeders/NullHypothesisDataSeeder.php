@@ -78,7 +78,7 @@ class NullHypothesisDataSeeder extends Seeder
         DB::table('null_hypothesis_data')->insert([
             'id' => 6,
             'null_hypothesis' => 'FDR Does not Granger Cause NPF',
-            'obs' => 135,
+            'obs' => NULL,
             'fStatic' => 249.73,
             'prob' => NULL,
             'jenis' => 'b',
