@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(NegaraMasterSeeder::class);
         $this->call(VariableMasterSeeder::class);
         $this->call(VariableDataSeeder::class);
+        $this->call(NullHypothesisDataSeeder::class);
     }
 }

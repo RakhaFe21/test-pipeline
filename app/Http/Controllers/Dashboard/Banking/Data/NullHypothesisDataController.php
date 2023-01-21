@@ -18,7 +18,8 @@ class NullHypothesisDataController extends Controller
      */
     public function index()
     {
-        return view('dashboard.bank.nullhypothesisdata.index');
+        $hypothesis = NullHypothesisData::orderBy('id','asc')->get();
+        return view('dashboard.bank.nullhypothesisdata.index', compact('hypothesis'));
     }
 
     /**
@@ -59,7 +60,7 @@ class NullHypothesisDataController extends Controller
         }
 
         $nS = new NullHypothesisData;
-        $nS->null_hypothesis = $request->variable_1a . ' Does not Granger Cause ' . $request->variable_1b;
+        $nS->null_hypothesis = strtoupper($request->variable_1a) . ' Does not Granger Cause ' . strtoupper($request->variable_1b);
         $nS->obs = $request->obs;
         $nS->fStatic = $request->fStatistic1;
         $nS->prob = $request->prob1;
@@ -68,7 +69,7 @@ class NullHypothesisDataController extends Controller
         $nS->save();
 
         $nS2 = new NullHypothesisData;
-        $nS2->null_hypothesis = $request->variable_2a . ' Does not Granger Cause ' . $request->variable_2b;
+        $nS2->null_hypothesis = strtoupper($request->variable_2a) . ' Does not Granger Cause ' . strtoupper($request->variable_2b);
         $nS2->fStatic = $request->fStatistic2;
         $nS2->prob = $request->prob2;
         $nS2->id_negara = 1;

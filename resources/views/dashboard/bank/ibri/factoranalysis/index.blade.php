@@ -10,7 +10,8 @@
         </div>
 
         <div class="flex flex-row justify-between items-center content-center w-full mb-6">
-            <select id="selectTabs" class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block p-2.5 pr-10"></select>
+            <select id="selectTabs"
+                class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block p-2.5 pr-10"></select>
         </div>
 
         <div id="tab1" class="">
@@ -256,7 +257,9 @@
                 iprNormalized.push(parseFloat(ipr[key]) / parseFloat(total[2]))
                 fdrNormalized.push(parseFloat(fdr[key]) / parseFloat(total[3]))
 
-                criteriaNormalized.push((sum([npfNormalized[key].toFixed(2), carNormalized[key].toFixed(2), iprNormalized[key].toFixed(2), fdrNormalized[key].toFixed(2)]) / 4))
+                criteriaNormalized.push((sum([npfNormalized[key].toFixed(2), carNormalized[key].toFixed(2),
+                    iprNormalized[key].toFixed(2), fdrNormalized[key].toFixed(2)
+                ]) / 4))
             })
 
             $('#tbodyCriteria').html('')
@@ -273,7 +276,9 @@
                 `)
             })
 
-            let totalNormalized = [sum(npfNormalized), sum(carNormalized), sum(iprNormalized), sum(fdrNormalized), sum(criteriaNormalized)]
+            let totalNormalized = [sum(npfNormalized), sum(carNormalized), sum(iprNormalized), sum(fdrNormalized),
+                sum(criteriaNormalized)
+            ]
             $('#tbodyCriteria').append(`
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <td class="py-4 px-6">TOTAL</td>
@@ -297,7 +302,9 @@
                 iprRatio.push(parseFloat(ipr[key]) * parseFloat(criteriaNormalized[2]))
                 fdrRatio.push(parseFloat(fdr[key]) * parseFloat(criteriaNormalized[3]))
 
-                weightedSumValue.push(sum([npfRatio[key].toFixed(2), carRatio[key].toFixed(2), iprRatio[key].toFixed(2), fdrRatio[key].toFixed(2)]))
+                weightedSumValue.push(sum([npfRatio[key].toFixed(2), carRatio[key].toFixed(2), iprRatio[key]
+                    .toFixed(2), fdrRatio[key].toFixed(2)
+                ]))
             })
 
             $('#theadCriteriaWeight').html('')
@@ -448,7 +455,8 @@
              */
             function years(data) {
                 Object.keys(data).forEach((key, index) => {
-                    $('#selectYears').append(`<option value="${data[key].tahun}">${data[key].tahun}</option>`)
+                    $('#selectYears').append(
+                        `<option value="${data[key].tahun}">${data[key].tahun}</option>`)
                 })
             }
 
