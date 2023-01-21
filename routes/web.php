@@ -85,4 +85,7 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::get('bank/nullhypothesisdata', [NullHypothesisDataController::class, 'index'])->name('bank.hypothesysdata');
     Route::get('bank/nullhypothesisdata/create', [NullHypothesisDataController::class, 'create'])->name('bank.hypothesysdata.create');
     Route::post('bank/nullhypothesisdata/store', [NullHypothesisDataController::class, 'store'])->name('bank.hypothesisdata.store');
+    Route::get('bank/nullhypothesisdata/edit/{grupId}/{id}', [NullHypothesisDataController::class, 'edit'])->name('bank.nullhypothesisdata.edit');
+    Route::post('bank/nullhypothesisdata/update', [NullHypothesisDataController::class, 'update'])->name('bank.nullhypothesisdata.update');
+    Route::post('bank/nullhypothesis/delete', [NullHypothesisDataController::class, 'destroy'])->name('bank.nullhypothesisdata.delete');
 });

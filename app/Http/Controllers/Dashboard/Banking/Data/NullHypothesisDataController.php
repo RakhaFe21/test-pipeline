@@ -96,9 +96,31 @@ class NullHypothesisDataController extends Controller
      * @param  \App\Models\NullHypothesisData  $nullHypothesisData
      * @return \Illuminate\Http\Response
      */
-    public function edit(NullHypothesisData $nullHypothesisData)
+    public function edit($grupId, $dataId)
     {
-        //
+        $nullHypothesis = NullHypothesisData::where('group_id', $grupId)->get()->toArray();
+
+        $data = array();
+        $getNull1 = explode(" ", $nullHypothesis[0]['null_hypothesis']);
+        $getNull2 = explode(" ", $nullHypothesis[1]['null_hypothesis']);
+
+        /* Get Null Hypothesis 1 */
+        $data['nullId1'] = $nullHypothesis[0]['id'];
+        $data['nullA_1'] = $getNull1[0];
+        $data['nullA_2'] = $getNull1[5];
+        $data['obs'] = $nullHypothesis[0]['obs'];
+        $data['fStatic1'] = $nullHypothesis[0]['fStatic'];
+        $data['prob1'] = $nullHypothesis[0]['prob'];
+
+        /* Get Null Hypothesis 2 */
+        $data['nullId2'] = $nullHypothesis[1]['id'];
+        $data['nullB_1'] = $getNull2[0];
+        $data['nullB_2'] = $getNull2[5];
+        $data['fStatic2'] = $nullHypothesis[1]['fStatic'];
+        $data['prob2'] = $nullHypothesis[1]['prob'];
+
+        $var = VariableMaster::all();
+        return view('dashboard.bank.nullhypothesisdata.edit', compact('nullHypothesis','var', 'data', 'grupId', 'dataId'));
     }
 
     /**
@@ -110,7 +132,35 @@ class NullHypothesisDataController extends Controller
      */
     public function update(Request $request, NullHypothesisData $nullHypothesisData)
     {
-        //
+        //dd($request->groupId);
+        $validator = Validator::make($request->all(), [
+            'variable_1a' => 'required',
+            'variable_1b' => 'required',
+            'variable_2a' => 'required',
+            'variable_2b' => 'required',
+            'obs' => 'required|numeric',
+            'fStatistic1' => 'required|numeric',
+            'fStatistic2' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['code' => 400, 'message' => 'Invalid data', 'data' => $validator->errors()], 200);
+        }
+
+        $nS = NullHypothesisData::where(['group_id' => $request->groupId, 'id' => $request->dataId1])->first();
+        $nS->null_hypothesis = strtoupper($request->variable_1a) . ' Does not Granger Cause ' . strtoupper($request->variable_1b);
+        $nS->obs = $request->obs;
+        $nS->fStatic = $request->fStatistic1;
+        $nS->prob = $request->prob1;
+        $nS->save();
+
+        $nS2 = NullHypothesisData::where(['group_id' => $request->groupId, 'id' => $request->dataId2])->first();
+        $nS2->null_hypothesis = strtoupper($request->variable_2a) . ' Does not Granger Cause ' . strtoupper($request->variable_2b);
+        $nS2->fStatic = $request->fStatistic2;
+        $nS2->prob = $request->prob2;
+        $nS2->save();
+
+        return response()->json(['code' => 200, 'message' => 'Data saved', 'data' => null], 200);
     }
 
     /**
@@ -119,8 +169,23 @@ class NullHypothesisDataController extends Controller
      * @param  \App\Models\NullHypothesisData  $nullHypothesisData
      * @return \Illuminate\Http\Response
      */
-    public function destroy(NullHypothesisData $nullHypothesisData)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            $validator = Validator::make($request->all(), [
+                'groupId' => 'required|numeric',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['code' => 400, 'message' => 'Invalid Data', 'data' => $validator->errors()], 200);
+            }
+
+            NullHypothesisData::where('group_id', $request->groupId)
+                ->delete();
+
+            return response()->json(['code' => 200, 'message' => 'Data deleted successfully', 'data' => null], 200);
+        } catch (Exception $e) {
+            return response()->json(['code' => 500, 'message' => $e->getMessage(), 'data' => null], 200);
+        }
     }
 }

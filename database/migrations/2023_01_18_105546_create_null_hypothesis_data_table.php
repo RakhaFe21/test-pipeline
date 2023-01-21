@@ -16,6 +16,7 @@ class CreateNullHypothesisDataTable extends Migration
         Schema::create('null_hypothesis_data', function (Blueprint $table) {
             $table->id();
             $table->string('null_hypothesis');
+            $table->integer('group_id')->nullable();
             $table->double('obs')->nullable();
             $table->double('fStatic')->nullable();
             $table->double('prob')->nullable();
