@@ -188,4 +188,69 @@ class NullHypothesisDataController extends Controller
             return response()->json(['code' => 500, 'message' => $e->getMessage(), 'data' => null], 200);
         }
     }
+
+    public function getVariableValue()
+    {
+        $variable = ['NPF','CAR','IPR','FDR'];
+        $table = '<thead class="text-xs uppercase bg-gray-200" id="theadVariable">';
+        $table.= '<th scope="col" class="py-3 px-6">VARIABLE</th>';
+
+        foreach ($variable as $item) {
+            $table.= '<th scope="col" class="py-3 px-6">I'.$item.'</th>';
+        }
+
+        $table.= '<th scope="col" class="py-3 px-6">TOTAL</th></thead>';
+        $table.= '<tbody id="tbodyVariable">';
+
+        $totalMatrix = array();
+        foreach ($variable as $item) {
+            $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+            $table.= '<td class="border py-4 px-6">I'.$item.'</td>';
+
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            $table.= '<td class="border py-4 px-6">'.$valNpf.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$valCar.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$valIpr.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$valFdr.'</td>';
+
+            /* Get sum of matrix */
+            $sumAll = $valNpf + $valCar + $valIpr + $valFdr;
+            $totalMatrix['arrTotal'] = $sumAll;
+
+            $table.= '<td class="border py-4 px-6">'.$sumAll.'</td>';
+
+            $table.= '</tr>';
+        }
+
+        $table.= '<tr><td colspan="5" class="border py-4 px-6">MAX</td><td class="border py-4 px-6">'.$totalMatrix['arrTotal'].'</td></tr>';
+
+        $table.= '</tbody>';
+
+        return $table;
+    }
+
+    public  function  getProb($nullHypothesis)
+    {
+        $getProb = NullHypothesisData::where('null_hypothesis', $nullHypothesis)->select(['prob'])->first();
+        $calcProb = $getProb->prob * 100;
+
+        /* Find matrix value */
+        if($calcProb > 100) {
+            $matrix = 1;
+        } else if($calcProb >= 50 && $calcProb <= 100) {
+            $matrix = 2;
+        } else if($calcProb >= 10 && $calcProb < 50) {
+            $matrix = 3;
+        } else if($calcProb < 10) {
+            $matrix = 4;
+        } else {
+            $matrix = 0;
+        }
+
+        return $matrix;
+    }
 }
