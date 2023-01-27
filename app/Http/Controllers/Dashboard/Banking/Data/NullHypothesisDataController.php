@@ -233,10 +233,73 @@ class NullHypothesisDataController extends Controller
         return $table;
     }
 
+    public  function  getNormalizedVariableValue()
+    {
+        $variable = ['NPF','CAR','IPR','FDR'];
+        $table = '<thead class="text-xs uppercase bg-gray-200" id="theadVariable">';
+
+        $table.= '<tbody id="tbodyVariable">';
+
+        /*
+         * Get matrix max
+         * */
+        $totalMatrix = array();
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            /* Get sum of matrix */
+            $sumAll = $valNpf + $valCar + $valIpr + $valFdr;
+            $totalMatrix['arrTotal'] = $sumAll;
+        }
+        /* End get matrix max */
+
+        /*
+         * Get normalized data
+         * */
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            $countNpf = $valNpf / $totalMatrix['arrTotal'];
+            $countCar = $valCar / $totalMatrix['arrTotal'];
+            $countIpr = $valIpr / $totalMatrix['arrTotal'];
+            $countFdr = $valFdr / $totalMatrix['arrTotal'];
+
+            $fixedNpf = ($countNpf == 0) ? 0 : number_format($countNpf, 2);
+            $fixedCar = ($countCar == 0) ? 0 : number_format($countCar, 2);
+            $fixedIpr = ($countIpr == 0) ? 0 : number_format($countIpr, 2);
+            $fixedFdr = ($countFdr == 0) ? 0 : number_format($countFdr, 2);
+
+            $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+            $table.= '<td class="border py-4 px-6">I'.$item.'</td>';
+
+            $table.= '<td class="border py-4 px-6">'.$fixedNpf.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$fixedCar.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$fixedIpr.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$fixedFdr.'</td>';
+
+            $table.= '</tr>';
+        }
+        /* End get normalized data */
+
+        $table.= '</tbody>';
+
+        return $table;
+    }
+
     public  function  getProb($nullHypothesis)
     {
         $getProb = NullHypothesisData::where('null_hypothesis', $nullHypothesis)->select(['prob'])->first();
-        $calcProb = $getProb->prob * 100;
+        if(!empty($getProb->prob)) {
+            $calcProb = $getProb->prob * 100;
+        } else {
+            $calcProb = 0;
+        }
 
         /* Find matrix value */
         if($calcProb > 100) {
@@ -253,4 +316,33 @@ class NullHypothesisDataController extends Controller
 
         return $matrix;
     }
+
+    public function getIdentityMatrix()
+    {
+        $variable = ['NPF','CAR','IPR','FDR'];
+
+        $table = '<tbody id="tbodyVariable">';
+
+        $totalMatrix = array();
+        foreach ($variable as $item) {
+            $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+
+            $valNpf = ($item == $variable[0]) ? 1: 0;
+            $valCar = ($item == $variable[1]) ? 1: 0;
+            $valIpr = ($item == $variable[2]) ? 1: 0;
+            $valFdr = ($item == $variable[3]) ? 1: 0;
+
+            $table.= '<td class="border py-4 px-6">'.$valNpf.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$valCar.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$valIpr.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$valFdr.'</td>';
+
+            $table.= '</tr>';
+        }
+
+        $table.= '</tbody>';
+
+        return $table;
+    }
+
 }

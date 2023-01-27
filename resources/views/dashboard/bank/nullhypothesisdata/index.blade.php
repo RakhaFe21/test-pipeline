@@ -44,16 +44,17 @@
             </div>
         </div>
         <div class="hidden" id="tab3">
-            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left text-center border-collapse">
-                    <thead class="text-xs uppercase bg-gray-200">
-                        <th scope="col" class="py-3 px-6">NORMALIZED</th>
-                        <th scope="col" class="py-3 px-6">INPF%</th>
-                        <th scope="col" class="py-3 px-6">ICAR%</th>
-                        <th scope="col" class="py-3 px-6">IIPR%</th>
-                        <th scope="col" class="py-3 px-6">IFDR%</th>
-                        <th scope="col" class="py-3 px-6">TOTAL</th>
-                    </thead>
+            <p class="mb-6 text-center text-lg font-normal lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Normalization of Direct Relation Matrix</p>
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg mb-6">
+                <table class="w-full text-sm text-left text-center border-collapse" id="table3">
+
+                </table>
+            </div>
+
+            <p class="mb-6 text-center text-lg font-normal lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">IDENTITY MATRIK 12X12 (I)</p>
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg mb-6">
+                <table class="w-full text-sm text-left text-center border-collapse" id="table4">
+
                 </table>
             </div>
         </div>
@@ -214,11 +215,22 @@
             })
 
             /*
-            * Get step 2
+            * Get step 2 - Matrix variable
             * */
             $.get("nullhypothesisdata/variable", function(data){
-                $("#table2").html(data);
-            });
+                $('#table2').html(data)
+            })
+
+            /*
+            * Get step 3 - Normalized variable
+            * */
+            $.get("nullhypothesisdata/normalizedVariable", function (data){
+                $('#table3').html(data)
+            })
+
+            $.get("nullhypothesisdata/identityMatrix", function (data){
+                $('#table4').html(data)
+            })
         })
     </script>
 @endpush
