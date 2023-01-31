@@ -90,5 +90,7 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::post('bank/nullhypothesis/delete', [NullHypothesisDataController::class, 'destroy'])->name('bank.nullhypothesisdata.delete');
     Route::get('bank/nullhypothesisdata/variable', [NullHypothesisDataController::class,'getVariableValue'])->name('bank.nullhypothesis.variableValue');
     Route::get('bank/nullhypothesisdata/normalizedVariable', [NullHypothesisDataController::class,'getNormalizedVariableValue'])->name('bank.nullhypothesis.normalizedVariableValue');
-    Route::get('bank/nullhypothesisdata/identityMatrix', [NullHypothesisDataController::class,'getIdentityMatrix'])->name('bank.nullhypothesis.identityMatrix');
+    Route::get('bank/nullhypothesisdata/identityMatrix', [NullHypothesisDataController::class,'identityMatrix'])->name('bank.nullhypothesis.identityMatrix');
+    Route::get('bank/nullhypothesisdata/identityMatrixY', [NullHypothesisDataController::class,'identityMatrixY'])->name('bank.nullhypothesis.identityMatrixY');
+    Route::get('bank/nullhypothesisdata/minvers', [NullHypothesisDataController::class, 'getMinvers'])->name('bank.hypothesysdata.minvers');
 });

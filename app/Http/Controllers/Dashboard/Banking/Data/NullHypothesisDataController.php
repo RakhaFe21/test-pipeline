@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Models\VariableMaster;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Phpml\Classification\KNearestNeighbors;
+use Phpml\Math\Matrix;
+use NumPHP\Core\NumPHP;
 
 class NullHypothesisDataController extends Controller
 {
@@ -317,7 +320,7 @@ class NullHypothesisDataController extends Controller
         return $matrix;
     }
 
-    public function getIdentityMatrix()
+    public function identityMatrix()
     {
         $variable = ['NPF','CAR','IPR','FDR'];
 
@@ -344,5 +347,162 @@ class NullHypothesisDataController extends Controller
 
         return $table;
     }
+
+    public function identityMatrixY()
+    {
+        $variable = ['NPF','CAR','IPR','FDR'];
+        $table = '<thead class="text-xs uppercase bg-gray-200" id="theadVariable">';
+
+        $table.= '<tbody id="tbodyVariable">';
+
+        /*
+         * Get matrix max
+         * */
+        $totalMatrix = array();
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            /* Get sum of matrix */
+            $sumAll = $valNpf + $valCar + $valIpr + $valFdr;
+            $totalMatrix['arrTotal'] = $sumAll;
+        }
+        /* End get matrix max */
+
+        /*
+         * Get normalized data
+         * */
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            $countNpf = $valNpf / $totalMatrix['arrTotal'];
+            $countCar = $valCar / $totalMatrix['arrTotal'];
+            $countIpr = $valIpr / $totalMatrix['arrTotal'];
+            $countFdr = $valFdr / $totalMatrix['arrTotal'];
+
+            $fixedNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
+            $fixedCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
+            $fixedIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
+            $fixedFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
+
+            $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+
+            $table.= '<td class="border py-4 px-6">'.$fixedNpf.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$fixedCar.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$fixedIpr.'</td>';
+            $table.= '<td class="border py-4 px-6">'.$fixedFdr.'</td>';
+
+            $table.= '</tr>';
+        }
+        /* End get normalized data */
+
+        $table.= '</tbody>';
+
+        return $table;
+    }
+
+    public function getIdentityMatrix($var)
+    {
+        $variable = ['NPF','CAR','IPR','FDR'];
+        foreach ($variable as $v => $k) {
+            return $v;
+        }
+    }
+    public function getMinvers()
+    {
+        $variable = ['NPF','CAR','IPR','FDR'];
+
+        /*
+         * Get matrix max
+         * */
+        $totalMatrix = array();
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            /* Get sum of matrix */
+            $sumAll = $valNpf + $valCar + $valIpr + $valFdr;
+            $totalMatrix['arrTotal'] = $sumAll;
+        }
+        /* End get matrix max */
+
+        /*
+         * Get normalized data
+         * */
+        $arrNpf = array();
+        $arrCar = array();
+        $arrIpr = array();
+        $arrFdr = array();
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            $countNpf = $valNpf / $totalMatrix['arrTotal'];
+            $countCar = $valCar / $totalMatrix['arrTotal'];
+            $countIpr = $valIpr / $totalMatrix['arrTotal'];
+            $countFdr = $valFdr / $totalMatrix['arrTotal'];
+
+            $fixedNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
+            $fixedCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
+            $fixedIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
+            $fixedFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
+
+            $arrNpf[] = $fixedNpf;
+            $arrCar[] = $fixedCar;
+            $arrIpr[] = $fixedIpr;
+            $arrFdr[] = $fixedFdr;
+        }
+
+        $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
+        $invMatrix = new Matrix($mergeMatrix);
+        /* End get normalized data */
+
+        $invMatrixValues = $invMatrix->inverse()->toArray();
+
+        //dump($invMatrixValues);
+
+        $table = '<tbody id="tbodyVariable">';
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[0][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][0], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[0][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][1], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[0][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][2], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[0][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][3], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '</tbody>';
+
+        return $table;
+    }
+
 
 }

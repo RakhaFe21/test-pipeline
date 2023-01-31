@@ -57,6 +57,20 @@
 
                 </table>
             </div>
+
+            <p class="mb-6 text-center text-lg font-normal lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Matrix Identity (I)- Matrix Y</p>
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg mb-6">
+                <table class="w-full text-sm text-left text-center border-collapse" id="table5">
+
+                </table>
+            </div>
+
+            <p class="mb-6 text-center text-lg font-normal lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">INVERSE MATRIX OF I-Y</p>
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg mb-6">
+                <table class="w-full text-sm text-left text-center border-collapse" id="table6">
+
+                </table>
+            </div>
         </div>
     </section>
 
@@ -228,8 +242,25 @@
                 $('#table3').html(data)
             })
 
+            /*
+            * Get Identity Matrix
+            * */
             $.get("nullhypothesisdata/identityMatrix", function (data){
                 $('#table4').html(data)
+            })
+
+            /*
+            * Get matrix identity - matrix Y
+            * */
+            $.get("nullhypothesisdata/identityMatrixY", function (data){
+                $('#table5').html(data)
+            })
+
+            /*
+            * Get invers matrix
+            * */
+            $.get("nullhypothesisdata/minvers", function (data){
+                $('#table6').html(data)
             })
         })
     </script>
