@@ -538,6 +538,7 @@ class NullHypothesisDataController extends Controller
         $arrIpr = array();
         $arrFdr = array();
 
+        $sumNpf = 0;
         foreach ($variable as $item) {
             $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
             $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
@@ -568,6 +569,8 @@ class NullHypothesisDataController extends Controller
             $arrCar[] = $matrixIdentityCar;
             $arrIpr[] = $matrixIdentityIpr;
             $arrFdr[] = $matrixIdentityFdr;
+
+            $sumNpf+= $matrixIdentityNpf;
         }
 
         $allNormalized = array($npfNormalized, $carNormalized, $iprNormalized, $fdrNormalized);
@@ -582,8 +585,341 @@ class NullHypothesisDataController extends Controller
 
         $invMatrixValues = $invMatrix->inverse();
 
-        $mmultValue = $normMatrixValues->multiply($invMatrixValues);
+        $mmultValue = $normMatrixValues->multiply($invMatrixValues)->toArray();
 
-        dump($mmultValue);
+        $mmultNpf = array_sum(array_filter($mmultValue[0], function ($num){
+            return $num > 0;
+        }));
+
+        $mmultCar = array_sum(array_filter($mmultValue[1], function ($num){
+            return $num > 0;
+        }));
+
+        $mmultIpr = array_sum(array_filter($mmultValue[2], function ($num){
+            return $num > 0;
+        }));
+
+        $mmultFdr = array_sum(array_filter($mmultValue[3], function ($num){
+            return $num > 0;
+        }));
+
+
+        $table = '<div class="overflow-x-auto relative shadow-md sm:rounded-lg mb-4">';
+        $table.= '<table class="w-full text-sm text-left text-center border-collapse" >';
+        $table.= '<tbody id="tbodyVariable">';
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][0], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][1], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][2], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][3], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '</tbody>';
+        $table.= '</table>';
+        $table.= '</div>';
+
+        $table.= '<p class="mb-6 text-left text-lg font-normal lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">CI hasil penjumlahan</p>';
+        $table.= '<div class="overflow-x-auto relative shadow-md sm:rounded-lg mt-4">';
+        $table.= '<table class="w-full text-sm text-left text-center border-collapse" >';
+        $table.= '<thead class="text-xs uppercase bg-gray-200" id="theadVariable">';
+        $table.= '<th scope="col" class="py-3 px-6">'.number_format($mmultNpf, 2).'</th>';
+        $table.= '<th scope="col" class="py-3 px-6">'.number_format($mmultCar, 2).'</th>';
+        $table.= '<th scope="col" class="py-3 px-6">'.number_format($mmultIpr, 2).'</th>';
+        $table.= '<th scope="col" class="py-3 px-6">'.number_format($mmultFdr, 2).'</th>';
+        $table.= '</thead>';
+        $table.= '</table>';
+        $table.= '</div>';
+
+        return $table;
+    }
+
+    public function matrix()
+    {
+        $variable = ['NPF','CAR','IPR','FDR'];
+
+        /*
+         * Get matrix max
+         * */
+        $totalMatrix = array();
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            /* Get sum of matrix */
+            $sumAll = $valNpf + $valCar + $valIpr + $valFdr;
+            $totalMatrix['arrTotal'] = $sumAll;
+        }
+        /* End get matrix max */
+
+        /*
+         * Get normalized data
+         * */
+        $npfNormalized = array();
+        $carNormalized = array();
+        $iprNormalized = array();
+        $fdrNormalized = array();
+
+        $arrNpf = array();
+        $arrCar = array();
+        $arrIpr = array();
+        $arrFdr = array();
+
+        $sumNpf = 0;
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            $countNpf = $valNpf / $totalMatrix['arrTotal'];
+            $countCar = $valCar / $totalMatrix['arrTotal'];
+            $countIpr = $valIpr / $totalMatrix['arrTotal'];
+            $countFdr = $valFdr / $totalMatrix['arrTotal'];
+
+            $fixedNpf = ($countNpf == 0) ? 0 : number_format($countNpf, 2);
+            $fixedCar = ($countCar == 0) ? 0 : number_format($countCar, 2);
+            $fixedIpr = ($countIpr == 0) ? 0 : number_format($countIpr, 2);
+            $fixedFdr = ($countFdr == 0) ? 0 : number_format($countFdr, 2);
+
+            $matrixIdentityNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
+            $matrixIdentityCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
+            $matrixIdentityIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
+            $matrixIdentityFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
+
+            $npfNormalized[] = $fixedNpf;
+            $carNormalized[] = $fixedCar;
+            $iprNormalized[] = $fixedIpr;
+            $fdrNormalized[] = $fixedFdr;
+
+            $arrNpf[] = $matrixIdentityNpf;
+            $arrCar[] = $matrixIdentityCar;
+            $arrIpr[] = $matrixIdentityIpr;
+            $arrFdr[] = $matrixIdentityFdr;
+
+            $sumNpf+= $matrixIdentityNpf;
+        }
+
+        $allNormalized = array($npfNormalized, $carNormalized, $iprNormalized, $fdrNormalized);
+        $normMatrix = new Matrix($allNormalized);
+        $normMatrixValues = $normMatrix->inverse();
+
+        //dump($allNormalized);
+
+        $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
+        $invMatrix = new Matrix($mergeMatrix);
+        /* End get normalized data */
+
+        $invMatrixValues = $invMatrix->inverse();
+
+        $mmultValue = $normMatrixValues->multiply($invMatrixValues)->toArray();
+
+        $mmultNpf = array_sum(array_filter($mmultValue[0], function ($num){
+            return $num > 0;
+        }));
+
+        $mmultCar = array_sum(array_filter($mmultValue[1], function ($num){
+            return $num > 0;
+        }));
+
+        $mmultIpr = array_sum(array_filter($mmultValue[2], function ($num){
+            return $num > 0;
+        }));
+
+        $mmultFdr = array_sum(array_filter($mmultValue[3], function ($num){
+            return $num > 0;
+        }));
+
+        $table = '<div class="overflow-x-auto relative shadow-md sm:rounded-lg mb-4">';
+        $table.= '<table class="w-full text-sm text-left text-center border-collapse" >';
+        $table.= '<tbody id="tbodyVariable">';
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][0], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][1], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][2], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][3], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '</tbody>';
+        $table.= '</table>';
+        $table.= '</div>';
+
+        return $table;
+    }
+
+    public function averageTreshold()
+    {
+        $variable = ['NPF','CAR','IPR','FDR'];
+
+        /*
+         * Get matrix max
+         * */
+        $totalMatrix = array();
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            /* Get sum of matrix */
+            $sumAll = $valNpf + $valCar + $valIpr + $valFdr;
+            $totalMatrix['arrTotal'] = $sumAll;
+        }
+        /* End get matrix max */
+
+        /*
+         * Get normalized data
+         * */
+        $npfNormalized = array();
+        $carNormalized = array();
+        $iprNormalized = array();
+        $fdrNormalized = array();
+
+        $arrNpf = array();
+        $arrCar = array();
+        $arrIpr = array();
+        $arrFdr = array();
+
+        $sumNpf = 0;
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            $countNpf = $valNpf / $totalMatrix['arrTotal'];
+            $countCar = $valCar / $totalMatrix['arrTotal'];
+            $countIpr = $valIpr / $totalMatrix['arrTotal'];
+            $countFdr = $valFdr / $totalMatrix['arrTotal'];
+
+            $fixedNpf = ($countNpf == 0) ? 0 : number_format($countNpf, 2);
+            $fixedCar = ($countCar == 0) ? 0 : number_format($countCar, 2);
+            $fixedIpr = ($countIpr == 0) ? 0 : number_format($countIpr, 2);
+            $fixedFdr = ($countFdr == 0) ? 0 : number_format($countFdr, 2);
+
+            $matrixIdentityNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
+            $matrixIdentityCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
+            $matrixIdentityIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
+            $matrixIdentityFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
+
+            $npfNormalized[] = $fixedNpf;
+            $carNormalized[] = $fixedCar;
+            $iprNormalized[] = $fixedIpr;
+            $fdrNormalized[] = $fixedFdr;
+
+            $arrNpf[] = $matrixIdentityNpf;
+            $arrCar[] = $matrixIdentityCar;
+            $arrIpr[] = $matrixIdentityIpr;
+            $arrFdr[] = $matrixIdentityFdr;
+
+            $sumNpf+= $matrixIdentityNpf;
+        }
+
+        $allNormalized = array($npfNormalized, $carNormalized, $iprNormalized, $fdrNormalized);
+        $normMatrix = new Matrix($allNormalized);
+        $normMatrixValues = $normMatrix->inverse();
+
+        //dump($allNormalized);
+
+        $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
+        $invMatrix = new Matrix($mergeMatrix);
+        /* End get normalized data */
+
+        $invMatrixValues = $invMatrix->inverse();
+
+        $mmultValue = $normMatrixValues->multiply($invMatrixValues)->toArray();
+
+        $mmultNpf = array_sum(array_filter($mmultValue[0], function ($num){
+            return $num > 0;
+        }));
+
+        $mmultCar = array_sum(array_filter($mmultValue[1], function ($num){
+            return $num > 0;
+        }));
+
+        $mmultIpr = array_sum(array_filter($mmultValue[2], function ($num){
+            return $num > 0;
+        }));
+
+        $mmultFdr = array_sum(array_filter($mmultValue[3], function ($num){
+            return $num > 0;
+        }));
+
+        $arrData = array(
+            $mmultValue[0][0],
+            $mmultValue[1][0],
+            $mmultValue[2][0],
+            $mmultValue[3][0],
+            $mmultValue[0][1],
+            $mmultValue[1][1],
+            $mmultValue[2][1],
+            $mmultValue[3][1],
+            $mmultValue[0][2],
+            $mmultValue[1][2],
+            $mmultValue[2][2],
+            $mmultValue[3][2],
+            $mmultValue[0][3],
+            $mmultValue[1][3],
+            $mmultValue[2][3],
+            $mmultValue[3][3]
+        );
+
+        $avg =  array_sum($arrData)/count($arrData);
+
+        $table = '<div class="overflow-x-auto relative shadow-md sm:rounded-lg mt-4">';
+        $table.= '<table class="w-full text-sm text-left text-center border-collapse" >';
+        $table.= '<thead class="text-xs uppercase bg-gray-200" id="theadVariable">';
+        $table.= '<th scope="col" class="py-3 px-6">Average</th>';
+        $table.= '<th scope="col" class="py-3 px-6">'.number_format($avg, 2).'</th>';
+        $table.= '</thead>';
+        $table.= '</table>';
+        $table.= '</div>';
+
+        return $table;
+
+        return $table;
     }
 }

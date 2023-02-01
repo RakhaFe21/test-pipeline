@@ -74,10 +74,22 @@
         </div>
         <div class="hidden" id="tab4">
             <p class="mb-6 text-center text-lg font-normal lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Total Relation Matrix T</p>
-            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left text-center border-collapse" id="table7">
+            <div id="table7">
 
-                </table>
+            </div>
+        </div>
+
+        <div class="hidden" id="tab5">
+            <p class="mb-6 text-center text-lg font-normal lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Evaluate the sums of rows and columns in T matrix</p>
+            <div id="table8">
+
+            </div>
+        </div>
+
+        <div class="hidden" id="tab6">
+            <p class="mb-6 text-center text-lg font-normal lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Defining the threshold value</p>
+            <div id="table9">
+
             </div>
         </div>
     </section>
@@ -141,7 +153,7 @@
                     'name' : 'Step 4 - Matrix'
                 },
                 {
-                    'id' : 'tab5',
+                    'id' : 'tab6',
                     'name' : 'Step 5 - Treshold'
                 }
             ]
@@ -283,6 +295,20 @@
             * */
             $.get("nullhypothesisdata/relationmatrix", function (data){
                 $('#table7').html(data)
+            })
+
+            /*
+            * Get matrix
+            * */
+            $.get("nullhypothesisdata/matrix", function (data){
+                $('#table8').html(data)
+            })
+
+            /*
+            * Get Average
+            * */
+            $.get("nullhypothesisdata/average", function (data){
+                $('#table9').html(data)
             })
         })
     </script>
