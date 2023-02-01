@@ -93,4 +93,5 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::get('bank/nullhypothesisdata/identityMatrix', [NullHypothesisDataController::class,'identityMatrix'])->name('bank.nullhypothesis.identityMatrix');
     Route::get('bank/nullhypothesisdata/identityMatrixY', [NullHypothesisDataController::class,'identityMatrixY'])->name('bank.nullhypothesis.identityMatrixY');
     Route::get('bank/nullhypothesisdata/minvers', [NullHypothesisDataController::class, 'getMinvers'])->name('bank.hypothesysdata.minvers');
+    Route::get('bank/nullhypothesisdata/relationmatrix', [NullHypothesisDataController::class, 'totalRelationMatrix'])->name('bank.hypothesysdata.relationmatrix');
 });

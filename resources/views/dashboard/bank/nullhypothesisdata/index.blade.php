@@ -72,6 +72,14 @@
                 </table>
             </div>
         </div>
+        <div class="hidden" id="tab4">
+            <p class="mb-6 text-center text-lg font-normal lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Total Relation Matrix T</p>
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-center border-collapse" id="table7">
+
+                </table>
+            </div>
+        </div>
     </section>
 
     <div id="modalConfirm" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
@@ -145,6 +153,13 @@
             $('#selectTabs').on('change', function () {
                 let id = $('#selectTabs').val()
                 Object.keys(tabs).forEach((key, index) => {
+
+                    if(id != 'tab1') {
+                        $('#addNew').addClass('hidden');
+                    } else {
+                        $('#addNew').removeClass('hidden');
+                    }
+
                     if(id == tabs[key].id) {
                         $('#' + id).removeClass('hidden')
                     } else {
@@ -261,6 +276,13 @@
             * */
             $.get("nullhypothesisdata/minvers", function (data){
                 $('#table6').html(data)
+            })
+
+            /*
+            * Get total relation matrix
+            * */
+            $.get("nullhypothesisdata/relationmatrix", function (data){
+                $('#table7').html(data)
             })
         })
     </script>

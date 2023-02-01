@@ -12,9 +12,10 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "markbaker/matrix": "3.0",
+        "numphp/numphp": "*",
         "php-ai/php-ml": "^0.10.0",
-        "yoeunes/toastr": "^2.0",
-        "numphp/numphp": "*"
+        "yoeunes/toastr": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

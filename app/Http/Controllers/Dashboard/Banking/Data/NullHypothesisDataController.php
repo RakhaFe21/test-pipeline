@@ -463,6 +463,7 @@ class NullHypothesisDataController extends Controller
         }
 
         $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
+
         $invMatrix = new Matrix($mergeMatrix);
         /* End get normalized data */
 
@@ -504,5 +505,85 @@ class NullHypothesisDataController extends Controller
         return $table;
     }
 
+    public function totalRelationMatrix()
+    {
+        $variable = ['NPF','CAR','IPR','FDR'];
 
+        /*
+         * Get matrix max
+         * */
+        $totalMatrix = array();
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            /* Get sum of matrix */
+            $sumAll = $valNpf + $valCar + $valIpr + $valFdr;
+            $totalMatrix['arrTotal'] = $sumAll;
+        }
+        /* End get matrix max */
+
+        /*
+         * Get normalized data
+         * */
+        $npfNormalized = array();
+        $carNormalized = array();
+        $iprNormalized = array();
+        $fdrNormalized = array();
+
+        $arrNpf = array();
+        $arrCar = array();
+        $arrIpr = array();
+        $arrFdr = array();
+
+        foreach ($variable as $item) {
+            $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
+            $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
+            $valIpr = ($item == $variable[2]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[2]);
+            $valFdr = ($item == $variable[3]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[3]);
+
+            $countNpf = $valNpf / $totalMatrix['arrTotal'];
+            $countCar = $valCar / $totalMatrix['arrTotal'];
+            $countIpr = $valIpr / $totalMatrix['arrTotal'];
+            $countFdr = $valFdr / $totalMatrix['arrTotal'];
+
+            $fixedNpf = ($countNpf == 0) ? 0 : number_format($countNpf, 2);
+            $fixedCar = ($countCar == 0) ? 0 : number_format($countCar, 2);
+            $fixedIpr = ($countIpr == 0) ? 0 : number_format($countIpr, 2);
+            $fixedFdr = ($countFdr == 0) ? 0 : number_format($countFdr, 2);
+
+            $matrixIdentityNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
+            $matrixIdentityCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
+            $matrixIdentityIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
+            $matrixIdentityFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
+
+            $npfNormalized[] = $fixedNpf;
+            $carNormalized[] = $fixedCar;
+            $iprNormalized[] = $fixedIpr;
+            $fdrNormalized[] = $fixedFdr;
+
+            $arrNpf[] = $matrixIdentityNpf;
+            $arrCar[] = $matrixIdentityCar;
+            $arrIpr[] = $matrixIdentityIpr;
+            $arrFdr[] = $matrixIdentityFdr;
+        }
+
+        $allNormalized = array($npfNormalized, $carNormalized, $iprNormalized, $fdrNormalized);
+        $normMatrix = new Matrix($allNormalized);
+        $normMatrixValues = $normMatrix->inverse();
+
+        //dump($allNormalized);
+
+        $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
+        $invMatrix = new Matrix($mergeMatrix);
+        /* End get normalized data */
+
+        $invMatrixValues = $invMatrix->inverse();
+
+        $mmultValue = $normMatrixValues->multiply($invMatrixValues);
+
+        dump($mmultValue);
+    }
 }
