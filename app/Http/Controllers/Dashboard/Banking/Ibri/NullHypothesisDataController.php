@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard\Banking\Data;
+namespace App\Http\Controllers\Dashboard\Banking\Ibri;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Dashboard\Banking\Data\Exception;
 use App\Models\NullHypothesisData;
-use Illuminate\Http\Request;
 use App\Models\VariableMaster;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-use Phpml\Classification\KNearestNeighbors;
 use Phpml\Math\Matrix;
-use NumPHP\Core\NumPHP;
 
 class NullHypothesisDataController extends Controller
 {
@@ -22,7 +20,7 @@ class NullHypothesisDataController extends Controller
     public function index()
     {
         $hypothesis = NullHypothesisData::orderBy('id','asc')->get();
-        return view('dashboard.bank.nullhypothesisdata.index', compact('hypothesis'));
+        return view('dashboard.bank.ibri.nullhypothesisdata.index', compact('hypothesis'));
     }
 
     /**
@@ -33,7 +31,7 @@ class NullHypothesisDataController extends Controller
     public function create()
     {
         $var = VariableMaster::all();
-        return view('dashboard.bank.nullhypothesisdata.create', compact('var'));
+        return view('dashboard.bank.ibri.nullhypothesisdata.create', compact('var'));
     }
 
     /**
@@ -123,7 +121,7 @@ class NullHypothesisDataController extends Controller
         $data['prob2'] = $nullHypothesis[1]['prob'];
 
         $var = VariableMaster::all();
-        return view('dashboard.bank.nullhypothesisdata.edit', compact('nullHypothesis','var', 'data', 'grupId', 'dataId'));
+        return view('dashboard.bank.ibri.nullhypothesisdata.edit', compact('nullHypothesis','var', 'data', 'grupId', 'dataId'));
     }
 
     /**
@@ -917,8 +915,6 @@ class NullHypothesisDataController extends Controller
         $table.= '</thead>';
         $table.= '</table>';
         $table.= '</div>';
-
-        return $table;
 
         return $table;
     }

@@ -1,23 +1,31 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+	use App\Http\Controllers\Auth\AuthController;
+	use App\Http\Controllers\Dashboard\Banking\BankVariableController;
+	use App\Http\Controllers\Dashboard\Banking\Data\BankDataController;
+	use App\Http\Controllers\Dashboard\Banking\Ibri\BankAgregationController;
+	use App\Http\Controllers\Dashboard\Banking\Ibri\BankBasedYearController;
+	use App\Http\Controllers\Dashboard\Banking\Ibri\BankDeterminingController;
+	use App\Http\Controllers\Dashboard\Banking\Ibri\BankFactorAnalysisController;
+	use App\Http\Controllers\Dashboard\Banking\Ibri\BankTheoreticalController;
+	use App\Http\Controllers\Dashboard\Banking\Ibri\BankTransformingController;
+	use App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController;
+    use App\Http\Controllers\Dashboard\Banking\Ibri\SignalingTresholdController;
+	use App\Http\Controllers\Dashboard\DashboardController;
+	use App\Http\Controllers\Landing\{HomeController, IntegrationController, ProfileController, TentangKamiController};
+	use App\Http\Controllers\Landing\Bank\{DataController,
+		TheheatmapController,
+		TheoriticalController,
+		VariableController,
+		VisualizationController};
+	use App\Http\Controllers\Landing\Macro\{DataMacroController,
+		TheheatmapMacroController,
+		TheoriticalMacroController,
+		VariableMacroController,
+		VisualizationMacroController};
+	use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\Dashboard\Banking\BankVariableController;
-use App\Http\Controllers\Dashboard\Banking\Data\BankDataController;
-use App\Http\Controllers\Dashboard\Banking\Data\NullHypothesisDataController;
-use App\Http\Controllers\Dashboard\Banking\Ibri\BankAgregationController;
-use App\Http\Controllers\Dashboard\Banking\Ibri\BankTheoreticalController;
-use App\Http\Controllers\Dashboard\Banking\Ibri\BankTransformingController;
-use App\Http\Controllers\Dashboard\Banking\Ibri\BankBasedYearController;
-use App\Http\Controllers\Dashboard\Banking\Ibri\BankDeterminingController;
-use App\Http\Controllers\Dashboard\Banking\Ibri\BankFactorAnalysisController;
-use App\Http\Controllers\Landing\{HomeController, IntegrationController, ProfileController, TentangKamiController};
-use App\Http\Controllers\Landing\Bank\{DataController, TheheatmapController, TheoriticalController, VariableController, VisualizationController};
-use App\Http\Controllers\Landing\Macro\{DataMacroController, TheheatmapMacroController, TheoriticalMacroController, VariableMacroController, VisualizationMacroController};
-
-Route::get('/', [HomeController::class, 'index'])->name('home');
+	Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tentang-kami', [TentangKamiController::class, 'index'])->name('tentang.kami');
 Route::get('/integration', [IntegrationController::class, 'index'])->name('integration');
 
@@ -96,4 +104,8 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::get('bank/nullhypothesisdata/relationmatrix', [NullHypothesisDataController::class, 'totalRelationMatrix'])->name('bank.hypothesysdata.relationmatrix');
     Route::get('bank/nullhypothesisdata/matrix', [NullHypothesisDataController::class, 'matrix'])->name('bank.hypothesysdata.matrix');
     Route::get('bank/nullhypothesisdata/average', [NullHypothesisDataController::class, 'averageTreshold'])->name('bank.hypothesysdata.average');
+
+    Route::get('bank/ibri/signaling/upper', [SignalingTresholdController::class, 'indexUpper'])->name('bank.ibri.signaling.upper');
+    Route::get('bank/ibri/signaling/lower', [SignalingTresholdController::class, 'indexLower'])->name('bank.ibri.signaling.lower');
+    Route::get('bank/ibri/signaling/lower/data', [SignalingTresholdController::class, 'dataLower'])->name('bank.ibri.signaling.lower.data');
 });
