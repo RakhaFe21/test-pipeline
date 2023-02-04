@@ -107,5 +107,6 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
 
     Route::get('bank/ibri/signaling/upper', [SignalingTresholdController::class, 'indexUpper'])->name('bank.ibri.signaling.upper');
     Route::get('bank/ibri/signaling/lower', [SignalingTresholdController::class, 'indexLower'])->name('bank.ibri.signaling.lower');
+    Route::get('bank/ibri/signaling/upper/data', [SignalingTresholdController::class, 'dataUpper'])->name('bank.ibri.signaling.upper.data');
     Route::get('bank/ibri/signaling/lower/data', [SignalingTresholdController::class, 'dataLower'])->name('bank.ibri.signaling.lower.data');
 });
