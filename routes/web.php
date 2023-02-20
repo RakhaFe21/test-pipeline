@@ -12,6 +12,7 @@
 	use App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController;
     use App\Http\Controllers\Dashboard\Banking\Ibri\SignalingTresholdController;
     use App\Http\Controllers\Dashboard\Banking\Ibri\SampleModelController;
+    use App\Http\Controllers\Dashboard\Banking\Ibri\OutSampleController;
 	use App\Http\Controllers\Dashboard\DashboardController;
 	use App\Http\Controllers\Landing\{HomeController, IntegrationController, ProfileController, TentangKamiController};
 	use App\Http\Controllers\Landing\Bank\{DataController,
@@ -116,4 +117,8 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::get('bank/ibri/sample/upper/data', [SampleModelController::class, 'dataUpper'])->name('bank.ibri.sample.upper.data');
     Route::get('bank/ibri/sample/lower/data', [SampleModelController::class, 'dataLower'])->name('bank.ibri.sample.lower.data');
     Route::get('bank/ibri/sample/hp', [SampleModelController::class, 'getHpFilter'])->name('bank.ibri.sample.hp');
+
+    Route::get('bank/ibri/ews/upper', [OutSampleController::class, 'indexUpper'])->name('bank.ibri.ews.upper');
+    Route::get('bank/ibri/ews/lower', [OutSampleController::class, 'indexLower'])->name('bank.ibri.ews.lower');
+    Route::get('bank/ibri/ews/signal', [OutSampleController::class, 'signalData'])->name('bank.ibri.ews.signal');
 });

@@ -246,6 +246,17 @@
                 }
             ]
 
+            const ewsChildMenu = [
+                {
+                    "url": "{{ route('dashboard.bank.ibri.ews.upper') }}",
+                    "title": "Upper Treshold"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.ibri.ews.lower') }}",
+                    "title": "Lower Treshold"
+                }
+            ]
+
             Object.keys(bankIbriMenuList).forEach((key, index) => {
                 $("#data-dropdown").append(`
                     <li>
@@ -286,6 +297,20 @@
                             </svg>
                         </button>
                         <ul id="signal-hp-dropdown" class="px-4 space-y-4"></ul>
+                        <button type="button"
+                            class="flex items-center p-4 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                            aria-controls="ews-dropdown" data-collapse-toggle="ews-dropdown">
+                            <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                                sidebar-toggle-item="ews-dropdown">EWS - Out Sample Model</span>
+                            <svg sidebar-toggle-item="ews-dropdown" class="w-6 h-6" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <ul id="ews-dropdown" class="px-4 space-y-4"></ul>
             `)
 
             Object.keys(signalingTresholdChildMenu).forEach((key, index) => {
@@ -305,6 +330,17 @@
                         <a href="${signalingHpChildMenu[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                             <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
                             <span class="flex-1 ml-4 text-left whitespace-nowrap">${signalingHpChildMenu[key].title}</span>
+                        </a>
+                    </li>
+                `)
+            })
+
+            Object.keys(ewsChildMenu).forEach((key, index) => {
+                $("#ews-dropdown").append(`
+                    <li>
+                        <a href="${ewsChildMenu[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                            <span class="flex-1 ml-4 text-left whitespace-nowrap">${ewsChildMenu[key].title}</span>
                         </a>
                     </li>
                 `)
