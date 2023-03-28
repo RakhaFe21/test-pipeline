@@ -128,7 +128,7 @@
             function setTable(obj) {
                 $('#tbody').html('')
                 Object.keys(obj).forEach((key, index) => {
-                    let data = obj[key]
+                    let data = obj[key];
                     $('#tbody').append(`
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">${data[0]}</td>
@@ -143,7 +143,8 @@
                                 </button>
                             </td>
                         </tr>
-                    `)
+                    `);
+
                 })
             }
 
