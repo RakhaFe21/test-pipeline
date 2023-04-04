@@ -13,6 +13,8 @@
     use App\Http\Controllers\Dashboard\Banking\Ibri\SignalingTresholdController;
     use App\Http\Controllers\Dashboard\Banking\Ibri\SampleModelController;
     use App\Http\Controllers\Dashboard\Banking\Ibri\OutSampleController;
+    use App\Http\Controllers\Dashboard\Banking\Ibri\OutSamplePerformanceController;
+    use App\Http\Controllers\Dashboard\Banking\Ibri\OptimalLevelIndexController;
 	use App\Http\Controllers\Dashboard\DashboardController;
 	use App\Http\Controllers\Landing\{HomeController, IntegrationController, ProfileController, TentangKamiController};
 	use App\Http\Controllers\Landing\Bank\{DataController,
@@ -121,4 +123,9 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::get('bank/ibri/ews/upper', [OutSampleController::class, 'indexUpper'])->name('bank.ibri.ews.upper');
     Route::get('bank/ibri/ews/lower', [OutSampleController::class, 'indexLower'])->name('bank.ibri.ews.lower');
     Route::get('bank/ibri/ews/signal', [OutSampleController::class, 'signalData'])->name('bank.ibri.ews.signal');
+
+    Route::get('bank/ibri/osp/upper', [OutSamplePerformanceController::class, 'indexUpper'])->name('bank.ibri.outsampleperf.upper');
+    Route::get('bank/ibri/osp/lower', [OutSamplePerformanceController::class, 'indexLower'])->name('bank.ibri.outsampleperf.lower');
+
+    Route::get('bank/ibri/optimal-index', [OptimalLevelIndexController::class, 'index'])->name('bank.ibri.optimallevelindex');
 });
