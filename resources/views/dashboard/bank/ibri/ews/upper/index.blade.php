@@ -25,7 +25,7 @@
                         class="bg-gray-50 flex w-full border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray p-3.5 mr-4" id="selectTable">
                     </select>
                 </div>
-                <div class="mb-4">
+                <div class="mb-4" id="tahun-section">
                     <label class="block text-gray-700 text-sm mb-2 ml-4" for="tahun">
                         Tahun
                     </label>
@@ -234,16 +234,36 @@
             function tableChange(table) {
                 $('.skalz-tbody').html('')
                 if (table === 'tableDiv1') {
+                    $('#tahun-section').css({
+                        display: "inline",
+                        visibility: "visible"
+                    });
                     let variable = $('#selectVariable').val()
                     let year = $('#selectYear').val()
                     getSignal(variable, year)
                 } else if (table === 'tableDiv2'){
+                    $('#tahun-section').css({
+                        display: "inline",
+                        visibility: "visible"
+                    });
                     countHorizon()
                 } else if (table === 'tableDiv3'){
+                    $('#tahun-section').css({
+                        display: "inline",
+                        visibility: "visible"
+                    });
                     getValueMonth()
                 } else if (table === 'tableDiv4'){
+                    $('#tahun-section').css({
+                        display: "none",
+                        visibility: "hidden"
+                    });
                     getResultMonth()
                 } else {
+                    $('#tahun-section').css({
+                        display: "none",
+                        visibility: "hidden"
+                    });
                     getRangkumanYear()
                 }
             }
@@ -348,48 +368,49 @@
 
             async function filterSignalByYear(data, year){
                 let fData = []
-                if (year === "2010") {
-                    for (let i = 0; i < data.length; i++) {
-                        if(data[i].tahun == year) {
-                            if (i < (data.length - 1)) {
-                                data[i].signalC = (data[i].value_index > data[i].average)?1:0
+                console.log(data);
+                // if (year === "2010") {
+                //     for (let i = 0; i < data.length; i++) {
+                //         if(data[i].tahun == year) {
+                //             if (i < (data.length - 1)) {
+                //                 data[i].signalC = (data[i].value_index > data[i].average)?1:0
         
-                                if (data[i].signal && data[i].signalC) {
-                                    data[i+1].test_horizon1 =  'A'
-                                    data[i+1].test_horizon3 =  'A'
-                                    data[i+1].test_horizon6 =  'A'
-                                    data[i+1].test_horizon12=  'A'
-                                    data[i+1].test_horizon24 =  'A'
-                                } else if(data[i].signal && !data[i].signalC){
-                                    data[i+1].test_horizon1 =  'B'
-                                    data[i+1].test_horizon3 =  'B'
-                                    data[i+1].test_horizon6 =  'B'
-                                    data[i+1].test_horizon12=  'B'
-                                    data[i+1].test_horizon24 =  'B'
-                                } else if(!data[i].signal && data[i].signalC){
-                                    data[i+1].test_horizon1 =  'C'
-                                    data[i+1].test_horizon3 =  'C'
-                                    data[i+1].test_horizon6 =  'C'
-                                    data[i+1].test_horizon12=  'C'
-                                    data[i+1].test_horizon24 =  'C'
-                                } else {
-                                    data[i].test_horizon1 =  'D'
-                                    data[i].test_horizon3 =  'D'
-                                    data[i].test_horizon6 =  'D'
-                                    data[i].test_horizon12=  'D'
-                                    data[i].test_horizon24 =  'D'
-                                }
-                                fData.push(data[i])
-                            }
-                        }
-                    }
-                    return fData
-                } else if (year === "2011"){
-                    for (let index = 0; index < array.length; index++) {
-                        const element = array[index];
+                //                 if (data[i].signal && data[i].signalC) {
+                //                     data[i+1].test_horizon1 =  'A'
+                //                     data[i+1].test_horizon3 =  'A'
+                //                     data[i+1].test_horizon6 =  'A'
+                //                     data[i+1].test_horizon12=  'A'
+                //                     data[i+1].test_horizon24 =  'A'
+                //                 } else if(data[i].signal && !data[i].signalC){
+                //                     data[i+1].test_horizon1 =  'B'
+                //                     data[i+1].test_horizon3 =  'B'
+                //                     data[i+1].test_horizon6 =  'B'
+                //                     data[i+1].test_horizon12=  'B'
+                //                     data[i+1].test_horizon24 =  'B'
+                //                 } else if(!data[i].signal && data[i].signalC){
+                //                     data[i+1].test_horizon1 =  'C'
+                //                     data[i+1].test_horizon3 =  'C'
+                //                     data[i+1].test_horizon6 =  'C'
+                //                     data[i+1].test_horizon12=  'C'
+                //                     data[i+1].test_horizon24 =  'C'
+                //                 } else {
+                //                     data[i].test_horizon1 =  'D'
+                //                     data[i].test_horizon3 =  'D'
+                //                     data[i].test_horizon6 =  'D'
+                //                     data[i].test_horizon12=  'D'
+                //                     data[i].test_horizon24 =  'D'
+                //                 }
+                //                 fData.push(data[i])
+                //             }
+                //         }
+                //     }
+                //     return fData
+                // } else if (year === "2011"){
+                //     for (let index = 0; index < array.length; index++) {
+                //         const element = array[index];
                         
-                    }
-                }
+                //     }
+                // }
             }
 
             async function filterGreenBlockByYear(data){
@@ -556,7 +577,7 @@
                 let year = $('#selectYear').val()
                 let resultSignal = await reqSignal(variable, year)
                 let resultHorizon = await convertHorizon(resultSignal)
-                let resultFilter = await filterResultMonthnByYear(resultHorizon, year);
+                let resultFilter = await filterResultMonthnByYear(resultHorizon);
                 renderResultMonth(resultFilter)
             }
 
@@ -594,7 +615,6 @@
             async function convertHorizon(data) {
                 let result = []
                 for (let i = 0; i < data.length; i++) {
-                    data[i].signalC = (data[i].value_index > data[i].average)?1:0
                     if (data[i].tahun === "2010") {
                         if (data[i].bulan == 1) {
                             data[i].month1 = null
@@ -602,7 +622,6 @@
                             data[i].month6 = null
                             data[i].month12 = null
                             data[i].month24 = null
-                            data[i+1].month1 = getMonthValue(data[i].signal, data[i].signalC)
                             data[i].nilaiMonth1_1 = null
                             data[i].nilaiMonth1_2 = null
                             data[i].nilaiMonth3_1 = null
@@ -613,162 +632,142 @@
                             data[i].nilaiMonth12_2 = null
                             data[i].nilaiMonth24_1 = null
                             data[i].nilaiMonth24_2 = null
-                            data[i+1].nilaiMonth1_1 = getMonthResult(data[i].signal, data[i].signalC)
-                            data[i+1].nilaiMonth1_2 = data[i+1].nilaiMonth1_1 ** 2
-                            data[i+1].nilaiMonth3_1 = null
-                            data[i+1].nilaiMonth3_2 = null
-                            data[i+1].nilaiMonth6_1 = null
-                            data[i+1].nilaiMonth6_2 = null
-                            data[i+1].nilaiMonth12_1 = null
-                            data[i+1].nilaiMonth12_2 = null
-                            data[i+1].nilaiMonth24_1 = null
-                            data[i+1].nilaiMonth24_2 = null
-                        } else if (data[i].bulan < 3){
-                            data[i+1].month1 = getMonthValue(data[i].signal, data[i].signalC)
+                        } else if (data[i].bulan < 4){
+                            data[i].month1 = getMonthValue(data[i-1].signal, data[i].signal_crisis)
                             data[i].month3 = null
                             data[i].month6 = null
                             data[i].month12 = null
                             data[i].month24 = null
-                            data[i+1].nilaiMonth1_1 = getMonthResult(data[i].signal, data[i].signalC)
-                            data[i+1].nilaiMonth1_2 = data[i+1].nilaiMonth1_1 ** 2
-                            data[i+1].nilaiMonth3_1 = null
-                            data[i+1].nilaiMonth3_2 = null
-                            data[i+1].nilaiMonth6_1 = null
-                            data[i+1].nilaiMonth6_2 = null
-                            data[i+1].nilaiMonth12_1 = null
-                            data[i+1].nilaiMonth12_2 = null
-                            data[i+1].nilaiMonth24_1 = null
-                            data[i+1].nilaiMonth24_2 = null
-                        } else if (data[i].bulan == 3){
-                            data[i+1].month1 = getMonthValue(data[i].signal, data[i].signalC)
-                            data[i+1].month3 = data[i].month1
-                            data[i].month3 = null
+                            data[i].nilaiMonth1_1 = getMonthResult(data[i-1].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth1_2 = data[i].nilaiMonth1_1 ** 2
+                            data[i].nilaiMonth3_1 = null
+                            data[i].nilaiMonth3_2 = null
+                            data[i].nilaiMonth6_1 = null
+                            data[i].nilaiMonth6_2 = null
+                            data[i].nilaiMonth12_1 = null
+                            data[i].nilaiMonth12_2 = null
+                            data[i].nilaiMonth24_1 = null
+                            data[i].nilaiMonth24_2 = null
+                        } else if (data[i].bulan == 4){
+                            data[i].month1 = getMonthValue(data[i-1].signal, data[i].signal_crisis)
+                            data[i].month3 = getMonthValue(data[i-3].signal, data[i].signal_crisis)
                             data[i].month6 = null
                             data[i].month12 = null
                             data[i].month24 = null
-                            data[i+1].nilaiMonth1_1 = getMonthResult(data[i].signal, data[i].signalC)
-                            data[i+1].nilaiMonth1_2 = data[i+1].nilaiMonth1_1 ** 2
-                            data[i+1].nilaiMonth3_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth3_2 = data[i+1].nilaiMonth3_1 ** 2
-                            data[i+1].nilaiMonth6_1 = null
-                            data[i+1].nilaiMonth6_2 = null
-                            data[i+1].nilaiMonth12_1 = null
-                            data[i+1].nilaiMonth12_2 = null
-                            data[i+1].nilaiMonth24_1 = null
-                            data[i+1].nilaiMonth24_2 = null
-                        } else if (data[i].bulan < 6){
-                            data[i+1].month1 = getMonthValue(data[i].signal, data[i].signalC)
-                            data[i+1].month3 = data[i].month1
+                            data[i].nilaiMonth1_1 = getMonthResult(data[i-1].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth1_2 = data[i].nilaiMonth1_1 ** 2
+                            data[i].nilaiMonth3_1 = getMonthResult(data[i-3].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth3_2 = data[i].nilaiMonth3_1 ** 2
+                            data[i].nilaiMonth6_1 = null
+                            data[i].nilaiMonth6_2 = null
+                            data[i].nilaiMonth12_1 = null
+                            data[i].nilaiMonth12_2 = null
+                            data[i].nilaiMonth24_1 = null
+                            data[i].nilaiMonth24_2 = null
+                        } else if (data[i].bulan < 7){
+                            data[i].month1 = getMonthValue(data[i-1].signal, data[i].signal_crisis)
+                            data[i].month3 = getMonthValue(data[i-3].signal, data[i].signal_crisis)
                             data[i].month6 = null
                             data[i].month12 = null
                             data[i].month24 = null
-                            data[i+1].nilaiMonth1_1 = getMonthResult(data[i].signal, data[i].signalC)
-                            data[i+1].nilaiMonth1_2 = data[i+1].nilaiMonth1_1 ** 2
-                            data[i+1].nilaiMonth3_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth3_2 = data[i+1].nilaiMonth3_1 ** 2
-                            data[i+1].nilaiMonth6_1 = null
-                            data[i+1].nilaiMonth6_2 = null
-                            data[i+1].nilaiMonth12_1 = null
-                            data[i+1].nilaiMonth12_2 = null
-                            data[i+1].nilaiMonth24_1 = null
-                            data[i+1].nilaiMonth24_2 = null
-                        } else if (data[i].bulan == 6){
-                            data[i+1].month1 = getMonthValue(data[i].signal, data[i].signalC)
-                            data[i+1].month3 = data[i].month1
-                            data[i+1].month6 = data[i].month1
-                            data[i].month6 = null
+                            data[i].nilaiMonth1_1 = getMonthResult(data[i-1].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth1_2 = data[i].nilaiMonth1_1 ** 2
+                            data[i].nilaiMonth3_1 = getMonthResult(data[i-3].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth3_2 = data[i].nilaiMonth3_1 ** 2
+                            data[i].nilaiMonth6_1 = null
+                            data[i].nilaiMonth6_2 = null
+                            data[i].nilaiMonth12_1 = null
+                            data[i].nilaiMonth12_2 = null
+                            data[i].nilaiMonth24_1 = null
+                            data[i].nilaiMonth24_2 = null
+                        } else if (data[i].bulan == 7){
+                            data[i].month1 = getMonthValue(data[i-1].signal, data[i].signal_crisis)
+                            data[i].month3 = getMonthValue(data[i-3].signal, data[i].signal_crisis)
+                            data[i].month6 = getMonthValue(data[i-6].signal, data[i].signal_crisis)
                             data[i].month12 = null
                             data[i].month24 = null
-                            data[i+1].nilaiMonth1_1 = getMonthResult(data[i].signal, data[i].signalC)
-                            data[i+1].nilaiMonth1_2 = data[i+1].nilaiMonth1_1 ** 2
-                            data[i+1].nilaiMonth3_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth3_2 = data[i+1].nilaiMonth3_1 ** 2
-                            data[i+1].nilaiMonth6_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth6_2 = data[i+1].nilaiMonth6_1 ** 2
-                            data[i+1].nilaiMonth12_1 = null
-                            data[i+1].nilaiMonth12_2 = null
-                            data[i+1].nilaiMonth24_1 = null
-                            data[i+1].nilaiMonth24_2 = null
+                            data[i].nilaiMonth1_1 = getMonthResult(data[i-1].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth1_2 = data[i].nilaiMonth1_1 ** 2
+                            data[i].nilaiMonth3_1 = getMonthResult(data[i-3].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth3_2 = data[i].nilaiMonth3_1 ** 2
+                            data[i].nilaiMonth6_1 = getMonthResult(data[i-6].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth6_2 = data[i].nilaiMonth6_1 ** 2
+                            data[i].nilaiMonth12_1 = null
+                            data[i].nilaiMonth12_2 = null
+                            data[i].nilaiMonth24_1 = null
+                            data[i].nilaiMonth24_2 = null
                         }else if (data[i].bulan <  12){
-                            data[i+1].month1 = getMonthValue(data[i].signal, data[i].signalC)
-                            data[i+1].month3 = data[i].month1
-                            data[i+1].month6 = data[i].month1
+                            data[i].month1 = getMonthValue(data[i-1].signal, data[i].signal_crisis)
+                            data[i].month3 = getMonthValue(data[i-3].signal, data[i].signal_crisis)
+                            data[i].month6 = getMonthValue(data[i-6].signal, data[i].signal_crisis)
                             data[i].month12 = null
                             data[i].month24 = null
-                            data[i+1].nilaiMonth1_1 = getMonthResult(data[i].signal, data[i].signalC)
-                            data[i+1].nilaiMonth1_2 = data[i+1].nilaiMonth1_1 ** 2
-                            data[i+1].nilaiMonth3_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth3_2 = data[i+1].nilaiMonth3_1 ** 2
-                            data[i+1].nilaiMonth6_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth6_2 = data[i+1].nilaiMonth6_1 ** 2
-                            data[i+1].nilaiMonth12_1 = null
-                            data[i+1].nilaiMonth12_2 = null
-                            data[i+1].nilaiMonth24_1 = null
-                            data[i+1].nilaiMonth24_2 = null
+                            data[i].nilaiMonth1_1 = getMonthResult(data[i-1].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth1_2 = data[i].nilaiMonth1_1 ** 2
+                            data[i].nilaiMonth3_1 = getMonthResult(data[i-3].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth3_2 = data[i].nilaiMonth3_1 ** 2
+                            data[i].nilaiMonth6_1 = getMonthResult(data[i-6].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth6_2 = data[i].nilaiMonth6_1 ** 2
+                            data[i].nilaiMonth12_1 = null
+                            data[i].nilaiMonth12_2 = null
+                            data[i].nilaiMonth24_1 = null
+                            data[i].nilaiMonth24_2 = null
                         }  else {
-                            data[i+1].month1 = getMonthValue(data[i].signal, data[i].signalC)
-                            data[i+1].month3 = data[i].month1
-                            data[i+1].month6 = data[i].month1
-                            data[i+1].month12 = data[i].month1
-                            data[i].month6 = data[i-1].month1
+                            data[i].month1 = getMonthValue(data[i-1].signal, data[i].signal_crisis)
+                            data[i].month3 = getMonthValue(data[i-3].signal, data[i].signal_crisis)
+                            data[i].month6 = getMonthValue(data[i-6].signal, data[i].signal_crisis)
                             data[i].month12 = null
                             data[i].month24 = null
-                            data[i+1].nilaiMonth1_1 = getMonthResult(data[i].signal, data[i].signalC)
-                            data[i+1].nilaiMonth1_2 = data[i+1].nilaiMonth1_1 ** 2
-                            data[i+1].nilaiMonth3_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth3_2 = data[i+1].nilaiMonth3_1 ** 2
-                            data[i+1].nilaiMonth6_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth6_2 = data[i+1].nilaiMonth6_1 ** 2
-                            data[i+1].nilaiMonth12_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth12_2 = data[i+1].nilaiMonth12_1 ** 2
-                            data[i+1].nilaiMonth24_1 = null
-                            data[i+1].nilaiMonth24_2 = null
+                            data[i].nilaiMonth1_1 = getMonthResult(data[i-1].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth1_2 = data[i].nilaiMonth1_1 ** 2
+                            data[i].nilaiMonth3_1 = getMonthResult(data[i-3].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth3_2 = data[i].nilaiMonth3_1 ** 2
+                            data[i].nilaiMonth6_1 = getMonthResult(data[i-6].signal, data[i].signal_crisis)
+                            data[i].nilaiMonth6_2 = data[i].nilaiMonth6_1 ** 2
+                            data[i].nilaiMonth12_1 = null
+                            data[i].nilaiMonth12_2 = null
+                            data[i].nilaiMonth24_1 = null
+                            data[i].nilaiMonth24_2 = null
                         }
                         // data[i+1]
                         result[i] = data[i]
                     }
 
                     if (data[i].tahun === "2011") {
-                        data[i+1].month1 = getMonthValue(data[i].signal, data[i].signalC)
-                        data[i+1].month3 = data[i].month1
-                        data[i+1].month6 = data[i].month1
-                        data[i+1].month12 = data[i].month1
+                        data[i].month1 = getMonthValue(data[i-1].signal, data[i].signal_crisis)
+                        data[i].month3 = getMonthValue(data[i-3].signal, data[i].signal_crisis)
+                        data[i].month6 = getMonthValue(data[i-6].signal, data[i].signal_crisis)
+                        data[i].month12 = getMonthValue(data[i-12].signal, data[i].signal_crisis)
                         data[i].month24 = null
-                        data[i+1].nilaiMonth1_1 = getMonthResult(data[i].signal, data[i].signalC)
-                        data[i+1].nilaiMonth1_2 = data[i+1].nilaiMonth1_1 ** 2
-                        data[i+1].nilaiMonth3_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                        data[i+1].nilaiMonth3_2 = data[i+1].nilaiMonth3_1 ** 2
-                        data[i+1].nilaiMonth6_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                        data[i+1].nilaiMonth6_2 = data[i+1].nilaiMonth6_1 ** 2
-                        data[i+1].nilaiMonth12_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                        data[i+1].nilaiMonth12_2 = data[i+1].nilaiMonth12_1 ** 2
+                        data[i].nilaiMonth1_1 = getMonthResult(data[i-1].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth1_2 = data[i].nilaiMonth1_1 ** 2
+                        data[i].nilaiMonth3_1 = getMonthResult(data[i-3].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth3_2 = data[i].nilaiMonth3_1 ** 2
+                        data[i].nilaiMonth6_1 = getMonthResult(data[i-6].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth6_2 = data[i].nilaiMonth6_1 ** 2
+                        data[i].nilaiMonth12_1 = getMonthResult(data[i-12].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth12_2 = data[i].nilaiMonth12_1 ** 2
                         data[i].nilaiMonth24_1 = null
                         data[i].nilaiMonth24_2 = null
                         result[i] = data[i]
                     }
 
                     if (parseInt(data[i].tahun) > 2011 ) {
-                        if (i < (data.length -1) ) {
-                            data[i+1].month1 = getMonthValue(data[i].signal, data[i].signalC)
-                            data[i+1].month3 = data[i].month1
-                            data[i+1].month6 = data[i].month1
-                            data[i+1].month12 = data[i].month1
-                            data[i].month24 = data[i-1].month1
-                            data[i+1].nilaiMonth1_1 = getMonthResult(data[i].signal, data[i].signalC)
-                            data[i+1].nilaiMonth1_2 = data[i+1].nilaiMonth1_1 ** 2
-                            data[i+1].nilaiMonth3_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth3_2 = data[i+1].nilaiMonth3_1 ** 2
-                            data[i+1].nilaiMonth6_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth6_2 = data[i+1].nilaiMonth6_1 ** 2
-                            data[i+1].nilaiMonth12_1 = getMonthResult(data[i-1].signal, data[i-1].signalC)
-                            data[i+1].nilaiMonth12_2 = data[i+1].nilaiMonth6_1 ** 2
-                            data[i].nilaiMonth24_1 =  getMonthResult(data[i-2].signal, data[i-2].signalC)
-                            data[i].nilaiMonth24_2 = data[i].nilaiMonth24_1 ** 2
-                        } else {
-                            data[i].month24 = data[i-1].month1
-                            data[i].nilaiMonth24_1 =  getMonthResult(data[i-2].signal, data[i-2].signalC)
-                            data[i].nilaiMonth24_2 = data[i].nilaiMonth24_1 ** 2
-                        }
+                        data[i].month1 = getMonthValue(data[i-1].signal, data[i].signal_crisis)
+                        data[i].month3 = getMonthValue(data[i-3].signal, data[i].signal_crisis)
+                        data[i].month6 = getMonthValue(data[i-6].signal, data[i].signal_crisis)
+                        data[i].month12 = getMonthValue(data[i-12].signal, data[i].signal_crisis)
+                        data[i].month24 = getMonthValue(data[i-24].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth1_1 = getMonthResult(data[i-1].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth1_2 = data[i].nilaiMonth1_1 ** 2
+                        data[i].nilaiMonth3_1 = getMonthResult(data[i-3].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth3_2 = data[i].nilaiMonth3_1 ** 2
+                        data[i].nilaiMonth6_1 = getMonthResult(data[i-6].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth6_2 = data[i].nilaiMonth6_1 ** 2
+                        data[i].nilaiMonth12_1 = getMonthResult(data[i-12].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth12_2 = data[i].nilaiMonth12_1 ** 2
+                        data[i].nilaiMonth24_1 = getMonthResult(data[i-24].signal, data[i].signal_crisis)
+                        data[i].nilaiMonth24_2 = data[i].nilaiMonth12_1 ** 2
                         result[i] = data[i]
                     }
                 }
@@ -797,7 +796,7 @@
             }
 
             // sorry for ugly code
-            async function filterResultMonthnByYear(data, year) {
+            async function filterResultMonthnByYear(data) {
                 let sigmaMonth1 = null
                 let sigmaMonth3 = null
                 let sigmaMonth6  = null
@@ -851,116 +850,63 @@
                 let tempSumSignalCMonth24 = 0
                 
                 for (let i = 0; i < data.length; i++) {
-                    if (data[i].tahun == year) {
-                        sigmaMonth1 = sigmaMonth1 + data[i].nilaiMonth1_2
-                        sigmaMonth3 = sigmaMonth3 + data[i].nilaiMonth3_2
-                        sigmaMonth6 = sigmaMonth6 + data[i].nilaiMonth6_2
-                        sigmaMonth12 = sigmaMonth12 + data[i].nilaiMonth12_2
-                        sigmaMonth24 = sigmaMonth24 + data[i].nilaiMonth24_2
+                    sigmaMonth1 = sigmaMonth1 + data[i].nilaiMonth1_2
+                    sigmaMonth3 = sigmaMonth3 + data[i].nilaiMonth3_2
+                    sigmaMonth6 = sigmaMonth6 + data[i].nilaiMonth6_2
+                    sigmaMonth12 = sigmaMonth12 + data[i].nilaiMonth12_2
+                    sigmaMonth24 = sigmaMonth24 + data[i].nilaiMonth24_2
 
-                        data[i].month1 === null ? jumlah_month1 + 0  : jumlah_month1++
-                        data[i].month3 === null ? jumlah_month3 + 0  : jumlah_month3++
-                        data[i].month6 === null ? jumlah_month6 + 0  : jumlah_month6++
-                        data[i].month12 === null ?  jumlah_month12 + 0  : jumlah_month12++
-                        data[i].month24 === null ?  jumlah_month24 + 0 : jumlah_month24++
+                    data[i].month1 === null ? jumlah_month1 + 0  : jumlah_month1++
+                    data[i].month3 === null ? jumlah_month3 + 0  : jumlah_month3++
+                    data[i].month6 === null ? jumlah_month6 + 0  : jumlah_month6++
+                    data[i].month12 === null ?  jumlah_month12 + 0  : jumlah_month12++
+                    data[i].month24 === null ?  jumlah_month24 + 0 : jumlah_month24++
 
-                        data[i].month1 == 'A' ? sumA_month1++ : sumA_month1 + 0 
-                        data[i].month3 == 'A' ? sumA_month3++ : sumA_month3 + 0 
-                        data[i].month6 == 'A' ? sumA_month6++ : sumA_month6 + 0 
-                        data[i].month12 == 'A' ? sumA_month12++  : sumA_month12 + 0 
-                        data[i].month24 == 'A' ? sumA_month24++  : sumA_month24 + 0
+                    data[i].month1 == 'A' ? sumA_month1++ : sumA_month1 + 0 
+                    data[i].month3 == 'A' ? sumA_month3++ : sumA_month3 + 0 
+                    data[i].month6 == 'A' ? sumA_month6++ : sumA_month6 + 0 
+                    data[i].month12 == 'A' ? sumA_month12++  : sumA_month12 + 0 
+                    data[i].month24 == 'A' ? sumA_month24++  : sumA_month24 + 0
 
-                        data[i].month1 == 'B' ? sumB_month1++ : sumB_month1 + 0 
-                        data[i].month3 == 'B' ? sumB_month3++ : sumB_month3 + 0 
-                        data[i].month6 == 'B' ? sumB_month6++ : sumB_month6 + 0 
-                        data[i].month12 == 'B' ? sumB_month12++  : sumB_month12 + 0 
-                        data[i].month24 == 'B' ? sumB_month24++  : sumB_month24 + 0 
+                    data[i].month1 == 'B' ? sumB_month1++ : sumB_month1 + 0 
+                    data[i].month3 == 'B' ? sumB_month3++ : sumB_month3 + 0 
+                    data[i].month6 == 'B' ? sumB_month6++ : sumB_month6 + 0 
+                    data[i].month12 == 'B' ? sumB_month12++  : sumB_month12 + 0 
+                    data[i].month24 == 'B' ? sumB_month24++  : sumB_month24 + 0 
 
-                        data[i].month1 == 'C' ? sumC_month1++ : sumC_month1 + 0 
-                        data[i].month3 == 'C' ? sumC_month3++ : sumC_month3 + 0 
-                        data[i].month6 == 'C' ? sumC_month6++ : sumC_month6 + 0 
-                        data[i].month12 == 'C' ? sumC_month12++  : sumC_month12 + 0 
-                        data[i].month24 == 'C' ? sumC_month24++  : sumC_month24 + 0 
+                    data[i].month1 == 'C' ? sumC_month1++ : sumC_month1 + 0 
+                    data[i].month3 == 'C' ? sumC_month3++ : sumC_month3 + 0 
+                    data[i].month6 == 'C' ? sumC_month6++ : sumC_month6 + 0 
+                    data[i].month12 == 'C' ? sumC_month12++  : sumC_month12 + 0 
+                    data[i].month24 == 'C' ? sumC_month24++  : sumC_month24 + 0 
 
-                        data[i].month1 == 'D' ? sumD_month1++ : sumD_month1 + 0 
-                        data[i].month3 == 'D' ? sumD_month3++ : sumD_month3 + 0 
-                        data[i].month6 == 'D' ? sumD_month6++ : sumD_month6 + 0 
-                        data[i].month12 == 'D' ? sumD_month12++  : sumD_month12 + 0 
-                        data[i].month24 == 'D' ? sumD_month24++  : sumD_month24 + 0 
-                        
-                        if (year == "2010") {
-                            if (i > 0) {
-                                tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
-                                tempSumSignalCMonth1 = data[i].signalC + tempSumSignalCMonth1
-                                if (i > 2) {
-                                    tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
-                                    tempSumSignalCMonth3 = data[i].signalC + tempSumSignalCMonth3
-                                    if (i > 5) {
-                                        tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
-                                        tempSumSignalCMonth6 = data[i].signalC + tempSumSignalCMonth6
-                                    }
-                                }
-                            } 
-                            }
-                        }else if(year == '2011'){
-                            tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
-                            tempSumSignalCMonth1 = data[i].signalC + tempSumSignalCMonth1
-                            tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
-                            tempSumSignalCMonth3 = data[i].signalC + tempSumSignalCMonth3
-                            tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
-                            tempSumSignalCMonth6 = data[i].signalC + tempSumSignalCMonth6
-                            tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
-                            tempSumSignalCMonth12 = data[i].signalC + tempSumSignalCMonth12
-                        } else{
-                            tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
-                            tempSumSignalCMonth1 = data[i].signalC + tempSumSignalCMonth1
-                            tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
-                            tempSumSignalCMonth3 = data[i].signalC + tempSumSignalCMonth3
-                            tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
-                            tempSumSignalCMonth6 = data[i].signalC + tempSumSignalCMonth6
-                            tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
-                            tempSumSignalCMonth12 = data[i].signalC + tempSumSignalCMonth12
-                            tempSumSignalSMonth24 = data[i].signal + tempSumSignalSMonth24
-                            tempSumSignalCMonth24 = data[i].signalC + tempSumSignalCMonth24
-                        }
-                    }
-                
-
-                if (year == '2010') {
+                    data[i].month1 == 'D' ? sumD_month1++ : sumD_month1 + 0 
+                    data[i].month3 == 'D' ? sumD_month3++ : sumD_month3 + 0 
+                    data[i].month6 == 'D' ? sumD_month6++ : sumD_month6 + 0 
+                    data[i].month12 == 'D' ? sumD_month12++  : sumD_month12 + 0 
+                    data[i].month24 == 'D' ? sumD_month24++  : sumD_month24 + 0 
                     
-                    averageP_month1 = tempSumSignalSMonth1 /11
-                    averageP_month3 = tempSumSignalSMonth3 / 9
-                    averageP_month6 = tempSumSignalSMonth6 / 6
-                    averageP_month12 = null
-                    averageP_month24 = null
-                    averageR_month1 = tempSumSignalCMonth1 /11
-                    averageR_month3 = tempSumSignalCMonth3 / 9
-                    averageR_month6 = tempSumSignalCMonth6 / 6
-                    averageR_month12 = null
-                    averageR_month24 = null
-                } else if(year == '2011'){
-                    averageP_month1 = tempSumSignalSMonth1 /12
-                    averageP_month3 = tempSumSignalSMonth3 / 12
-                    averageP_month6 = tempSumSignalSMonth6 / 12
-                    averageP_month12 = tempSumSignalSMonth12 / 12
-                    averageP_month24 = null
-                    averageR_month1 = tempSumSignalCMonth1 /12
-                    averageR_month3 = tempSumSignalCMonth3 / 12
-                    averageR_month6 = tempSumSignalCMonth6 / 12
-                    averageR_month12 = tempSumSignalCMonth12 / 12
-                    averageR_month24 = null
-                } else{
-                    averageP_month1 = tempSumSignalSMonth1 /12
-                    averageP_month3 = tempSumSignalSMonth3 / 12
-                    averageP_month6 = tempSumSignalSMonth6 / 12
-                    averageP_month12 = tempSumSignalSMonth12 / 12
-                    averageP_month24 = tempSumSignalSMonth24 / 12
-                    averageR_month1 = tempSumSignalCMonth1 /12
-                    averageR_month3 = tempSumSignalCMonth3 / 12
-                    averageR_month6 = tempSumSignalCMonth6 / 12
-                    averageR_month12 = tempSumSignalCMonth12 / 12
-                    averageR_month24 = tempSumSignalSMonth12 / 12
+                    tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
+                    tempSumSignalCMonth1 = data[i].signal_crisis + tempSumSignalCMonth1
+                    tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
+                    tempSumSignalCMonth3 = data[i].signal_crisis + tempSumSignalCMonth3
+                    tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
+                    tempSumSignalCMonth6 = data[i].signal_crisis + tempSumSignalCMonth6
+                    tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
+                    tempSumSignalCMonth12 = data[i].signal_crisis + tempSumSignalCMonth12
+                    tempSumSignalSMonth24 = data[i].signal + tempSumSignalSMonth24
+                    tempSumSignalCMonth24 = data[i].signal_crisis + tempSumSignalCMonth24
                 }
+                averageP_month1 = tempSumSignalSMonth1 / jumlah_month1
+                averageP_month3 = tempSumSignalSMonth3 / jumlah_month3
+                averageP_month6 = tempSumSignalSMonth6 / jumlah_month6
+                averageP_month12 = tempSumSignalSMonth12 / jumlah_month12
+                averageP_month24 = tempSumSignalSMonth24 / jumlah_month24
+                averageR_month1 = tempSumSignalCMonth1 / jumlah_month1
+                averageR_month3 = tempSumSignalCMonth3 / jumlah_month3
+                averageR_month6 = tempSumSignalCMonth6 / jumlah_month6
+                averageR_month12 = tempSumSignalCMonth12 / jumlah_month12
+                averageR_month24 = tempSumSignalCMonth24 / jumlah_month24
                 
                 let result = [
                     [
@@ -1132,116 +1078,63 @@
                 let tempSumSignalCMonth24 = 0
                 
                 for (let i = 0; i < data.length; i++) {
-                    if (data[i].tahun == year) {
-                        sigmaMonth1 = sigmaMonth1 + data[i].nilaiMonth1_2
-                        sigmaMonth3 = sigmaMonth3 + data[i].nilaiMonth3_2
-                        sigmaMonth6 = sigmaMonth6 + data[i].nilaiMonth6_2
-                        sigmaMonth12 = sigmaMonth12 + data[i].nilaiMonth12_2
-                        sigmaMonth24 = sigmaMonth24 + data[i].nilaiMonth24_2
+                    sigmaMonth1 = sigmaMonth1 + data[i].nilaiMonth1_2
+                    sigmaMonth3 = sigmaMonth3 + data[i].nilaiMonth3_2
+                    sigmaMonth6 = sigmaMonth6 + data[i].nilaiMonth6_2
+                    sigmaMonth12 = sigmaMonth12 + data[i].nilaiMonth12_2
+                    sigmaMonth24 = sigmaMonth24 + data[i].nilaiMonth24_2
 
-                        data[i].month1 === null ? jumlah_month1 + 0  : jumlah_month1++
-                        data[i].month3 === null ? jumlah_month3 + 0  : jumlah_month3++
-                        data[i].month6 === null ? jumlah_month6 + 0  : jumlah_month6++
-                        data[i].month12 === null ?  jumlah_month12 + 0  : jumlah_month12++
-                        data[i].month24 === null ?  jumlah_month24 + 0 : jumlah_month24++
+                    data[i].month1 === null ? jumlah_month1 + 0  : jumlah_month1++
+                    data[i].month3 === null ? jumlah_month3 + 0  : jumlah_month3++
+                    data[i].month6 === null ? jumlah_month6 + 0  : jumlah_month6++
+                    data[i].month12 === null ?  jumlah_month12 + 0  : jumlah_month12++
+                    data[i].month24 === null ?  jumlah_month24 + 0 : jumlah_month24++
 
-                        data[i].month1 == 'A' ? sumA_month1++ : sumA_month1 + 0 
-                        data[i].month3 == 'A' ? sumA_month3++ : sumA_month3 + 0 
-                        data[i].month6 == 'A' ? sumA_month6++ : sumA_month6 + 0 
-                        data[i].month12 == 'A' ? sumA_month12++  : sumA_month12 + 0 
-                        data[i].month24 == 'A' ? sumA_month24++  : sumA_month24 + 0
+                    data[i].month1 == 'A' ? sumA_month1++ : sumA_month1 + 0 
+                    data[i].month3 == 'A' ? sumA_month3++ : sumA_month3 + 0 
+                    data[i].month6 == 'A' ? sumA_month6++ : sumA_month6 + 0 
+                    data[i].month12 == 'A' ? sumA_month12++  : sumA_month12 + 0 
+                    data[i].month24 == 'A' ? sumA_month24++  : sumA_month24 + 0
 
-                        data[i].month1 == 'B' ? sumB_month1++ : sumB_month1 + 0 
-                        data[i].month3 == 'B' ? sumB_month3++ : sumB_month3 + 0 
-                        data[i].month6 == 'B' ? sumB_month6++ : sumB_month6 + 0 
-                        data[i].month12 == 'B' ? sumB_month12++  : sumB_month12 + 0 
-                        data[i].month24 == 'B' ? sumB_month24++  : sumB_month24 + 0 
+                    data[i].month1 == 'B' ? sumB_month1++ : sumB_month1 + 0 
+                    data[i].month3 == 'B' ? sumB_month3++ : sumB_month3 + 0 
+                    data[i].month6 == 'B' ? sumB_month6++ : sumB_month6 + 0 
+                    data[i].month12 == 'B' ? sumB_month12++  : sumB_month12 + 0 
+                    data[i].month24 == 'B' ? sumB_month24++  : sumB_month24 + 0 
 
-                        data[i].month1 == 'C' ? sumC_month1++ : sumC_month1 + 0 
-                        data[i].month3 == 'C' ? sumC_month3++ : sumC_month3 + 0 
-                        data[i].month6 == 'C' ? sumC_month6++ : sumC_month6 + 0 
-                        data[i].month12 == 'C' ? sumC_month12++  : sumC_month12 + 0 
-                        data[i].month24 == 'C' ? sumC_month24++  : sumC_month24 + 0 
+                    data[i].month1 == 'C' ? sumC_month1++ : sumC_month1 + 0 
+                    data[i].month3 == 'C' ? sumC_month3++ : sumC_month3 + 0 
+                    data[i].month6 == 'C' ? sumC_month6++ : sumC_month6 + 0 
+                    data[i].month12 == 'C' ? sumC_month12++  : sumC_month12 + 0 
+                    data[i].month24 == 'C' ? sumC_month24++  : sumC_month24 + 0 
 
-                        data[i].month1 == 'D' ? sumD_month1++ : sumD_month1 + 0 
-                        data[i].month3 == 'D' ? sumD_month3++ : sumD_month3 + 0 
-                        data[i].month6 == 'D' ? sumD_month6++ : sumD_month6 + 0 
-                        data[i].month12 == 'D' ? sumD_month12++  : sumD_month12 + 0 
-                        data[i].month24 == 'D' ? sumD_month24++  : sumD_month24 + 0 
-                        
-                        if (year == "2010") {
-                            if (i > 0) {
-                                tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
-                                tempSumSignalCMonth1 = data[i].signalC + tempSumSignalCMonth1
-                                if (i > 2) {
-                                    tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
-                                    tempSumSignalCMonth3 = data[i].signalC + tempSumSignalCMonth3
-                                    if (i > 5) {
-                                        tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
-                                        tempSumSignalCMonth6 = data[i].signalC + tempSumSignalCMonth6
-                                    }
-                                }
-                            } 
-                            }
-                        }else if(year == '2011'){
-                            tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
-                            tempSumSignalCMonth1 = data[i].signalC + tempSumSignalCMonth1
-                            tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
-                            tempSumSignalCMonth3 = data[i].signalC + tempSumSignalCMonth3
-                            tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
-                            tempSumSignalCMonth6 = data[i].signalC + tempSumSignalCMonth6
-                            tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
-                            tempSumSignalCMonth12 = data[i].signalC + tempSumSignalCMonth12
-                        } else{
-                            tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
-                            tempSumSignalCMonth1 = data[i].signalC + tempSumSignalCMonth1
-                            tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
-                            tempSumSignalCMonth3 = data[i].signalC + tempSumSignalCMonth3
-                            tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
-                            tempSumSignalCMonth6 = data[i].signalC + tempSumSignalCMonth6
-                            tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
-                            tempSumSignalCMonth12 = data[i].signalC + tempSumSignalCMonth12
-                            tempSumSignalSMonth24 = data[i].signal + tempSumSignalSMonth24
-                            tempSumSignalCMonth24 = data[i].signalC + tempSumSignalCMonth24
-                        }
-                    }
-                
-
-                if (year == '2010') {
+                    data[i].month1 == 'D' ? sumD_month1++ : sumD_month1 + 0 
+                    data[i].month3 == 'D' ? sumD_month3++ : sumD_month3 + 0 
+                    data[i].month6 == 'D' ? sumD_month6++ : sumD_month6 + 0 
+                    data[i].month12 == 'D' ? sumD_month12++  : sumD_month12 + 0 
+                    data[i].month24 == 'D' ? sumD_month24++  : sumD_month24 + 0 
                     
-                    averageP_month1 = tempSumSignalSMonth1 /11
-                    averageP_month3 = tempSumSignalSMonth3 / 9
-                    averageP_month6 = tempSumSignalSMonth6 / 6
-                    averageP_month12 = null
-                    averageP_month24 = null
-                    averageR_month1 = tempSumSignalCMonth1 /11
-                    averageR_month3 = tempSumSignalCMonth3 / 9
-                    averageR_month6 = tempSumSignalCMonth6 / 6
-                    averageR_month12 = null
-                    averageR_month24 = null
-                } else if(year == '2011'){
-                    averageP_month1 = tempSumSignalSMonth1 /12
-                    averageP_month3 = tempSumSignalSMonth3 / 12
-                    averageP_month6 = tempSumSignalSMonth6 / 12
-                    averageP_month12 = tempSumSignalSMonth12 / 12
-                    averageP_month24 = null
-                    averageR_month1 = tempSumSignalCMonth1 /12
-                    averageR_month3 = tempSumSignalCMonth3 / 12
-                    averageR_month6 = tempSumSignalCMonth6 / 12
-                    averageR_month12 = tempSumSignalCMonth12 / 12
-                    averageR_month24 = null
-                } else{
-                    averageP_month1 = tempSumSignalSMonth1 /12
-                    averageP_month3 = tempSumSignalSMonth3 / 12
-                    averageP_month6 = tempSumSignalSMonth6 / 12
-                    averageP_month12 = tempSumSignalSMonth12 / 12
-                    averageP_month24 = tempSumSignalSMonth24 / 12
-                    averageR_month1 = tempSumSignalCMonth1 /12
-                    averageR_month3 = tempSumSignalCMonth3 / 12
-                    averageR_month6 = tempSumSignalCMonth6 / 12
-                    averageR_month12 = tempSumSignalCMonth12 / 12
-                    averageR_month24 = tempSumSignalSMonth12 / 12
+                    tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
+                    tempSumSignalCMonth1 = data[i].signal_crisis + tempSumSignalCMonth1
+                    tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
+                    tempSumSignalCMonth3 = data[i].signal_crisis + tempSumSignalCMonth3
+                    tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
+                    tempSumSignalCMonth6 = data[i].signal_crisis + tempSumSignalCMonth6
+                    tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
+                    tempSumSignalCMonth12 = data[i].signal_crisis + tempSumSignalCMonth12
+                    tempSumSignalSMonth24 = data[i].signal + tempSumSignalSMonth24
+                    tempSumSignalCMonth24 = data[i].signal_crisis + tempSumSignalCMonth24
                 }
+                averageP_month1 = tempSumSignalSMonth1 / jumlah_month1
+                averageP_month3 = tempSumSignalSMonth3 / jumlah_month3
+                averageP_month6 = tempSumSignalSMonth6 / jumlah_month6
+                averageP_month12 = tempSumSignalSMonth12 / jumlah_month12
+                averageP_month24 = tempSumSignalSMonth24 / jumlah_month24
+                averageR_month1 = tempSumSignalCMonth1 / jumlah_month1
+                averageR_month3 = tempSumSignalCMonth3 / jumlah_month3
+                averageR_month6 = tempSumSignalCMonth6 / jumlah_month6
+                averageR_month12 = tempSumSignalCMonth12 / jumlah_month12
+                averageR_month24 = tempSumSignalCMonth24 / jumlah_month24
 
 
                 let result = []

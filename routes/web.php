@@ -123,6 +123,7 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::get('bank/ibri/ews/upper', [OutSampleController::class, 'indexUpper'])->name('bank.ibri.ews.upper');
     Route::get('bank/ibri/ews/lower', [OutSampleController::class, 'indexLower'])->name('bank.ibri.ews.lower');
     Route::get('bank/ibri/ews/signal', [OutSampleController::class, 'signalData'])->name('bank.ibri.ews.signal');
+    Route::get('bank/ibri/ews/signal/lower', [OutSampleController::class, 'signalDataLower'])->name('bank.ibri.ews.signal-lower');
 
     Route::get('bank/ibri/osp/upper', [OutSamplePerformanceController::class, 'indexUpper'])->name('bank.ibri.outsampleperf.upper');
     Route::get('bank/ibri/osp/lower', [OutSamplePerformanceController::class, 'indexLower'])->name('bank.ibri.outsampleperf.lower');
