@@ -203,7 +203,7 @@
                 },
                 {
                     "table": "tableDiv5",
-                    "title": "Rangkuman Upper Treshold"
+                    "title": "Rangkuman Lower Treshold"
                 }
             ]
 
