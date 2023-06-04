@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Dashboard\Banking\Data\Exception;
 use App\Models\NullHypothesisData;
 use App\Models\VariableMaster;
+use App\Models\AdditionalData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Phpml\Math\Matrix;
+use App\Http\Controllers\Service\SpreadsheetServiceController as Excel;
 
 class NullHypothesisDataController extends Controller
 {
@@ -227,7 +229,7 @@ class NullHypothesisDataController extends Controller
             $table.= '</tr>';
         }
 
-        $table.= '<tr><td colspan="5" class="border py-4 px-6">MAX</td><td class="border py-4 px-6">'.$totalMatrix['arrTotal'].'</td></tr>';
+        $table.= '<tr><td colspan="5" class="border py-4 px-6"><strong>MAX</strong></td><td class="border py-4 px-6"><strong>'.$totalMatrix['arrTotal'].'</strong></td></tr>';
 
         $table.= '</tbody>';
 
@@ -279,10 +281,10 @@ class NullHypothesisDataController extends Controller
             $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
             $table.= '<td class="border py-4 px-6">I'.$item.'</td>';
 
-            $table.= '<td class="border py-4 px-6">'.$fixedNpf.'</td>';
-            $table.= '<td class="border py-4 px-6">'.$fixedCar.'</td>';
-            $table.= '<td class="border py-4 px-6">'.$fixedIpr.'</td>';
-            $table.= '<td class="border py-4 px-6">'.$fixedFdr.'</td>';
+            $table.= '<td class="border py-4 px-6'.($fixedNpf == 0 ? ' text-ds-yellow font-medium' : '').'">'.$fixedNpf.'</td>';
+            $table.= '<td class="border py-4 px-6'.($fixedCar == 0 ? ' text-ds-yellow font-medium' : '').'">'.$fixedCar.'</td>';
+            $table.= '<td class="border py-4 px-6'.($fixedIpr == 0 ? ' text-ds-yellow font-medium' : '').'">'.$fixedIpr.'</td>';
+            $table.= '<td class="border py-4 px-6'.($fixedFdr == 0 ? ' text-ds-yellow font-medium' : '').'">'.$fixedFdr.'</td>';
 
             $table.= '</tr>';
         }
@@ -333,10 +335,10 @@ class NullHypothesisDataController extends Controller
             $valIpr = ($item == $variable[2]) ? 1: 0;
             $valFdr = ($item == $variable[3]) ? 1: 0;
 
-            $table.= '<td class="border py-4 px-6">'.$valNpf.'</td>';
-            $table.= '<td class="border py-4 px-6">'.$valCar.'</td>';
-            $table.= '<td class="border py-4 px-6">'.$valIpr.'</td>';
-            $table.= '<td class="border py-4 px-6">'.$valFdr.'</td>';
+            $table.= '<td class="border py-4 px-6'.($valNpf == 1 ? ' text-ds-yellow font-medium' : '').'">'.$valNpf.'</td>';
+            $table.= '<td class="border py-4 px-6'.($valCar == 1 ? ' text-ds-yellow font-medium' : '').'">'.$valCar.'</td>';
+            $table.= '<td class="border py-4 px-6'.($valIpr == 1 ? ' text-ds-yellow font-medium' : '').'">'.$valIpr.'</td>';
+            $table.= '<td class="border py-4 px-6'.($valFdr == 1 ? ' text-ds-yellow font-medium' : '').'">'.$valFdr.'</td>';
 
             $table.= '</tr>';
         }
@@ -449,52 +451,57 @@ class NullHypothesisDataController extends Controller
             $countIpr = $valIpr / $totalMatrix['arrTotal'];
             $countFdr = $valFdr / $totalMatrix['arrTotal'];
 
-            $fixedNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
-            $fixedCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
-            $fixedIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
-            $fixedFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
+            $fixedNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix($countNpf) - $countNpf;
+            $fixedCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix($countCar) - $countCar;
+            $fixedIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix($countIpr) - $countIpr;
+            $fixedFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix($countFdr) - $countFdr;
 
             $arrNpf[] = $fixedNpf;
             $arrCar[] = $fixedCar;
             $arrIpr[] = $fixedIpr;
             $arrFdr[] = $fixedFdr;
         }
-
+        
         $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
 
-        $invMatrix = new Matrix($mergeMatrix);
-        /* End get normalized data */
+        $matrix_reorder = [];
 
-        $invMatrixValues = $invMatrix->inverse()->toArray();
+        foreach ($mergeMatrix as $key => $value) {
+            $matrix_reorder[$key] = [$arrNpf[$key], $arrCar[$key], $arrIpr[$key],  $arrFdr[$key]];
+        }
+ 
+        // dd($matrix_reorder);
+        /* End get normalized data */
+        $invMatrixValues = Excel::MINVERSE($matrix_reorder);
 
         //dump($invMatrixValues);
 
         $table = '<tbody id="tbodyVariable">';
         $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
         $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[0][0], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][0], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][0], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][0], 2).'</td>';
-        $table.= '</tr>';
-
-        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
         $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[0][1], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][1], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][1], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][1], 2).'</td>';
-        $table.= '</tr>';
-
-        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
         $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[0][2], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][2], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][2], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[0][3], 2).'</td>';
         $table.= '</tr>';
 
         $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
-        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[0][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][2], 2).'</td>';
         $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[1][3], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][2], 2).'</td>';
         $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[2][3], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][2], 2).'</td>';
         $table.= '<td class="border py-4 px-6">'.number_format($invMatrixValues[3][3], 2).'</td>';
         $table.= '</tr>';
 
@@ -526,17 +533,14 @@ class NullHypothesisDataController extends Controller
         /*
          * Get normalized data
          * */
-        $npfNormalized = array();
-        $carNormalized = array();
-        $iprNormalized = array();
-        $fdrNormalized = array();
-
         $arrNpf = array();
         $arrCar = array();
         $arrIpr = array();
         $arrFdr = array();
-
-        $sumNpf = 0;
+        $normal_npf = [];
+        $normal_car = [];
+        $normal_ipr = [];
+        $normal_fdr = [];
         foreach ($variable as $item) {
             $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
             $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
@@ -548,58 +552,67 @@ class NullHypothesisDataController extends Controller
             $countIpr = $valIpr / $totalMatrix['arrTotal'];
             $countFdr = $valFdr / $totalMatrix['arrTotal'];
 
-            $fixedNpf = ($countNpf == 0) ? 0 : number_format($countNpf, 2);
-            $fixedCar = ($countCar == 0) ? 0 : number_format($countCar, 2);
-            $fixedIpr = ($countIpr == 0) ? 0 : number_format($countIpr, 2);
-            $fixedFdr = ($countFdr == 0) ? 0 : number_format($countFdr, 2);
+            $normal_npf[] = $countNpf ;
+        $normal_car[] = $countCar ;
+        $normal_ipr[] =  $countIpr ;
+        $normal_fdr[] = $countFdr ;
 
-            $matrixIdentityNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
-            $matrixIdentityCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
-            $matrixIdentityIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
-            $matrixIdentityFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
+            $fixedNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix($countNpf) - $countNpf;
+            $fixedCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix($countCar) - $countCar;
+            $fixedIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix($countIpr) - $countIpr;
+            $fixedFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix($countFdr) - $countFdr;
 
-            $npfNormalized[] = $fixedNpf;
-            $carNormalized[] = $fixedCar;
-            $iprNormalized[] = $fixedIpr;
-            $fdrNormalized[] = $fixedFdr;
-
-            $arrNpf[] = $matrixIdentityNpf;
-            $arrCar[] = $matrixIdentityCar;
-            $arrIpr[] = $matrixIdentityIpr;
-            $arrFdr[] = $matrixIdentityFdr;
-
-            $sumNpf+= $matrixIdentityNpf;
+            $arrNpf[] = $fixedNpf;
+            $arrCar[] = $fixedCar;
+            $arrIpr[] = $fixedIpr;
+            $arrFdr[] = $fixedFdr;
         }
-
-        $allNormalized = array($npfNormalized, $carNormalized, $iprNormalized, $fdrNormalized);
-        $normMatrix = new Matrix($allNormalized);
-        $normMatrixValues = $normMatrix->inverse();
-
-        //dump($allNormalized);
-
+        
         $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
-        $invMatrix = new Matrix($mergeMatrix);
+
+        $matrix_reorder = [];
+        $normal_matrix = [];
+
+        foreach ($mergeMatrix as $key => $value) {
+            $matrix_reorder[$key] = [$arrNpf[$key], $arrCar[$key], $arrIpr[$key],  $arrFdr[$key]];
+            $normal_matrix[$key] = [$normal_npf[$key], $normal_car[$key], $normal_ipr[$key],  $normal_fdr[$key]];
+        }
+ 
+        // dd($matrix_reorder);
         /* End get normalized data */
+        $invMatrixValues = Excel::MINVERSE($matrix_reorder);
 
-        $invMatrixValues = $invMatrix->inverse();
+        $mmultValue = Excel::MMULT($invMatrixValues, $normal_matrix);
 
-        $mmultValue = $normMatrixValues->multiply($invMatrixValues)->toArray();
 
-        $mmultNpf = array_sum(array_filter($mmultValue[0], function ($num){
-            return $num > 0;
-        }));
+        $mmultNpf = array_sum([
+                $mmultValue[0][0],
+                $mmultValue[1][0],
+                $mmultValue[2][0],
+                $mmultValue[3][0],
+        ]);
+        
 
-        $mmultCar = array_sum(array_filter($mmultValue[1], function ($num){
-            return $num > 0;
-        }));
+        $mmultCar = array_sum([
+            $mmultValue[0][1],
+            $mmultValue[1][1],
+            $mmultValue[2][1],
+            $mmultValue[3][1],
+    ]);
 
-        $mmultIpr = array_sum(array_filter($mmultValue[2], function ($num){
-            return $num > 0;
-        }));
+        $mmultIpr = array_sum([
+            $mmultValue[0][2],
+            $mmultValue[1][2],
+            $mmultValue[2][2],
+            $mmultValue[3][2],
+    ]);
 
-        $mmultFdr = array_sum(array_filter($mmultValue[3], function ($num){
-            return $num > 0;
-        }));
+        $mmultFdr = array_sum([
+            $mmultValue[0][3],
+            $mmultValue[1][3],
+            $mmultValue[2][3],
+            $mmultValue[3][3],
+    ]);
 
 
         $table = '<div class="overflow-x-auto relative shadow-md sm:rounded-lg mb-4">';
@@ -607,29 +620,29 @@ class NullHypothesisDataController extends Controller
         $table.= '<tbody id="tbodyVariable">';
         $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][0], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][0], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][0], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][0], 2).'</td>';
-        $table.= '</tr>';
-
-        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][1], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][1], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][1], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][1], 2).'</td>';
-        $table.= '</tr>';
-
-        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][2], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][2], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][2], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][3], 2).'</td>';
         $table.= '</tr>';
 
         $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][2], 2).'</td>';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][3], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][2], 2).'</td>';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][3], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][2], 2).'</td>';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][3], 2).'</td>';
         $table.= '</tr>';
 
@@ -675,17 +688,14 @@ class NullHypothesisDataController extends Controller
         /*
          * Get normalized data
          * */
-        $npfNormalized = array();
-        $carNormalized = array();
-        $iprNormalized = array();
-        $fdrNormalized = array();
-
         $arrNpf = array();
         $arrCar = array();
         $arrIpr = array();
         $arrFdr = array();
-
-        $sumNpf = 0;
+        $normal_npf = [];
+        $normal_car = [];
+        $normal_ipr = [];
+        $normal_fdr = [];
         foreach ($variable as $item) {
             $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
             $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
@@ -697,87 +707,67 @@ class NullHypothesisDataController extends Controller
             $countIpr = $valIpr / $totalMatrix['arrTotal'];
             $countFdr = $valFdr / $totalMatrix['arrTotal'];
 
-            $fixedNpf = ($countNpf == 0) ? 0 : number_format($countNpf, 2);
-            $fixedCar = ($countCar == 0) ? 0 : number_format($countCar, 2);
-            $fixedIpr = ($countIpr == 0) ? 0 : number_format($countIpr, 2);
-            $fixedFdr = ($countFdr == 0) ? 0 : number_format($countFdr, 2);
+            $normal_npf[] = $countNpf ;
+        $normal_car[] = $countCar ;
+        $normal_ipr[] =  $countIpr ;
+        $normal_fdr[] = $countFdr ;
 
-            $matrixIdentityNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
-            $matrixIdentityCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
-            $matrixIdentityIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
-            $matrixIdentityFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
+            $fixedNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix($countNpf) - $countNpf;
+            $fixedCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix($countCar) - $countCar;
+            $fixedIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix($countIpr) - $countIpr;
+            $fixedFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix($countFdr) - $countFdr;
 
-            $npfNormalized[] = $fixedNpf;
-            $carNormalized[] = $fixedCar;
-            $iprNormalized[] = $fixedIpr;
-            $fdrNormalized[] = $fixedFdr;
-
-            $arrNpf[] = $matrixIdentityNpf;
-            $arrCar[] = $matrixIdentityCar;
-            $arrIpr[] = $matrixIdentityIpr;
-            $arrFdr[] = $matrixIdentityFdr;
-
-            $sumNpf+= $matrixIdentityNpf;
+            $arrNpf[] = $fixedNpf;
+            $arrCar[] = $fixedCar;
+            $arrIpr[] = $fixedIpr;
+            $arrFdr[] = $fixedFdr;
         }
-
-        $allNormalized = array($npfNormalized, $carNormalized, $iprNormalized, $fdrNormalized);
-        $normMatrix = new Matrix($allNormalized);
-        $normMatrixValues = $normMatrix->inverse();
-
-        //dump($allNormalized);
-
+        
         $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
-        $invMatrix = new Matrix($mergeMatrix);
+
+        $matrix_reorder = [];
+        $normal_matrix = [];
+
+        foreach ($mergeMatrix as $key => $value) {
+            $matrix_reorder[$key] = [$arrNpf[$key], $arrCar[$key], $arrIpr[$key],  $arrFdr[$key]];
+            $normal_matrix[$key] = [$normal_npf[$key], $normal_car[$key], $normal_ipr[$key],  $normal_fdr[$key]];
+        }
+ 
+        // dd($matrix_reorder);
         /* End get normalized data */
+        $invMatrixValues = Excel::MINVERSE($matrix_reorder);
 
-        $invMatrixValues = $invMatrix->inverse();
+        $mmultValue = Excel::MMULT($invMatrixValues, $normal_matrix);
 
-        $mmultValue = $normMatrixValues->multiply($invMatrixValues)->toArray();
-
-        $mmultNpf = array_sum(array_filter($mmultValue[0], function ($num){
-            return $num > 0;
-        }));
-
-        $mmultCar = array_sum(array_filter($mmultValue[1], function ($num){
-            return $num > 0;
-        }));
-
-        $mmultIpr = array_sum(array_filter($mmultValue[2], function ($num){
-            return $num > 0;
-        }));
-
-        $mmultFdr = array_sum(array_filter($mmultValue[3], function ($num){
-            return $num > 0;
-        }));
 
         $table = '<div class="overflow-x-auto relative shadow-md sm:rounded-lg mb-4">';
         $table.= '<table class="w-full text-sm text-left text-center border-collapse" >';
         $table.= '<tbody id="tbodyVariable">';
         $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][0], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][0], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][0], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][0], 2).'</td>';
-        $table.= '</tr>';
-
-        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][1], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][1], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][1], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][1], 2).'</td>';
-        $table.= '</tr>';
-
-        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][2], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][2], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][2], 2).'</td>';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][2], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][3], 2).'</td>';
         $table.= '</tr>';
 
         $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
-        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[0][3], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][2], 2).'</td>';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[1][3], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][2], 2).'</td>';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[2][3], 2).'</td>';
+        $table.= '</tr>';
+
+        $table.= '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][0], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][1], 2).'</td>';
+        $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][2], 2).'</td>';
         $table.= '<td class="border py-4 px-6">'.number_format($mmultValue[3][3], 2).'</td>';
         $table.= '</tr>';
 
@@ -811,17 +801,14 @@ class NullHypothesisDataController extends Controller
         /*
          * Get normalized data
          * */
-        $npfNormalized = array();
-        $carNormalized = array();
-        $iprNormalized = array();
-        $fdrNormalized = array();
-
         $arrNpf = array();
         $arrCar = array();
         $arrIpr = array();
         $arrFdr = array();
-
-        $sumNpf = 0;
+        $normal_npf = [];
+        $normal_car = [];
+        $normal_ipr = [];
+        $normal_fdr = [];
         foreach ($variable as $item) {
             $valNpf = ($item == $variable[0]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[0]);
             $valCar = ($item == $variable[1]) ? 0: $this->getProb($item.' Does not Granger Cause '.$variable[1]);
@@ -833,79 +820,45 @@ class NullHypothesisDataController extends Controller
             $countIpr = $valIpr / $totalMatrix['arrTotal'];
             $countFdr = $valFdr / $totalMatrix['arrTotal'];
 
-            $fixedNpf = ($countNpf == 0) ? 0 : number_format($countNpf, 2);
-            $fixedCar = ($countCar == 0) ? 0 : number_format($countCar, 2);
-            $fixedIpr = ($countIpr == 0) ? 0 : number_format($countIpr, 2);
-            $fixedFdr = ($countFdr == 0) ? 0 : number_format($countFdr, 2);
+            $normal_npf[] = $countNpf ;
+        $normal_car[] = $countCar ;
+        $normal_ipr[] =  $countIpr ;
+        $normal_fdr[] = $countFdr ;
 
-            $matrixIdentityNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
-            $matrixIdentityCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
-            $matrixIdentityIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
-            $matrixIdentityFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
+            $fixedNpf = ($countNpf == 0) ? 1 : $this->getIdentityMatrix($countNpf) - $countNpf;
+            $fixedCar = ($countCar == 0) ? 1 : $this->getIdentityMatrix($countCar) - $countCar;
+            $fixedIpr = ($countIpr == 0) ? 1 : $this->getIdentityMatrix($countIpr) - $countIpr;
+            $fixedFdr = ($countFdr == 0) ? 1 : $this->getIdentityMatrix($countFdr) - $countFdr;
 
-            $npfNormalized[] = $fixedNpf;
-            $carNormalized[] = $fixedCar;
-            $iprNormalized[] = $fixedIpr;
-            $fdrNormalized[] = $fixedFdr;
-
-            $arrNpf[] = $matrixIdentityNpf;
-            $arrCar[] = $matrixIdentityCar;
-            $arrIpr[] = $matrixIdentityIpr;
-            $arrFdr[] = $matrixIdentityFdr;
-
-            $sumNpf+= $matrixIdentityNpf;
+            $arrNpf[] = $fixedNpf;
+            $arrCar[] = $fixedCar;
+            $arrIpr[] = $fixedIpr;
+            $arrFdr[] = $fixedFdr;
         }
-
-        $allNormalized = array($npfNormalized, $carNormalized, $iprNormalized, $fdrNormalized);
-        $normMatrix = new Matrix($allNormalized);
-        $normMatrixValues = $normMatrix->inverse();
-
-        //dump($allNormalized);
-
+        
         $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
-        $invMatrix = new Matrix($mergeMatrix);
+
+        $matrix_reorder = [];
+        $normal_matrix = [];
+
+        foreach ($mergeMatrix as $key => $value) {
+            $matrix_reorder[$key] = [$arrNpf[$key], $arrCar[$key], $arrIpr[$key],  $arrFdr[$key]];
+            $normal_matrix[$key] = [$normal_npf[$key], $normal_car[$key], $normal_ipr[$key],  $normal_fdr[$key]];
+        }
+ 
+        // dd($matrix_reorder);
         /* End get normalized data */
+        $invMatrixValues = Excel::MINVERSE($matrix_reorder);
 
-        $invMatrixValues = $invMatrix->inverse();
-
-        $mmultValue = $normMatrixValues->multiply($invMatrixValues)->toArray();
-
-        $mmultNpf = array_sum(array_filter($mmultValue[0], function ($num){
-            return $num > 0;
-        }));
-
-        $mmultCar = array_sum(array_filter($mmultValue[1], function ($num){
-            return $num > 0;
-        }));
-
-        $mmultIpr = array_sum(array_filter($mmultValue[2], function ($num){
-            return $num > 0;
-        }));
-
-        $mmultFdr = array_sum(array_filter($mmultValue[3], function ($num){
-            return $num > 0;
-        }));
-
-        $arrData = array(
-            $mmultValue[0][0],
-            $mmultValue[1][0],
-            $mmultValue[2][0],
-            $mmultValue[3][0],
-            $mmultValue[0][1],
-            $mmultValue[1][1],
-            $mmultValue[2][1],
-            $mmultValue[3][1],
-            $mmultValue[0][2],
-            $mmultValue[1][2],
-            $mmultValue[2][2],
-            $mmultValue[3][2],
-            $mmultValue[0][3],
-            $mmultValue[1][3],
-            $mmultValue[2][3],
-            $mmultValue[3][3]
-        );
-
-        $avg =  array_sum($arrData)/count($arrData);
+        $mmultValue = Excel::MMULT($invMatrixValues, $normal_matrix);
+        $avg =  Excel::Average($mmultValue);
+        AdditionalData::updateOrCreate([
+            'name' => 'average_treshold',
+            'negara_masters_id' => 1,
+            'jenis' => 'a'
+        ],[
+            'value' => $avg
+        ]);
 
         $table = '<div class="overflow-x-auto relative shadow-md sm:rounded-lg mt-4">';
         $table.= '<table class="w-full text-sm text-left text-center border-collapse" >';

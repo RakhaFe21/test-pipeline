@@ -15,21 +15,10 @@ class BankBasedYearController extends Controller
 {
     public function index(Request $request)
     {
-        $tahun = VariableData::select('tahun')
-            ->groupBy('tahun')
-            ->get();
 
-        $bulan = VariableData::select('bulan')
-            ->groupBy('bulan')
-            ->get();
+        $weight = VariableWeight::where('negara_masters_id', 1)->get();
 
-        $data = VariableData::select('tahun', 'bulan', 'value')
-            ->orderBy('tahun', 'asc')
-            ->orderBy('bulan', 'asc')
-            ->orderBy('variable_masters_id', 'asc')
-            ->get();
-
-        return view('dashboard.bank.ibri.basedyear.index', compact('tahun', 'bulan', 'data'));
+        return view('dashboard.bank.ibri.basedyear.index', compact( 'weight'));
     }
 
     public function store(Request $request)

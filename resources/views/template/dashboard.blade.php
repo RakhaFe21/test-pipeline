@@ -342,6 +342,24 @@
                                 <span class="flex-1 ml-4 text-left whitespace-nowrap">Optimal Level In Index</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('dashboard.bank.ibri.optimallevelreal') }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                                <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                                <span class="flex-1 ml-4 text-left whitespace-nowrap">Optimal Level In Real</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dashboard.bank.ibri.heat-map') }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                                <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                                <span class="flex-1 ml-4 text-left whitespace-nowrap">Setting The Heatmap</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dashboard.bank.ibri.visualization') }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                                <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                                <span class="flex-1 ml-4 text-left whitespace-nowrap">Visualization</span>
+                            </a>
+                        </li>
                         
             `)
 

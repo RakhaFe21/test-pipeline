@@ -5,7 +5,7 @@
         <div class="fle flex-col w-full mb-6">
             <h1 class="text-3xl font-medium">Upper Threshold</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Macro, Data, HP - In sample Mode, Upper Threshold</span>
+                <span>Macro, Data, HP - In sample Model, Upper Threshold</span>
             </div>
         </div>
 
@@ -44,7 +44,7 @@
 
             Object.keys(tahun).forEach((key, value) => {
                 $('#selectPeriod').append(`
-                    <option value="${tahun[key].tahun}-${tahun[key].variable_masters_id}-${tahun[key].nama_variable.toUpperCase()}">${tahun[key].tahun} I${tahun[key].nama_variable.toUpperCase()} HP</option>
+                    <option value="${tahun[key].tahun}-${tahun[key].variable_masters_id}-${tahun[key].nama_variable.toUpperCase()}">${tahun[key].tahun} ${tahun[key].nama_variable === 'ci' ? tahun[key].nama_variable.toUpperCase() : 'I'+tahun[key].nama_variable.toUpperCase()} HP</option>
                 `)
             })
 
@@ -85,15 +85,20 @@
                 $('#tbodyUpper').html('')
                 let totalSignal = 0
                 Object.keys(data).forEach((key, index) => {
-                    totalSignal += (data[key].value_index > average)?1:0
+                    totalSignal += (data[key].hp > average)?1:0
                 })
+                if (varName == 'CI') {
+                    varName = 'CI'
+                } else{
+                    varName = 'I'+varName
+                }
 
                 $('#headerUpper').html(`
                         <tr>
                             <th scope="col" class="py-3 px-6">YEAR</th>
                             <th scope="col" class="py-3 px-6">MONTHS</th>
-                            <th scope="col" class="py-3 px-6">I${varName}</th>
-                            <th scope="col" class="py-3 px-6">I${varName} - HP</th>
+                            <th scope="col" class="py-3 px-6">${varName}</th>
+                            <th scope="col" class="py-3 px-6">${varName} - HP</th>
                             <th scope="col" class="py-3 px-6">AVERAGE</th>
                             <th scope="col" class="py-3 px-6">SIGNAL</th>
                         <tr>
@@ -115,7 +120,7 @@
                                 <td class="border border-slate-300 py-4 px-6">${fData[key].value_index.toFixed(2)}</td>
                                 <td class="border border-slate-300 py-4 px-6">${fData[key].hp.toFixed(2)}</td>
                                 <td class="border border-slate-300 py-4 px-6">${average}</td>
-                                <td class="border border-slate-300 py-4 px-6">${signal}</td>
+                                <td class="border border-slate-300 py-4 px-6 ${signal == 0 ? 'text-red-500 text-bold' : ''}">${signal}</td>
                             </tr>
                         `)
                 })

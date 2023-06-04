@@ -44,7 +44,7 @@
 
             Object.keys(tahun).forEach((key, value) => {
                 $('#selectPeriod').append(`
-                    <option value="${tahun[key].tahun}-${tahun[key].variable_masters_id}-${tahun[key].nama_variable.toUpperCase()}">${tahun[key].tahun} I${tahun[key].nama_variable.toUpperCase()} HP</option>
+                    <option value="${tahun[key].tahun}-${tahun[key].variable_masters_id}-${tahun[key].nama_variable.toUpperCase()}">${tahun[key].tahun} ${tahun[key].nama_variable === 'ci' ? tahun[key].nama_variable.toUpperCase() : 'I'+tahun[key].nama_variable.toUpperCase()} HP</option>
                 `)
             })
 
@@ -85,7 +85,7 @@
                 $('#tbodyUpper').html('')
                 let totalSignal = 0
                 Object.keys(data).forEach((key, index) => {
-                    totalSignal += (data[key].value_index < average)?1:0
+                    totalSignal += (data[key].hp < average)?1:0
                 })
 
                 $('#headerUpper').html(`
@@ -102,7 +102,7 @@
                 Object.keys(fData).forEach((key, index) => {
                     let first = true
                     let rowSpaned = ''
-                    let signal = (fData[key].value_index > average)?1:0
+                    let signal = (fData[key].hp < average)?1:0
 
                     if(index==0) {
                         rowSpaned = `<td rowspan="12" class="border border-slate-300 py-4 px-6">${fData[key].tahun}</td>`
@@ -115,7 +115,7 @@
                                 <td class="border border-slate-300 py-4 px-6">${fData[key].value_index.toFixed(2)}</td>
                                 <td class="border border-slate-300 py-4 px-6">${fData[key].hp.toFixed(2)}</td>
                                 <td class="border border-slate-300 py-4 px-6">${average}</td>
-                                <td class="border border-slate-300 py-4 px-6">${signal}</td>
+                                <td class="border border-slate-300 py-4 px-6  ${signal == 0 ? 'text-red-500 text-bold' : ''}">${signal}</td>
                             </tr>
                         `)
                 })

@@ -3,9 +3,9 @@
 @section('content')
     <section class="p-5">
         <div class="fle flex-col w-full mb-6">
-            <h1 class="text-3xl font-medium">Optimal Level In Index</h1>
+            <h1 class="text-3xl font-medium">Optimal Level In Real</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Banking, Data, Optimal Level In Index</span>
+                <span>Banking, Data, Optimal Level In Real</span>
             </div>
         </div>
 
@@ -126,7 +126,7 @@
             // })
 
             Object.keys(variable).forEach((key, index) => {
-                $('#selectVariable').append(`<option value="${variable[key].id}">I${variable[key].nama_variable.toUpperCase()}</option>`)
+                $('#selectVariable').append(`<option value="${variable[key].id}">${variable[key].nama_variable.toUpperCase()}</option>`)
             })
 
             Object.keys(tahun).forEach((key, index) => {
@@ -179,6 +179,7 @@
             async function renderTable() {
                 let year = $('#selectYear').val()
                 let signal = await reqSignal()
+                let dataVar = await reqDataVar()
                 let signalLow = await reqSignalLow()
                 let resultHorizon = await convertHorizon(signal)
                 let resultHorizonLow = await convertHorizon(signalLow)
@@ -186,14 +187,42 @@
                 let resultFilterLow = await filterRangkumanMonthnByYear(resultHorizonLow);
                 let lowGsb = await getLowGsb(resultFilter)
                 let lowGsbLow = await getLowGsb(resultFilterLow)
-                let stDev = await getStdev(signal, lowGsb)
-                let stDevLow = await getStdev(signalLow, lowGsbLow)
-                let meanTotal = await getMeanTotal(signal);
-                let mean = await getMean(signal, lowGsb);
-                let meanLow = await getMean(signalLow, lowGsbLow);
-                let listByYear = await filterByYear(signal, year)
+                let stDev = await getStdev(dataVar, lowGsb)
+                let stDevLow = await getStdev(dataVar, lowGsbLow)
+                let meanTotal = await getMeanTotal(dataVar);
+                let mean = await getMean(dataVar, lowGsb);
+                let meanLow = await getMean(dataVar, lowGsbLow);
+                let listByYear = await filterByYear(dataVar, year)
                 renderData(listByYear, stDev, mean, meanTotal, lowGsb, stDevLow, meanLow, lowGsbLow)
                 
+            }
+
+            async function reqDataVar() {
+                try {
+                    const fVariable = $('#selectVariable').val()
+                    const fTahun = $('#selectYear').val()
+                    const signal = await axios({
+                        method: 'get',
+                        url: '{{ route('dashboard.bank.ibri.optimallevelreal.data') }}',
+                        headers: {},
+                        params: {
+                            'variable': fVariable
+                        }
+                    })
+
+                    const data = signal.data
+
+                    if(data.code === 200) {
+                        console.log(data.data);
+                        return data.data
+                    } else {
+                        console.log(data.message);
+                        toastr.error(data.message)
+                    }
+
+                } catch (error) {
+                    toastr.error(error.message)
+                }
             }
 
             async function reqSignal() {
@@ -291,8 +320,8 @@
                     }
                 };
                 datas.forEach(data => {
-                    desc = getDescription(data.value_index, upper, meanTotal, lower, var_id);
-                    prepChart.value_index.push(parseFloat(data.value_index.toFixed(2)))
+                    desc = getDescription(data.value, upper, meanTotal, lower, var_id);
+                    prepChart.value_index.push(parseFloat(data.value.toFixed(2)))
                     prepChart.upperTh.data.push(parseFloat(upper.toFixed(2)))
                     prepChart.lowerTh.data.push(parseFloat(lower.toFixed(2)))
                     prepChart.average.data.push(parseFloat(meanTotal.toFixed(2)))
@@ -300,7 +329,7 @@
                     $('.skalz-tbody').append(`
                         <tr>
                             <td class="border border-slate-300 py-4 px-6">${bulan[data.bulan - 1]}</td>
-                            <td class="border border-slate-300 py-4 px-6">${data.value_index.toFixed(2)}</td>
+                            <td class="border border-slate-300 py-4 px-6">${data.value.toFixed(2)}</td>
                             <td class="border border-slate-300 py-4 px-6">${upper.toFixed(2)}</td>
                             <td class="border border-slate-300 py-4 px-6">${meanTotal.toFixed(2)}</td>
                             <td class="border border-slate-300 py-4 px-6">${lower.toFixed(2)}</td>
@@ -315,7 +344,7 @@
                 let result = []
                 for (let i = 0; i < datas.length; i++) {
                     if (i > (index-1)) {
-                        result.push(datas[i].value_index)
+                        result.push(datas[i].value)
                     }
                     
                 }
@@ -326,7 +355,7 @@
                 let result = []
                 for (let i = 0; i < datas.length; i++) {
                     if (i > (index-1)) {
-                        result.push(datas[i].value_index)
+                        result.push(datas[i].value)
                     }
                     
                 }
@@ -336,7 +365,7 @@
             async function getMeanTotal(datas){
                 let result = []
                 datas.forEach((el, index) => {
-                    result.push(el.value_index)                    
+                    result.push(el.value)                    
                 })
                 return avg(result)
             }

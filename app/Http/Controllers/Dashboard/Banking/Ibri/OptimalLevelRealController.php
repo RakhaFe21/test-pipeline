@@ -9,7 +9,7 @@ use App\Models\VariableData;
 use App\Models\AdditionalData;
 use App\Http\Controllers\Service\SpreadsheetServiceController;
 
-class OptimalLevelIndexController extends Controller
+class OptimalLevelRealController extends Controller
 {
     public function index()
     {
@@ -26,7 +26,7 @@ class OptimalLevelIndexController extends Controller
             ['jenis' , '=', 'a']
         ])->first();
         $avg = round($avg->value, 2);
-        return view('dashboard.bank.ibri.optimallevelindex.index', compact('variable', 'tahun', 'avg'));
+        return view('dashboard.bank.ibri.optimallevelreal.index', compact('variable', 'tahun', 'avg'));
     }
 
     public function getStdev(Request $request)
@@ -35,5 +35,12 @@ class OptimalLevelIndexController extends Controller
             array_push($array, floatval($value));
         }
         return SpreadsheetServiceController::STDEV($array);
+    }
+
+    public function getData(Request $request)
+    {
+        $data =  VariableData::where('variable_masters_id', $request->variable)->get();
+        
+        return ['code' => 200, 'message' => 'success', 'data' => $data];
     }
 }

@@ -11,7 +11,7 @@ class VariableMaster extends Model
 
     public function variableData()
     {
-        return $this->belongsTo(VariableData::class);
+        return $this->hasMany(VariableData::class, 'variable_masters_id', 'id');
     }
 
     public function variableWeight()

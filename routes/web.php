@@ -15,6 +15,9 @@
     use App\Http\Controllers\Dashboard\Banking\Ibri\OutSampleController;
     use App\Http\Controllers\Dashboard\Banking\Ibri\OutSamplePerformanceController;
     use App\Http\Controllers\Dashboard\Banking\Ibri\OptimalLevelIndexController;
+    use App\Http\Controllers\Dashboard\Banking\Ibri\OptimalLevelRealController;
+    use App\Http\Controllers\Dashboard\Banking\Ibri\HeatMapController;
+    use App\Http\Controllers\Dashboard\Banking\Ibri\VisualizationController as IbriVisualizationController;
 	use App\Http\Controllers\Dashboard\DashboardController;
 	use App\Http\Controllers\Landing\{HomeController, IntegrationController, ProfileController, TentangKamiController};
 	use App\Http\Controllers\Landing\Bank\{DataController,
@@ -129,4 +132,14 @@ Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')
     Route::get('bank/ibri/osp/lower', [OutSamplePerformanceController::class, 'indexLower'])->name('bank.ibri.outsampleperf.lower');
 
     Route::get('bank/ibri/optimal-index', [OptimalLevelIndexController::class, 'index'])->name('bank.ibri.optimallevelindex');
+    
+    Route::get('bank/ibri/optimal-real', [OptimalLevelRealController::class, 'index'])->name('bank.ibri.optimallevelreal');
+    Route::get('bank/ibri/optimal-real-data', [OptimalLevelRealController::class, 'getData'])->name('bank.ibri.optimallevelreal.data');
+
+    Route::get('bank/ibri/stdev', [OptimalLevelIndexController::class, 'getStdev'])->name('stdev');
+
+    Route::get('bank/ibri/heat-map', [HeatMapController::class, 'index'])->name('bank.ibri.heat-map');
+
+    Route::get('bank/ibri/visualization', [IbriVisualizationController::class, 'index'])->name('bank.ibri.visualization');
+
 });

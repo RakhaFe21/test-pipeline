@@ -3,99 +3,45 @@
 @section('content')
     <section class="p-5">
         <div class="fle flex-col w-full mb-6">
-            <h1 class="text-3xl font-medium">Optimal Level In Index</h1>
+            <h1 class="text-3xl font-medium">Visualization</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Banking, Data, Optimal Level In Index</span>
+                <span>Banking, Data, Visualization</span>
             </div>
         </div>
 
-        <div class="box-border h-32 w-32 p-4 border-4 bg-gray-100 rounded-lg mb-4">
-            <div class="inline-block flex">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm mb-2" for="variable">
-                        Variable
-                    </label>
-                    <select
-                        class="bg-gray-50 flex w-full border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray p-3.5 mr-4" id="selectVariable">
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm mb-2 ml-4" for="tahun">
-                        Tahun
-                    </label>
-                    <select
-                        class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray flex w-full w-[100px] p-3.5 ml-4" id="selectYear">
-                    </select>
-                </div>
-            </div>
-        </div>
 
-        <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
-            <ul class="flex flex-wrap text-sm font-medium text-center" id="tab" data-tabs-toggle="#tabContent" role="tablist">
-                <li class="mr-2" role="presentation">
-                    <button class="inline-block p-4 rounded-t-lg border-b-2" id="table-tab" data-tabs-target="#table" type="button" role="tab" aria-controls="table" aria-selected="false">Table</button>
-                </li>
-                <li class="mr-2" role="presentation">
-                    <button class="inline-block p-4 rounded-t-lg border-b-2" id="chart-tab" data-tabs-target="#chart" type="button" role="tab" aria-controls="chart" aria-selected="false">Grafis</button>
-                </li>
-            </ul>
-        </div>
         <div id="tabContent">
-            <div class="hidden" id="table" role="tabpanel" aria-labelledby="table-tab">
+            <div id="table" role="tabpanel" aria-labelledby="table-tab">
                 <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left text-center">
+                    <table class="table table-bordered w-full text-sm text-left text-center">
                         <thead class="text-xs uppercase bg-gray-200">
                             <tr>
-                                <th scope="col" class="py-3 px-6">Months</th>
-                                <th scope="col" class="py-3 px-6" id="variableName-column">Variable</th>
-                                <th scope="col" class="py-3 px-6">Upper TH <br> <span class="upper-label"></span> Month</th>
-                                <th scope="col" class="py-3 px-6">Average Total</th>
-                                <th scope="col" class="py-3 px-6">Lower TH <br> <span class="upper-label-low"></span> Month</th>
-                                <th scope="col" class="py-3 px-6">Description</th>
+                                <th scope="col" class="py-3 px-6">No</th>
+                                <th scope="col" class="py-3 px-6">Indicator</th>
+                                <th scope="col" class="py-3 px-6">Caegory</th>
+                                <th scope="col" class="py-3 px-6">Model</th>
+                                <th scope="col" class="py-3 px-6">Trend</th>
+                                <th scope="col" class="py-3 px-6">Treshold</th>
+                                <th scope="col" class="py-3 px-6">Time Horizon</th>
+                                <th scope="col" class="py-3 px-6">Accuracy <br>(QPS)</th>
+                                <th scope="col" class="py-3 px-6">Predictive <br>Power (GSB)</th>
+                                <th scope="col" class="py-3 px-6">Loss Function</th>
+                                <th scope="col" class="py-3 px-6">Resilience <br> Level</th>
+                                <th scope="col" class="py-3 px-6">Optimal</th>
+                                <th scope="col" class="py-3 px-6">Tolerance</th>
+                                <th scope="col" class="py-3 px-6">Stagnant</th>
+                                <th scope="col" class="py-3 px-6">Vulnerable</th>
+                                <th scope="col" class="py-3 px-6">C(Probability of Crisis <br> Without Signal)</th>
+                                <th scope="col" class="py-3 px-6">C(Probability of Crisis <br> Without Signal)</th>
+                            </tr>
+                            <tr>
+                                <th scope="col" colspan="17" class="py-3 px-6">Lamdha =14400, Level of Multiplier {{$avg}}</th>
                             </tr>
                         </thead>
                         <tbody id="tbody" class="skalz-tbody">
 
                         </tbody>
                     </table>
-                </div>
-                <div class="overflow-x-auto relative shadow-md sm:rounded-lg mt-5 p-5">
-                    <table class="w-full text-sm text-right" style="border-collapse: separate; border-spacing:0 30px">
-                        <thead class="text-xs uppercase">
-                            <tr>
-                                <th scope="col" class=""><span class="upper-label"></span> Month</th>
-                                <th scope="col" class=""></th>
-                                <th scope="col" class=""></th>
-                                <th scope="col" class=""><span class="upper-label-low"></span> Month</th>
-                                <th scope="col" class=""></th>
-                                <th scope="col" class=""></th>
-                                <th scope="col" class=""></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-white dark:bg-gray-800 dark:border-gray-700">
-                                <td class="py-4 px-6">STDEV</td>
-                                <td class="py-4 px-6  border border-slate-300 bg-gray-100 addData" id="stdevCol"></td>
-                                <td class="py-4 px-6"></td>
-                                <td class="py-4 px-6">STDEV</td>
-                                <td class="py-4 px-6 border border-slate-300 bg-gray-100 addData" id="stdevColLow"></td>
-                                <td class="py-4 px-6"></td>
-                            </tr>
-                            <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 mt-5">
-                                <td class="py-4 px-6">MEAN</td>
-                                <td class="py-4 px-6  border border-slate-300 bg-gray-100 addData" id="meanCol"></td>
-                                <td class="py-4 px-6"></td>
-                                <td class="py-4 px-6">MEAN</td>
-                                <td class="py-4 px-6 border border-slate-300 bg-gray-100 addData" id="meanColLow"></td>
-                                <td class="py-4 px-6"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="hidden flex flex-row items-center justify-center pt-10" id="chart" role="tabpanel" aria-labelledby="chart-tab">
-                
-                    <canvas id="chart-section" width="100%" height="50%"></canvas>
                 </div>
             </div>
         </div>
@@ -111,7 +57,8 @@
             const variable = {!! json_encode($variable) !!}
             const averageGlobal = {{ $avg}}
             let bulan = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
-
+            
+            let dataAll = [];
             // Object.keys(tahun).forEach((key, index) => {
             //     $('#tbody').append(`
             //         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -125,43 +72,7 @@
             //     `)
             // })
 
-            Object.keys(variable).forEach((key, index) => {
-                $('#selectVariable').append(`<option value="${variable[key].id}">I${variable[key].nama_variable.toUpperCase()}</option>`)
-            })
-
-            Object.keys(tahun).forEach((key, index) => {
-                $('#selectYear').append(`<option value="${tahun[key].tahun}">${tahun[key].tahun}</option>`)
-            })
-
-            $('#selectVariable').on('change', function () {
-                $('.skalz-tbody').html('')
-                $('.addData').html('')
-                $("#chart-section").remove();
-                $("#chart").append('<canvas id="chart-section"></canvas>');
-
-                renderTable()
-            })
-
-            $('#selectYear').on('change', function () {
-                $('.skalz-tbody').html('')
-                $('.addData').html('')
-                $("#chart-section").remove();
-                $("#chart").append('<canvas id="chart-section"></canvas>');
-
-                renderTable()
-            })
-
-            const tabElements = [{
-                    id: 'table',
-                    triggerEl: document.querySelector('#table-tab'),
-                    targetEl: document.querySelector('#table')
-                },
-                {
-                    id: 'chart',
-                    triggerEl: document.querySelector('#chart-tab'),
-                    targetEl: document.querySelector('#chart')
-                }
-            ];
+            
 
             const options = {
                 defaultTabId: 'settings',
@@ -170,36 +81,88 @@
                 onShow: () => {}
             }
 
-            const tabs = new Tabs(tabElements, options)
-            tabs.show('table')
-            tabs.getTab('chart')
+            boot()    
 
-            renderTable()
+            async function getAllData(){
+                let j = 0
+                for (let property in variable) {
+                    let signal = await reqSignal(variable[property].id)
+                    let dataVar = await reqDataVar(variable[property].id)
+                    let signalLow = await reqSignalLow(variable[property].id)
+                    let resultHorizon = await convertHorizon(signal)
+                    let resultHorizonLow = await convertHorizon(signalLow)
+                    let resultFilter = await filterRangkumanMonthnByYear(resultHorizon);
+                    let resultFilterLow = await filterRangkumanMonthnByYear(resultHorizonLow);
+                    let lowGsb = await getLowGsb(resultFilter)
+                    let lowGsbLow = await getLowGsb(resultFilterLow)
+                    let stDev = await getStdev(dataVar, lowGsb)
+                    let stDevLow = await getStdev(dataVar, lowGsbLow)
+                    let meanTotal = await getMeanTotal(dataVar);
+                    let mean = await getMean(dataVar, lowGsb);
+                    let meanLow = await getMean(dataVar, lowGsbLow);
+                    let resultData = await getLowResult(resultFilter);
+                    let resultDataLow = await getLowResult(resultFilterLow);
+                    let lower = meanLow - (averageGlobal * stDevLow)
+                    let upper = mean + (averageGlobal * stDev)
+                    let temp = {
+                        var_id:variable[property].id,
+                        name:   variable[property].nama_variable,
+                        dataVar:dataVar,
+                        stDev:stDev,
+                        mean:mean,
+                        meanTotal:meanTotal,
+                        lowGsb:lowGsb,
+                        stDevLow:stDevLow,
+                        meanLow:meanLow,
+                        lowGsbLow:lowGsbLow,
+                        resultData:resultData,
+                        resultDataLow:resultDataLow,
+                        lower:lower,
+                        upper:upper
+                    }
+                    dataAll.push(temp)
+                }
+
+                return dataAll
+            }
+
+            async function boot() {
+                let firstData = await getAllData()
+                renderTable()
+            }
+
 
             async function renderTable() {
-                let year = $('#selectYear').val()
-                let signal = await reqSignal()
-                let signalLow = await reqSignalLow()
-                let resultHorizon = await convertHorizon(signal)
-                let resultHorizonLow = await convertHorizon(signalLow)
-                let resultFilter = await filterRangkumanMonthnByYear(resultHorizon);
-                let resultFilterLow = await filterRangkumanMonthnByYear(resultHorizonLow);
-                let lowGsb = await getLowGsb(resultFilter)
-                let lowGsbLow = await getLowGsb(resultFilterLow)
-                let stDev = await getStdev(signal, lowGsb)
-                let stDevLow = await getStdev(signalLow, lowGsbLow)
-                let meanTotal = await getMeanTotal(signal);
-                let mean = await getMean(signal, lowGsb);
-                let meanLow = await getMean(signalLow, lowGsbLow);
-                let listByYear = await filterByYear(signal, year)
-                renderData(listByYear, stDev, mean, meanTotal, lowGsb, stDevLow, meanLow, lowGsbLow)
+                renderData()
                 
             }
 
-            async function reqSignal() {
+            async function reqDataVar(fVariable) {
                 try {
-                    const fVariable = $('#selectVariable').val()
-                    const fTahun = $('#selectYear').val()
+                    const signal = await axios({
+                        method: 'get',
+                        url: '{{ route('dashboard.bank.ibri.optimallevelreal.data') }}',
+                        headers: {},
+                        params: {
+                            'variable': fVariable
+                        }
+                    })
+
+                    const data = signal.data
+
+                    if(data.code === 200) {
+                        return data.data
+                    } else {
+                        toastr.error(data.message)
+                    }
+
+                } catch (error) {
+                    toastr.error(error.message)
+                }
+            }
+
+            async function reqSignal(fVariable) {
+                try {
                     const signal = await axios({
                         method: 'get',
                         url: '{{ route('dashboard.bank.ibri.ews.signal') }}',
@@ -212,10 +175,8 @@
                     const data = signal.data
 
                     if(data.code === 200) {
-                        console.log(data.data);
                         return data.data
                     } else {
-                        console.log(data.message);
                         toastr.error(data.message)
                     }
 
@@ -224,9 +185,8 @@
                 }
             }
 
-            async function reqSignalLow() {
+            async function reqSignalLow(fVariable) {
                 try {
-                    const fVariable = $('#selectVariable').val()
                     const signal = await axios({
                         method: 'get',
                         url: '{{ route('dashboard.bank.ibri.ews.signal-lower') }}',
@@ -239,10 +199,8 @@
                     const data = signal.data
 
                     if(data.code === 200) {
-                        console.log(data.data);
                         return data.data
                     } else {
-                        console.log(data.message);
                         toastr.error(data.message)
                     }
 
@@ -262,60 +220,126 @@
                 return result
             }
 
-            async function renderData(datas, stdev, mean, meanTotal, limit, stDevLow, meanLow, limitLow){
-                $('#stdevCol').html(stdev.toFixed(4))
-                $('#meanCol').html(mean.toFixed(4))
-                $('#stdevColLow').html(stDevLow.toFixed(4))
-                $('#meanColLow').html(meanLow.toFixed(4))
-                let upper = mean + (averageGlobal * stdev)
-                let lower = meanLow - (averageGlobal * stDevLow)
-                var desc
-                var var_id = $('#selectVariable').val()
-                $('.upper-label').html(`${limit}`)
-                $('.upper-label-low').html(`${limitLow}`)
-                let prepChart = {
-                    name: $('#selectVariable option:selected' ).text(),
-                    month:[],
-                    value_index:[],
-                    upperTh : {
-                        name: 'Upper Treshold',
-                        data: []
-                    },
-                    lowerTh:{
-                        name: 'Lower Treshold',
-                        data: []
-                    },
-                    average:{
-                        name: 'Average Total',
-                        data:[]
-                    }
-                };
-                datas.forEach(data => {
-                    desc = getDescription(data.value_index, upper, meanTotal, lower, var_id);
-                    prepChart.value_index.push(parseFloat(data.value_index.toFixed(2)))
-                    prepChart.upperTh.data.push(parseFloat(upper.toFixed(2)))
-                    prepChart.lowerTh.data.push(parseFloat(lower.toFixed(2)))
-                    prepChart.average.data.push(parseFloat(meanTotal.toFixed(2)))
-                    prepChart.month.push(bulan[data.bulan - 1])
+            async function renderData(){
+                dataAll.unshift(dataAll[4])
+                dataAll.pop()
+                dataAll.forEach((data, key) => {
                     $('.skalz-tbody').append(`
+                        ${key === 0 ? '<tr><th scope="col" colspan="17" class="py-3 px-6">Elements of Composite Index</th></tr>': ''}
+                        ${key === 1 ? '<tr><th scope="col" colspan="17" class="py-3 px-6">Components of Composite Index</th></tr>': ''}
                         <tr>
-                            <td class="border border-slate-300 py-4 px-6">${bulan[data.bulan - 1]}</td>
-                            <td class="border border-slate-300 py-4 px-6">${data.value_index.toFixed(2)}</td>
-                            <td class="border border-slate-300 py-4 px-6">${upper.toFixed(2)}</td>
-                            <td class="border border-slate-300 py-4 px-6">${meanTotal.toFixed(2)}</td>
-                            <td class="border border-slate-300 py-4 px-6">${lower.toFixed(2)}</td>
-                            <td class="border border-slate-300 py-4 px-6">${desc}</td>
+                            <td class="border border-slate-300 py-4 ">${key+1} A</td>
+                            <td rowspan="2" class="border border-slate-300 py-4">${data.name}</td>
+                            <td rowspan="2" class="border border-slate-300 py-4 px-6">${data.name === 'ci' ? 'Dimension Index' : 'Individual Index'}</td>
+                            <td rowspan="2" class="border border-slate-300 py-4 px-6">µ = 0,5</td>
+                            <td rowspan="2" class="border border-slate-300 py-4 px-6">One-sided HP Filter</td>
+                            <td class="border border-slate-300 py-4">Upper Treshold</td> 
+                            <td class="border border-slate-300 py-4">${data.lowGsb}</td> 
+                            <td class="border border-slate-300 py-4">${data.resultData[13].toFixed(3)}</td>
+                            <td class="border border-slate-300 py-4">${data.resultData[14].toFixed(3)}</td> 
+                            <td class="border border-slate-300 py-4">${data.resultData[12].toFixed(3)}</td>
+                            <td class="border border-slate-300 py-4">${(data.resultData[17] * 100).toFixed(2)} %</td>
+                            <td rowspan="2" class="border border-slate-300 py-4">${getCondition('optimal', data)}</td>
+                            <td rowspan="2" class="border border-slate-300 py-4">${getCondition('tolerance', data)}</td>
+                            <td rowspan="2" class="border border-slate-300 py-4">${getCondition('stagnant', data)}</td>
+                            <td rowspan="2" class="border border-slate-300 py-4">${getCondition('vulnerable', data)}</td>
+                            <td class="border border-slate-300 py-4">${data.resultData[15].toFixed(3)}</td>
+                            <td class="border border-slate-300 py-4">${data.resultData[16].toFixed(3)}</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-slate-300 py-4 ">${key+1} A</td>
+                            <td class="border border-slate-300 py-4">Lower Treshold</td>
+                            <td class="border border-slate-300 py-4">${data.lowGsbLow}</td>
+                            <td class="border border-slate-300 py-4">${data.resultDataLow[13].toFixed(3)}</td>
+                            <td class="border border-slate-300 py-4">${data.resultDataLow[14].toFixed(3)}</td>
+                            <td class="border border-slate-300 py-4">${data.resultDataLow[12].toFixed(3)}</td>
+                            <td class="border border-slate-300 py-4">${(data.resultDataLow[17] * 100).toFixed(2)} %</td>
+                            <td class="border border-slate-300 py-4">${data.resultDataLow[15].toFixed(3)}</td>
+                            <td class="border border-slate-300 py-4">${data.resultDataLow[16].toFixed(3)}</td>
                         </tr>
                     `)
                 });
-                generateChart(prepChart)
+            }
+
+            function getCondition(condition, data){
+                if (data.name == 'npf') {
+                    return npfCondition(condition, data)
+                } else if (data.name == 'car') {
+                    return carCondition(condition, data)
+                } else if (data.name == 'npf') {
+                    return iprCondition(condition, data)
+                } else if (data.name == 'fdr') {
+                    return fdrCondition(condition, data)
+                } else {
+                    return ciCondition(condition, data)
+                }
+            }
+
+            function npfCondition(condition, data) {
+                if (condition === 'optimal') {
+                    return `${data.meanTotal.toFixed(2)} ≥ ${data.name} ≥ ${data.lower.toFixed(2)}`
+                } else if (condition === 'tolerance') {
+                    return `${data.meanTotal.toFixed(2)} < ${data.name} ≤ ${data.upper.toFixed(2)}`
+                } else if (condition === 'stagnant') {
+                    return `${data.name} < ${data.lower.toFixed(2)}`
+                } else {
+                    return `${data.name} > ${data.upper.toFixed(2)}`
+                }
+            }
+
+            function carCondition(condition, data) {
+                if (condition === 'optimal') {
+                    return `${data.meanTotal.toFixed(2)} > ${data.name} ≥ ${data.lower.toFixed(2)}`
+                } else if (condition === 'tolerance') {
+                    return `${data.meanTotal.toFixed(2)} ≤ ${data.name} ≤ ${data.upper.toFixed(2)}`
+                } else if (condition === 'stagnant') {
+                    return `${data.name} > ${data.upper.toFixed(2)}`
+                } else {
+                    return `${data.name} < ${data.lower.toFixed(2)}`
+                }
+            }
+
+            function iprCondition(condition, data) {
+                if (condition === 'optimal') {
+                    return `${data.meanTotal.toFixed(2)} > ${data.name} ≥ ${data.lower.toFixed(2)}`
+                } else if (condition === 'tolerance') {
+                    return `${data.meanTotal.toFixed(2)} ≤ ${data.name} ≤ ${data.upper.toFixed(2)}`
+                } else if (condition === 'stagnant') {
+                    return `${data.name} < ${data.lower.toFixed(2)}`
+                } else {
+                    return `${data.name} > ${data.upper.toFixed(2)}`
+                }
+            }
+            
+            function fdrCondition(condition, data) {
+                if (condition === 'optimal') {
+                    return `${data.meanTotal.toFixed(2)} ≥ ${data.name} ≥ ${data.lower.toFixed(2)}`
+                } else if (condition === 'tolerance') {
+                    return `${data.meanTotal.toFixed(2)} ≤ ${data.name} ≤ ${data.upper.toFixed(2)}`
+                } else if (condition === 'stagnant') {
+                    return `${data.name} < ${data.lower.toFixed(2)}`
+                } else {
+                    return `${data.name} > ${data.upper.toFixed(2)}`
+                }
+            }
+
+            function ciCondition(condition, data) {
+                if (condition === 'optimal') {
+                    return `${data.meanTotal.toFixed(2)} ≤ ${data.name} ≤ ${data.upper.toFixed(2)}`
+                } else if (condition === 'tolerance') {
+                    return `${data.meanTotal.toFixed(2)} ≥ ${data.name} ≥ ${data.lower.toFixed(2)}`
+                } else if (condition === 'stagnant') {
+                    return `${data.name} < ${data.lower.toFixed(2)}`
+                } else {
+                    return `${data.name} > ${data.upper.toFixed(2)}`
+                }
             }
 
             async function getStdev(datas, index){
                 let result = []
                 for (let i = 0; i < datas.length; i++) {
                     if (i > (index-1)) {
-                        result.push(datas[i].value_index)
+                        result.push(datas[i].value)
                     }
                     
                 }
@@ -326,7 +350,7 @@
                 let result = []
                 for (let i = 0; i < datas.length; i++) {
                     if (i > (index-1)) {
-                        result.push(datas[i].value_index)
+                        result.push(datas[i].value)
                     }
                     
                 }
@@ -336,7 +360,7 @@
             async function getMeanTotal(datas){
                 let result = []
                 datas.forEach((el, index) => {
-                    result.push(el.value_index)                    
+                    result.push(el.value)                    
                 })
                 return avg(result)
             }
@@ -376,7 +400,7 @@
 
             function npfDesc(value, upper, average, lower) {
                 if (value > upper) {
-                    return 'Vunerabiity'
+                    return 'Vulnerability'
                 } 
 
                 if (value < lower) {
@@ -430,7 +454,7 @@
 
             function fdrDesc(value, upper, average, lower) {
                 if (value > upper) {
-                    return 'Vunerabiity'
+                    return 'Vulnerability'
                 } 
 
                 if (value < lower) {
@@ -839,6 +863,22 @@
                 return index[lowIndex];
             }
 
+            async function  getLowResult(data) {
+                let lowIndex;
+                let low = 999;
+                let index = [3,6,12,24]
+
+                for (let i = 1; i < data.length; i++) {
+                    if (data[i][14] < low) {
+                        low = data[i][14]
+                        lowData = data[i]
+                        lowIndex = i-1
+                    }
+                    
+                }
+                return lowData;
+            }
+
             // Get month time horizon value
             function getMonthValue(signal, crisis) {
                 let result
@@ -861,37 +901,26 @@
                 return parseFloat(result)
             }
 
-            //for chart
-            async function generateChart(data) {
-
-                new Chart(
-                    document.getElementById('chart-section'),
-                    {
-                    type: 'line',
-                    data: {
-                        labels: data.month.map(row => row),
-                        datasets: [
-                        {
-                            label: data.name,
-                            data: data.value_index.map(row => row)
-                        },
-                        {
-                            label: data.upperTh.name,
-                            data: data.upperTh.data.map(row => row)
-                        },
-                        {
-                            label: data.lowerTh.name,
-                            data: data.lowerTh.data.map(row => row)
-                        },
-                        {
-                            label: data.average.name,
-                            data: data.average.data.map(row => row)
-                        }
-                        ]
-                    }
-                    }
-                );
-            };
+            function getColor(desc) {
+                switch (desc) {
+                    case 'Expected/Optimal':
+                        return 'green';
+                        break;
+                    case 'Tolerance':
+                        return 'yellow';
+                        break;
+                    case 'Vulnerability':
+                        return 'red';
+                        break;
+                    case 'Stagnant/Strict':
+                        return 'blue';
+                        break;
+                    default:
+                        return 'none';
+                        break;
+                }
+            }
         })
     </script>
+
 @endpush

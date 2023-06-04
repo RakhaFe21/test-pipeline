@@ -9,26 +9,70 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Service\IndexServiceController;
 
 class BankDeterminingController extends Controller
 {
+    private $indexService;
+    public function __construct() {
+        $this->indexService = new IndexServiceController;
+    }
+
     public function index()
     {
-        $tahun = VariableData::select('tahun')
+        $this->indexService->transform_to_index();
+        $tahuns = VariableData::select('tahun')
             ->groupBy('tahun')
             ->get();
+        $data = [];
+        collect($data);
+        $vars = $this->indexService->get_vars();
+        $i = 0;
+        foreach ($tahuns as $tahunKey => $tahun) {
+            $data[$tahunKey]['tahun'] = $tahun->tahun;
+            $data[$tahunKey]['NPF'] = round($vars['NPF'][$i], 3);
+            $data[$tahunKey]['CAR'] = round($vars['CAR'][$i], 3);
+            $data[$tahunKey]['IPR'] = round($vars['IPR'][$i], 3);
+            $data[$tahunKey]['FDR'] = round($vars['FDR'][$i], 3);
+            $i++;
+        }
+        $add_on = [];
 
-        $bulan = VariableData::select('bulan')
-            ->groupBy('bulan')
-            ->get();
+        $add_on['Average']['npf'] = round($vars['average_npf'], 3);
+        $add_on['Average']['car'] = round($vars['average_car'], 3);
+        $add_on['Average']['ipr'] = round($vars['average_ipr'], 3);
+        $add_on['Average']['fdr'] = round($vars['average_fdr'], 3);
+        $add_on['Average']['total'] = array_sum([
+            $add_on['Average']['npf'],
+            $add_on['Average']['car'],
+            $add_on['Average']['ipr'],
+            $add_on['Average']['fdr']
+        ]);
 
-        $data = VariableData::select('tahun', 'bulan', 'value_index')
-            ->orderBy('tahun', 'asc')
-            ->orderBy('bulan', 'asc')
-            ->orderBy('variable_masters_id', 'asc')
-            ->get();
+        $add_on['Average']['npf'] = round($vars['average_npf'], 3);
+        $add_on['Average']['car'] = round($vars['average_car'], 3);
+        $add_on['Average']['ipr'] = round($vars['average_ipr'], 3);
+        $add_on['Average']['fdr'] = round($vars['average_fdr'], 3);
+        $add_on['Average']['total'] = array_sum([
+            $add_on['Average']['npf'],
+            $add_on['Average']['car'],
+            $add_on['Average']['ipr'],
+            $add_on['Average']['fdr']
+        ]);
 
-        return view('dashboard.bank.ibri.determining.index', compact('tahun', 'bulan', 'data'));
+        $add_on['Weight']['npf'] = round( $add_on['Average']['npf']/ $add_on['Average']['total'], 3);
+        $add_on['Weight']['car'] = round( $add_on['Average']['car']/  $add_on['Average']['total'], 3);
+        $add_on['Weight']['ipr'] = round( $add_on['Average']['ipr']/  $add_on['Average']['total'], 3);
+        $add_on['Weight']['fdr'] = round( $add_on['Average']['fdr']/  $add_on['Average']['total'], 3);
+        $add_on['Weight']['total'] = array_sum([
+            $add_on['Weight']['npf'],
+            $add_on['Weight']['car'],
+            $add_on['Weight']['ipr'],
+            $add_on['Weight']['fdr']
+        ]);
+        
+        // dd($add_on);
+        return view('dashboard.bank.ibri.determining.index', compact('data', 'add_on'));
     }
 
     public function store(Request $request)

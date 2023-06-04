@@ -10,15 +10,23 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Service\IndexServiceController;
 
 class BankAgregationController extends Controller
 {
+    private $indexService;
+    public function __construct() {
+        $this->indexService = new IndexServiceController;
+    }
+
     public function index(Request $request)
     {
-
+        $this->indexService->transform_to_index();
         $weight = VariableWeight::select('variable_masters_id', 'weight', 'based_year')
             ->orderBy('variable_masters_id', 'asc')
-            ->get();
+            ->get()->each(function ($item, $key) {
+                $item->weight = round($item->weight, 3);
+            });
 
         $tahun = VariableData::select('tahun')
             ->groupBy('tahun')
@@ -32,9 +40,22 @@ class BankAgregationController extends Controller
             ->orderBy('tahun', 'asc')
             ->orderBy('bulan', 'asc')
             ->orderBy('variable_masters_id', 'asc')
-            ->get();
+            ->get()
+            ->each(function($model, $key){
+                $model->value_index = round($model->value_index, 2);
+            });
+        $arr_composite = [];
+        $composites = VariableData::select('tahun', 'bulan', 'value_index')
+        ->where('variable_masters_id', 5)
+        ->orderBy('tahun', 'asc')
+        ->orderBy('bulan', 'asc')
+        ->get();
 
-        return view('dashboard.bank.ibri.agregation.index', compact('weight', 'tahun', 'bulan', 'data'));
+        foreach ($composites as $key => $value) {
+            array_push($arr_composite, round($value->value_index, 2));
+        }
+
+        return view('dashboard.bank.ibri.agregation.index', compact('weight', 'tahun', 'bulan', 'data', 'arr_composite'));
     }
 
     public function store(Request $request)

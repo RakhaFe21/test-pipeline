@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\VariableMaster;
 use App\Models\VariableData;
 use App\Models\AdditionalData;
-use App\Http\Controllers\Service\SpreadsheetServiceController;
 
-class OptimalLevelIndexController extends Controller
+class VisualizationController extends Controller
 {
     public function index()
     {
@@ -26,14 +25,6 @@ class OptimalLevelIndexController extends Controller
             ['jenis' , '=', 'a']
         ])->first();
         $avg = round($avg->value, 2);
-        return view('dashboard.bank.ibri.optimallevelindex.index', compact('variable', 'tahun', 'avg'));
-    }
-
-    public function getStdev(Request $request)
-    {   $array = [];
-        foreach ($request->array as $key => $value) {
-            array_push($array, floatval($value));
-        }
-        return SpreadsheetServiceController::STDEV($array);
+        return view('dashboard.bank.ibri.visualization.index', compact('variable', 'tahun', 'avg'));
     }
 }

@@ -300,8 +300,8 @@
                     $('#bodySCTable').append(`
                             <tr>
                                 <td class="border border-slate-300 py-4 px-6">` + months(fData[key].bulan) + `</td>
-                                <td class="border border-slate-300 py-4 px-6">${fData[key].signal.toFixed(2)}</td>
-                                <td class="border border-slate-300 py-4 px-6">${signalC.toFixed(2)}</td>
+                                <td class="border border-slate-300 py-4 px-6  ${fData[key].signal == 0 ? 'text-red-500 text-bold' : ''}">${fData[key].signal.toFixed(2)}</td>
+                                <td class="border border-slate-300 py-4 px-6  ${signalC == 0 ? 'text-red-500 text-bold' : ''}">${signalC.toFixed(2)}</td>
                             </tr>
                         `)
                 })
@@ -518,7 +518,7 @@
                     var td
                     var val 
                     tr.forEach((el, index) => {
-                        val = typeof el[1] === "number" ? el[1].toFixed(3) : el[1] 
+                        val = typeof el[1] === "number" ? el[1].toFixed(4) : el[1] 
                        td += '<td class="border border-slate-300 py-4 px-6"><strong>'+el[0]+'</strong></td><td class="border border-slate-300 py-4 px-6">'+val+'</td>'
                     })
                     $('#bodyResultMonth').append(`
@@ -536,7 +536,7 @@
                         } else if (index < 9){
                             val = typeof el === "number" ? el.toFixed(3) : el
                         } else {
-                            val = typeof el === "number" ? el.toFixed(4) : el
+                            val = typeof el === "number" ? el.toFixed(3) : el
                         }
                        td += '<td class="border border-slate-300 py-4 px-6">'+val +'</td>'
                     })
@@ -767,7 +767,7 @@
                         data[i].nilaiMonth12_1 = getMonthResult(data[i-12].signal, data[i].signal_crisis)
                         data[i].nilaiMonth12_2 = data[i].nilaiMonth12_1 ** 2
                         data[i].nilaiMonth24_1 = getMonthResult(data[i-24].signal, data[i].signal_crisis)
-                        data[i].nilaiMonth24_2 = data[i].nilaiMonth12_1 ** 2
+                        data[i].nilaiMonth24_2 = data[i].nilaiMonth24_1 ** 2
                         result[i] = data[i]
                     }
                 }
@@ -886,16 +886,16 @@
                     data[i].month12 == 'D' ? sumD_month12++  : sumD_month12 + 0 
                     data[i].month24 == 'D' ? sumD_month24++  : sumD_month24 + 0 
                     
-                    tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
-                    tempSumSignalCMonth1 = data[i].signal_crisis + tempSumSignalCMonth1
-                    tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
-                    tempSumSignalCMonth3 = data[i].signal_crisis + tempSumSignalCMonth3
-                    tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
-                    tempSumSignalCMonth6 = data[i].signal_crisis + tempSumSignalCMonth6
-                    tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
-                    tempSumSignalCMonth12 = data[i].signal_crisis + tempSumSignalCMonth12
-                    tempSumSignalSMonth24 = data[i].signal + tempSumSignalSMonth24
-                    tempSumSignalCMonth24 = data[i].signal_crisis + tempSumSignalCMonth24
+                    data[i].month1 === null ? tempSumSignalSMonth1 = 0 + tempSumSignalSMonth1 : tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
+                    data[i].month1 === null ? tempSumSignalCMonth1 = 0 + tempSumSignalCMonth1 : tempSumSignalCMonth1 = data[i].signal_crisis + tempSumSignalCMonth1
+                    data[i].month3 === null ? tempSumSignalSMonth3 = 0 + tempSumSignalSMonth3 : tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
+                    data[i].month3 === null ? tempSumSignalCMonth3 = 0 + tempSumSignalCMonth3 : tempSumSignalCMonth3 = data[i].signal_crisis + tempSumSignalCMonth3
+                    data[i].month6 === null ? tempSumSignalSMonth6 = 0 + tempSumSignalSMonth6 : tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
+                    data[i].month6 === null ? tempSumSignalCMonth6 = 0 + tempSumSignalCMonth6 : tempSumSignalCMonth6 = data[i].signal_crisis + tempSumSignalCMonth6
+                    data[i].month12 === null ? tempSumSignalSMonth12 = 0 + tempSumSignalSMonth12 : tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
+                    data[i].month12 === null ? tempSumSignalCMonth12 = 0 + tempSumSignalCMonth12 : tempSumSignalCMonth12 = data[i].signal_crisis + tempSumSignalCMonth12
+                    data[i].month24 === null ? tempSumSignalSMonth24 = 0 + tempSumSignalSMonth24 : tempSumSignalSMonth24 = data[i].signal + tempSumSignalSMonth24
+                    data[i].month24 === null ? tempSumSignalCMonth24 = 0 + tempSumSignalCMonth24 : tempSumSignalCMonth24 = data[i].signal_crisis + tempSumSignalCMonth24
                 }
                 averageP_month1 = tempSumSignalSMonth1 / jumlah_month1
                 averageP_month3 = tempSumSignalSMonth3 / jumlah_month3
@@ -1114,16 +1114,16 @@
                     data[i].month12 == 'D' ? sumD_month12++  : sumD_month12 + 0 
                     data[i].month24 == 'D' ? sumD_month24++  : sumD_month24 + 0 
                     
-                    tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
-                    tempSumSignalCMonth1 = data[i].signal_crisis + tempSumSignalCMonth1
-                    tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
-                    tempSumSignalCMonth3 = data[i].signal_crisis + tempSumSignalCMonth3
-                    tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
-                    tempSumSignalCMonth6 = data[i].signal_crisis + tempSumSignalCMonth6
-                    tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
-                    tempSumSignalCMonth12 = data[i].signal_crisis + tempSumSignalCMonth12
-                    tempSumSignalSMonth24 = data[i].signal + tempSumSignalSMonth24
-                    tempSumSignalCMonth24 = data[i].signal_crisis + tempSumSignalCMonth24
+                    data[i].month1 === null ? tempSumSignalSMonth1 = 0 + tempSumSignalSMonth1 : tempSumSignalSMonth1 = data[i].signal + tempSumSignalSMonth1
+                    data[i].month1 === null ? tempSumSignalCMonth1 = 0 + tempSumSignalCMonth1 : tempSumSignalCMonth1 = data[i].signal_crisis + tempSumSignalCMonth1
+                    data[i].month3 === null ? tempSumSignalSMonth3 = 0 + tempSumSignalSMonth3 : tempSumSignalSMonth3 = data[i].signal + tempSumSignalSMonth3
+                    data[i].month3 === null ? tempSumSignalCMonth3 = 0 + tempSumSignalCMonth3 : tempSumSignalCMonth3 = data[i].signal_crisis + tempSumSignalCMonth3
+                    data[i].month6 === null ? tempSumSignalSMonth6 = 0 + tempSumSignalSMonth6 : tempSumSignalSMonth6 = data[i].signal + tempSumSignalSMonth6
+                    data[i].month6 === null ? tempSumSignalCMonth6 = 0 + tempSumSignalCMonth6 : tempSumSignalCMonth6 = data[i].signal_crisis + tempSumSignalCMonth6
+                    data[i].month12 === null ? tempSumSignalSMonth12 = 0 + tempSumSignalSMonth12 : tempSumSignalSMonth12 = data[i].signal + tempSumSignalSMonth12
+                    data[i].month12 === null ? tempSumSignalCMonth12 = 0 + tempSumSignalCMonth12 : tempSumSignalCMonth12 = data[i].signal_crisis + tempSumSignalCMonth12
+                    data[i].month24 === null ? tempSumSignalSMonth24 = 0 + tempSumSignalSMonth24 : tempSumSignalSMonth24 = data[i].signal + tempSumSignalSMonth24
+                    data[i].month24 === null ? tempSumSignalCMonth24 = 0 + tempSumSignalCMonth24 : tempSumSignalCMonth24 = data[i].signal_crisis + tempSumSignalCMonth24
                 }
                 averageP_month1 = tempSumSignalSMonth1 / jumlah_month1
                 averageP_month3 = tempSumSignalSMonth3 / jumlah_month3

@@ -80,7 +80,7 @@
                     let avg = resp.data.average
                     let mean = resp.data.averageSignaling
                     let stdev = resp.data.stdev
-                    let varName = resp.data.varName
+                    let varName = resp.data.varName === "CI" ? 'CI' : 'I'+resp.data.varName
                     let signal = resp.data.signal
 
                     /* Get total signal */
@@ -96,7 +96,7 @@
                         <tr>
                             <th scope="col" class="py-3 px-6">YEAR</th>
                             <th scope="col" class="py-3 px-6">MONTHS</th>
-                            <th scope="col" class="py-3 px-6">I`+varName+`</th>
+                            <th scope="col" class="py-3 px-6">`+varName+`</th>
                             <th scope="col" class="py-3 px-6">AVERAGE</th>
                             <th scope="col" class="py-3 px-6">SIGNAL</th>
                         <tr>
@@ -118,7 +118,7 @@
 
                         $('#tbodyUpper').append(`
                             <tr>`+rowSpaned+`<td class="border border-slate-300 py-4 px-6">`+months(varData[key].bulan)+`</td>
-                                <td class="border border-slate-300 py-4 px-6">${varData[key].value_index}</td>
+                                <td class="border border-slate-300 py-4 px-6">${varData[key].value_index.toFixed(2)}</td>
                                 <td class="border border-slate-300 py-4 px-6">${avg}</td>
                                 <td class="border border-slate-300 py-4 px-6">${signal}</td>
                             </tr>
