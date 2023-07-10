@@ -316,7 +316,7 @@
 
                     const signal = await axios({
                         method: 'get',
-                        url: '{{ route('dashboard.bank.ibri.ews.signal-lower') }}',
+                        url: '{{ route('dashboard.bank.ibri.ews.signal-lower', ['code' => \Route::current()->parameter('code')]) }}',
                         headers: {},
                         params: {
                             'variable': fVariable,
@@ -346,7 +346,7 @@
                     const fTahun = (year=='')?$('#selectYear').val():year
                     const signal = await axios({
                         method: 'get',
-                        url: '{{ route('dashboard.bank.ibri.ews.signal-lower') }}',
+                        url: '{{ route('dashboard.bank.ibri.ews.signal-lower', ['code' => \Route::current()->parameter('code')]) }}',
                         headers: {},
                         params: {
                             'variable': fVariable,

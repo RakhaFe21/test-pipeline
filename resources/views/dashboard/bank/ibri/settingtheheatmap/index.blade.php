@@ -153,7 +153,7 @@
                 try {
                     const signal = await axios({
                         method: 'get',
-                        url: '{{ route('dashboard.bank.ibri.optimallevelreal.data') }}',
+                        url: '{{ route('dashboard.bank.ibri.optimallevelreal.data', ['code' => \Route::current()->parameter('code')]) }}',
                         headers: {},
                         params: {
                             'variable': fVariable
@@ -177,7 +177,7 @@
                 try {
                     const signal = await axios({
                         method: 'get',
-                        url: '{{ route('dashboard.bank.ibri.ews.signal') }}',
+                        url: '{{ route('dashboard.bank.ibri.ews.signal', ['code' => \Route::current()->parameter('code')]) }}',
                         headers: {},
                         params: {
                             'variable': fVariable
@@ -201,7 +201,7 @@
                 try {
                     const signal = await axios({
                         method: 'get',
-                        url: '{{ route('dashboard.bank.ibri.ews.signal-lower') }}',
+                        url: '{{ route('dashboard.bank.ibri.ews.signal-lower', ['code' => \Route::current()->parameter('code')]) }}',
                         headers: {},
                         params: {
                             'variable': fVariable
@@ -285,7 +285,7 @@
             async function getStandardDeviation (array) {
                 const signal = await axios({
                     method: 'get',
-                    url: "{{ route('dashboard.stdev') }}",
+                    url: "{{ route('dashboard.stdev', ['code' => \Route::current()->parameter('code')]) }}",
                     headers: {},
                     params: {
                         'array': array

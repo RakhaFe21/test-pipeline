@@ -8,9 +8,19 @@ use App\Models\VariableData;
 use mysql_xdevapi\Exception;
 use Phpml\Math\Matrix;
 use App\Models\AdditionalData;
+use App\Models\NegaraMaster;
+use Illuminate\Support\Facades\Route;
 
 class SignalingTresholdController extends Controller
 {
+    private $country;
+    public function __construct() {
+        $this->country =  NegaraMaster::where('code', Route::current()->parameter('code'))->first();
+        if (!$this->country) {
+            return abort(500, 'Something went wrong');
+        }
+    }
+    
     /**
      * Display a listing of the resource upper.
      *
@@ -19,8 +29,9 @@ class SignalingTresholdController extends Controller
     public function indexUpper()
     {
         $tahun = VariableData::select('tahun', 'variable_masters_id', 'nama_variable')
+            ->where('negara_masters_id', $this->country->id)
             ->join('variable_masters', 'variable_masters.id', '=', 'variable_data.variable_masters_id')
-            // ->where('variable_masters_id', '!=', 5)
+            ->whereNotIn('variable_masters_id', [6,7,8,9,10])
             ->groupBy('variable_masters_id')
             ->groupBy('tahun')
             ->get();
@@ -33,7 +44,7 @@ class SignalingTresholdController extends Controller
         try {
             $avg =  AdditionalData::where([
                 ['name' , '=', 'average_treshold'],
-                ['negara_masters_id' , '=', '1'],
+                ['negara_masters_id' , '=', $this->country->id],
                 ['jenis' , '=', 'a']
             ])->first();
             $avg = $avg->value;
@@ -55,7 +66,7 @@ class SignalingTresholdController extends Controller
                 //     ->limit(1)
                 //     ->first();
 
-                $devData = VariableData::where(['tahun' => $key[0], 'variable_masters_id' => $key[1]])->get();
+                $devData = VariableData::where(['tahun' => $key[0], 'variable_masters_id' => $key[1],'negara_masters_id' => $this->country->id])->get();
                 $indexArray = array();
                 foreach ($devData as $v) {
                     $totalIndex[] = $v->value_index;
@@ -67,13 +78,13 @@ class SignalingTresholdController extends Controller
                 $stDev = number_format($this->stDev($totalIndex), 2);
 
                 /* get total signal */
-                $signal = VariableData::where('variable_masters_id', $key[1])->get();
+                $signal = VariableData::where('variable_masters_id', $key[1])->where('negara_masters_id', $this->country->id)->get();
 
                 return ['code' => 200, 'message' => 'success', 'data' => $devData, 'average' => round($avg, 2), 'stdev' => $stDev, 'averageSignaling' => $average, 'varName' => $key[2], 'signal' => $signal];
             } else {
                 return ['code' => 500, 'message' => 'Silahkan pilih periode', 'data' => ''];
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['code' => 500, 'message' => $e->getMessage(), 'data' => ''];
         }
     }
@@ -83,7 +94,7 @@ class SignalingTresholdController extends Controller
         try {
             $avg =  AdditionalData::where([
                 ['name' , '=', 'average_treshold'],
-                ['negara_masters_id' , '=', '1'],
+                ['negara_masters_id' , '=', $this->country->id],
                 ['jenis' , '=', 'a']
             ])->first();
             $avg =$avg->value;
@@ -104,7 +115,7 @@ class SignalingTresholdController extends Controller
                 //     ->limit(1)
                 //     ->first();
 
-                $devData = VariableData::where(['tahun' => $key[0], 'variable_masters_id' => $key[1]])->get();
+                $devData = VariableData::where(['tahun' => $key[0], 'variable_masters_id' => $key[1], 'negara_masters_id' => $this->country->id])->get();
 
                 $indexArray = array();
                 foreach ($devData as $v) {
@@ -117,13 +128,13 @@ class SignalingTresholdController extends Controller
                 $stDev = number_format($this->stDev($totalIndex), 2);
 
                 /* get total signal */
-                $signal = VariableData::where('variable_masters_id', $key[1])->get();
+                $signal = VariableData::where('variable_masters_id', $key[1])->where('negara_masters_id', $this->country->id)->get();
 
                 return ['code' => 200, 'message' => 'success', 'data' => $devData, 'average' => -(round($avg, 2)), 'stdev' => $stDev, 'averageSignaling' => $average, 'varName' => $key[2], 'signal' => $signal];
             } else {
                 return ['code' => 500, 'message' => 'Silahkan pilih periode', 'data' => ''];
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['code' => 500, 'message' => $e->getMessage(), 'data' => ''];
         }
     }
@@ -148,8 +159,9 @@ class SignalingTresholdController extends Controller
     public function indexLower()
     {
         $tahun = VariableData::select('tahun', 'variable_masters_id', 'nama_variable')
+            ->where('negara_masters_id', $this->country->id)
             ->join('variable_masters', 'variable_masters.id', '=', 'variable_data.variable_masters_id')
-            // ->where('variable_masters_id', '!=', 5)
+            ->whereNotIn('variable_masters_id', [6,7,8,9,10])
             ->groupBy('variable_masters_id')
             ->groupBy('tahun')
             ->get();

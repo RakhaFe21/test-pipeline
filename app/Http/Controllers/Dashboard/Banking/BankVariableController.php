@@ -11,4 +11,9 @@ class BankVariableController extends Controller
     {
         return view('dashboard.bank.variable');
     }
+
+    public function Macroindex()
+    {
+        return view('dashboard.bank.macro.variable');
+    }
 }

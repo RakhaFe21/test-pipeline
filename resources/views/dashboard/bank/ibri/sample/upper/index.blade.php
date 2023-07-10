@@ -5,7 +5,7 @@
         <div class="fle flex-col w-full mb-6">
             <h1 class="text-3xl font-medium">Upper Threshold</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Macro, Data, HP - In sample Model, Upper Threshold</span>
+                <span>Banking, Data, HP - In sample Model, Upper Threshold</span>
             </div>
         </div>
 
@@ -139,7 +139,7 @@
 
                     const post = await axios({
                         method: 'get',
-                        url: '{{ route('dashboard.bank.ibri.sample.upper.data') }}',
+                        url: '{{ route('dashboard.bank.ibri.sample.upper.data', ['code' => \Route::current()->parameter('code')]) }}',
                         headers: {},
                         params: {
                             'periode': filter

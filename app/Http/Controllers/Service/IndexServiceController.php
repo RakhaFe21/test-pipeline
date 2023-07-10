@@ -10,6 +10,10 @@ use App\Http\Controllers\Service\SpreadsheetServiceController as Excel;
 
 class IndexServiceController extends Controller
 {
+    public function __construct(private string $code) {
+        
+    }
+
     public function lower_value(array $datas)
     {
         $arr = [];
@@ -33,9 +37,15 @@ class IndexServiceController extends Controller
     {
         $master = VariableData::select('tahun', 'bulan', 'value', 'variable_masters_id', 'value_index')
             ->where('variable_masters_id', '!=', 5)
+            ->where('variable_masters_id', '!=', 6)
+            ->where('variable_masters_id', '!=', 7)
+            ->where('variable_masters_id', '!=', 8)
+            ->where('variable_masters_id', '!=', 9)
+            ->where('variable_masters_id', '!=', 10)
             ->orderBy('tahun', 'asc')
             ->orderBy('bulan', 'asc')
             ->orderBy('variable_masters_id', 'asc')
+            ->where('negara_masters_id', $this->code)
             ->get();
 
         $grouped = $master->groupBy('variable_masters_id')->transform(function($item, $k) {
@@ -120,6 +130,9 @@ class IndexServiceController extends Controller
     public function transform_to_index()
     {   
         $datas = $this->get_data();
+        if (!$datas) {
+            return false;
+        }
         $mapped = $this->mapping_data_model($datas);
         foreach ($mapped as $varKey => $var) {
             $stdev = $this->all_stdev_and_mean($var);

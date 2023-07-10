@@ -9,6 +9,8 @@ class NegaraMaster extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function variableData()
     {
         return $this->belongsTo(VariableData::class);

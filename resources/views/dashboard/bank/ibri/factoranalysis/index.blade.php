@@ -27,22 +27,24 @@
                         </tr>
                     </thead>
                     <tbody id="tbody">
-                        @foreach ($weights as $key => $weight)
-                            <tr>
-                                <td class="py-4 px-6">I{{strtoupper($weight->nama_variable)}}</td>
-                                <td class="py-4 px-6 {{ $npf[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($npf[$key], 2)}}</td>
-                                <td class="py-4 px-6 {{ $car[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($car[$key], 2)}}</td>
-                                <td class="py-4 px-6 {{ $ipr[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($ipr[$key], 2)}}</td>
-                                <td class="py-4 px-6 {{ $fdr[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($fdr[$key], 2)}}</td>
+                        @if(!$weights->isEmpty())
+                            @foreach ($weights as $key => $weight)
+                                <tr>
+                                    <td class="py-4 px-6">I{{strtoupper($weight->nama_variable)}}</td>
+                                    <td class="py-4 px-6 {{ $npf[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($npf[$key], 2)}}</td>
+                                    <td class="py-4 px-6 {{ $car[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($car[$key], 2)}}</td>
+                                    <td class="py-4 px-6 {{ $ipr[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($ipr[$key], 2)}}</td>
+                                    <td class="py-4 px-6 {{ $fdr[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($fdr[$key], 2)}}</td>
+                                </tr>
+                            @endforeach
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="py-4 px-6"><strong>TOTAL</strong></td>
+                                <td class="py-4 px-6 ">{{round($total[0], 2)}}</td>
+                                <td class="py-4 px-6 ">{{round($total[1], 2)}}</td>
+                                <td class="py-4 px-6 ">{{round($total[2], 2)}}</td>
+                                <td class="py-4 px-6 ">{{round($total[3], 2)}}</td>
                             </tr>
-                        @endforeach
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="py-4 px-6"><strong>TOTAL</strong></td>
-                            <td class="py-4 px-6 ">{{round($total[0], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total[1], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total[2], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total[3], 2)}}</td>
-                        </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -79,24 +81,26 @@
                         </tr>
                     </thead>
                     <tbody id="tbodyCriteria">
-                        @foreach ($weights as $key => $weight)
-                            <tr>
-                                <td class="py-4 px-6">I{{strtoupper($weight->nama_variable)}}</td>
-                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_npf[$key], 2)}}</td>
-                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_car[$key], 2)}}</td>
-                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_ipr[$key], 2)}}</td>
-                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_fdr[$key], 2)}}</td>
-                                <td class="py-4 px-6 ">{{round($criteria_weights[$key], 2)}}</td>
+                        @if(!$weights->isEmpty())
+                            @foreach ($weights as $key => $weight)
+                                <tr>
+                                    <td class="py-4 px-6">I{{strtoupper($weight->nama_variable)}}</td>
+                                    <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_npf[$key], 2)}}</td>
+                                    <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_car[$key], 2)}}</td>
+                                    <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_ipr[$key], 2)}}</td>
+                                    <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_fdr[$key], 2)}}</td>
+                                    <td class="py-4 px-6 ">{{round($criteria_weights[$key], 2)}}</td>
+                                </tr>
+                            @endforeach
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="py-4 px-6"><strong>TOTAL</strong></td>
+                                <td class="py-4 px-6 ">{{round($total_normalized[0], 2)}}</td>
+                                <td class="py-4 px-6 ">{{round($total_normalized[1], 2)}}</td>
+                                <td class="py-4 px-6 ">{{round($total_normalized[2], 2)}}</td>
+                                <td class="py-4 px-6 ">{{round($total_normalized[3], 2)}}</td>
+                                <td class="py-4 px-6 ">{{round($total_normalized[4], 2)}}</td>
                             </tr>
-                        @endforeach
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="py-4 px-6"><strong>TOTAL</strong></td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[0], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[1], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[2], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[3], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[4], 2)}}</td>
-                        </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -107,9 +111,16 @@
                     <thead id="theadCriteriaWeight" class="text-xs uppercase bg-gray-200">
                         <tr>
                             <th scope="col" class="py-3 px-6">CRITERIA WEIGHT</th>
+                            @if($criteria_weights)
                             @foreach ($criteria_weights as $criteria)
                                 <th scope="col" class="py-3 px-6">{{round($criteria, 2);}}</th>
                             @endforeach
+                            @else
+                                <td class="py-4 px-6"></td>
+                                <td class="py-4 px-6"></td>
+                                <td class="py-4 px-6"></td>
+                                <td class="py-4 px-6"></td>
+                            @endif
                         </tr>
                         <tr>
                             <th scope="col" class="py-3 px-6">VARIABLES</th>
@@ -142,13 +153,21 @@
                         </tr>
                     </thead>
                     <tbody id="tbodyWeightedSum">
-                        @foreach ($weight_sum_values as $keyW => $weight_sum_value)
-                        <tr>
-                            <td class="py-4 px-6">{{round($weight_sum_values[$keyW], 2)}}</td>
-                            <td class="py-4 px-6">{{round($criteria_weights[$keyW], 2)}}</td>
-                            <td class="py-4 px-6">{{round($ratio[$keyW], 2)}}</td>
-                        </tr>
-                        @endforeach
+                        @if($weight_sum_values)
+                            @foreach ($weight_sum_values as $keyW => $weight_sum_value)
+                            <tr>
+                                <td class="py-4 px-6">{{round($weight_sum_values[$keyW], 2)}}</td>
+                                <td class="py-4 px-6">{{round($criteria_weights[$keyW], 2)}}</td>
+                                <td class="py-4 px-6">{{round($ratio[$keyW], 2)}}</td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td class="py-4 px-6"></td>
+                                <td class="py-4 px-6"></td>
+                                <td class="py-4 px-6"></td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -162,19 +181,19 @@
                     <tbody id="tbodyLamda">
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">Lamnda Max</td>
-                            <td class="py-4 px-6">{{round($lamda_max, 2)}}</td>
+                            <td class="py-4 px-6">{{@round($lamda_max, 2)}}</td>
                         </tr>
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">CI</td>
-                            <td class="py-4 px-6">{{round($ci, 2)}}</td>
+                            <td class="py-4 px-6">{{@round($ci, 2)}}</td>
                         </tr>
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">Random Index</td>
-                            <td class="py-4 px-6">{{round($ri, 2)}}</td>
+                            <td class="py-4 px-6">{{@round($ri, 2)}}</td>
                         </tr>
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">Consistency Ration</td>
-                            <td class="py-4 px-6">{{round($consistency_ratio, 2)}}</td>
+                            <td class="py-4 px-6">{{@round($consistency_ratio, 2)}}</td>
                         </tr>
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">%</td>

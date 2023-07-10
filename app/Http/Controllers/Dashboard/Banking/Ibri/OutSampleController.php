@@ -7,12 +7,21 @@ use Illuminate\Http\Request;
 use App\Models\VariableData;
 use App\Models\VariableMaster;
 use App\Models\AdditionalData;
+use App\Models\NegaraMaster;
 use App\Models\VariableWeight;
+use Illuminate\Support\Facades\Route;
 use mysql_xdevapi\Exception;
 use Phpml\Math\Matrix;
 
 class OutSampleController extends Controller
 {
+    private $country;
+    public function __construct() {
+        $this->country =  NegaraMaster::where('code', Route::current()->parameter('code'))->first();
+        if (!$this->country) {
+            return abort(500, 'Something went wrong');
+        }
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,12 +29,15 @@ class OutSampleController extends Controller
      */
     public function indexUpper(Request $request)
     {
-        $tahun = VariableData::select('tahun')
+        $tahun = VariableData::select('tahun', 'variable_masters_id', 'negara_masters_id')
+        ->where('negara_masters_id', $this->country->id)
+            ->whereNotIn('variable_masters_id', [6,7,8,9,10])
             ->groupBy('tahun')
             ->get()
             ->toArray();
 
         $variable = VariableMaster::select('nama_variable', 'id')
+            ->whereNotIn('id', [6,7,8,9,10])
             ->get()
             ->toArray();
 
@@ -39,12 +51,15 @@ class OutSampleController extends Controller
      */
     public function indexLower(Request $request)
     {
-        $tahun = VariableData::select('tahun')
+        $tahun = VariableData::select('tahun', 'variable_masters_id', 'negara_masters_id')
+        ->where('negara_masters_id', $this->country->id)
+           ->whereNotIn('variable_masters_id', [6,7,8,9,10])
             ->groupBy('tahun')
             ->get()
             ->toArray();
 
         $variable = VariableMaster::select('nama_variable', 'id')
+            ->whereNotIn('id', [6,7,8,9,10])
             ->get()
             ->toArray();
 
@@ -56,7 +71,7 @@ class OutSampleController extends Controller
         try {
             $avg =  AdditionalData::where([
                 ['name' , '=', 'average_treshold'],
-                ['negara_masters_id' , '=', '1'],
+                ['negara_masters_id' , '=', $this->country->id],
                 ['jenis' , '=', 'a']
             ])->first();
             $avg =$avg->value;
@@ -88,7 +103,7 @@ class OutSampleController extends Controller
                 // $stDev = number_format($this->stDev($totalIndex), 2);
 
                 /* get total signal */
-                $signal = VariableData::where('variable_masters_id', $request->variable)->get()->toArray();
+                $signal = VariableData::where('variable_masters_id', $request->variable)->where('negara_masters_id', $this->country->id)->get()->toArray();
 
                 //dump($signal);
                 $aSignal = array();
@@ -119,7 +134,7 @@ class OutSampleController extends Controller
             } else {
                 return ['code' => 500, 'message' => 'Silahkan pilih periode', 'data' => ''];
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['code' => 500, 'message' => $e->getMessage(), 'data' => ''];
         }
     }
@@ -129,7 +144,7 @@ class OutSampleController extends Controller
         try {
             $avg =  AdditionalData::where([
                 ['name' , '=', 'average_treshold'],
-                ['negara_masters_id' , '=', '1'],
+                ['negara_masters_id' , '=', $this->country->id],
                 ['jenis' , '=', 'a']
             ])->first();
             $avg = -$avg->value;
@@ -157,7 +172,7 @@ class OutSampleController extends Controller
                 // }
 
                  /* get total signal */
-                 $signal = VariableData::where('variable_masters_id', $request->variable)->get()->toArray();
+                 $signal = VariableData::where('variable_masters_id', $request->variable)->where('negara_masters_id', $this->country->id)->get()->toArray();
 
                  //dump($signal);
                  $aSignal = array();
@@ -188,7 +203,7 @@ class OutSampleController extends Controller
             } else {
                 return ['code' => 500, 'message' => 'Silahkan pilih periode', 'data' => ''];
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['code' => 500, 'message' => $e->getMessage(), 'data' => ''];
         }
     }

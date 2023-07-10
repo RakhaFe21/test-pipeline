@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard\Banking\Ibri;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Dashboard\Banking\Data\Exception;
+use App\Http\Controllers\Service\IndexServiceController;
 use App\Models\NullHypothesisData;
 use App\Models\VariableMaster;
 use App\Models\AdditionalData;
@@ -11,9 +12,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Phpml\Math\Matrix;
 use App\Http\Controllers\Service\SpreadsheetServiceController as Excel;
+use App\Models\NegaraMaster;
+use Illuminate\Support\Facades\Route;
 
 class NullHypothesisDataController extends Controller
 {
+    private $country;
+    private $indexService;
+    public function __construct() {
+        $this->country =  NegaraMaster::where('code', Route::current()->parameter('code'))->first();
+        if (!$this->country) {
+            return abort(500, 'Something went wrong');
+        }
+        $this->indexService = new IndexServiceController($this->country->code);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +34,10 @@ class NullHypothesisDataController extends Controller
      */
     public function index()
     {
-        $hypothesis = NullHypothesisData::orderBy('id','asc')->get();
+        $hypothesis = NullHypothesisData::orderBy('id','asc')
+        ->where('id_negara', $this->country->id)
+        ->where('jenis', 'a')
+        ->get();
         return view('dashboard.bank.ibri.nullhypothesisdata.index', compact('hypothesis'));
     }
 
@@ -67,7 +83,7 @@ class NullHypothesisDataController extends Controller
         $nS->obs = $request->obs;
         $nS->fStatic = $request->fStatistic1;
         $nS->prob = $request->prob1;
-        $nS->id_negara = 1;
+        $nS->id_negara = $this->country->id;
         $nS->jenis = 'bank';
         $nS->save();
 
@@ -75,7 +91,7 @@ class NullHypothesisDataController extends Controller
         $nS2->null_hypothesis = strtoupper($request->variable_2a) . ' Does not Granger Cause ' . strtoupper($request->variable_2b);
         $nS2->fStatic = $request->fStatistic2;
         $nS2->prob = $request->prob2;
-        $nS2->id_negara = 1;
+        $nS2->id_negara = $this->country->id;
         $nS2->jenis = 'bank';
         $nS2->save();
 
@@ -187,7 +203,7 @@ class NullHypothesisDataController extends Controller
                 ->delete();
 
             return response()->json(['code' => 200, 'message' => 'Data deleted successfully', 'data' => null], 200);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['code' => 500, 'message' => $e->getMessage(), 'data' => null], 200);
         }
     }
@@ -297,7 +313,7 @@ class NullHypothesisDataController extends Controller
 
     public  function  getProb($nullHypothesis)
     {
-        $getProb = NullHypothesisData::where('null_hypothesis', $nullHypothesis)->select(['prob'])->first();
+        $getProb = NullHypothesisData::where('id_negara', $this->country->id)->where('null_hypothesis', $nullHypothesis)->select(['prob'])->first();
         if(!empty($getProb->prob)) {
             $calcProb = $getProb->prob * 100;
         } else {
