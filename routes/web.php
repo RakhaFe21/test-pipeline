@@ -81,16 +81,16 @@ Route::prefix('bank')->group(function () {
     Route::get('data', [DataController::class, 'index'])->name('bank.data');
     Route::post('data', [DataController::class, 'getByYear'])->name('bank.data.getByYear');
     Route::get('theoritical', [TheoriticalController::class, 'index'])->name('bank.theoritical');
-    Route::get('theheatmap', [TheheatmapController::class, 'index'])->name('bank.theheatmap')->middleware('check');
-    Route::get('visualization', [VisualizationController::class, 'index'])->name('bank.visualization')->middleware('check');
+    Route::get('theheatmap/{code}', [TheheatmapController::class, 'index'])->name('bank.theheatmap')->middleware('check');
+    Route::get('visualization/{code}', [VisualizationController::class, 'index'])->name('bank.visualization')->middleware('check');
 });
 
 Route::prefix('macro')->group(function () {
     Route::get('variable', [VariableMacroController::class, 'index'])->name('macro.variable');
     Route::get('data', [DataMacroController::class, 'index'])->name('macro.data');
     Route::get('theoritical', [TheoriticalMacroController::class, 'index'])->name('macro.theoritical');
-    Route::get('theheatmap', [TheheatmapMacroController::class, 'index'])->name('macro.theheatmap')->middleware('check');
-    Route::get('visualization', [VisualizationMacroController::class, 'index'])->name('macro.visualization')->middleware('check');
+    Route::get('theheatmap/{code}', [TheheatmapMacroController::class, 'index'])->name('macro.theheatmap')->middleware('check');
+    Route::get('visualization/{code}', [VisualizationMacroController::class, 'index'])->name('macro.visualization')->middleware('check');
 });
 
 Route::prefix('{code}')->group(function() {
