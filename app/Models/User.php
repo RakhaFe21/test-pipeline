@@ -12,6 +12,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const SUPER_ADMIN = 2;
+    const ADMIN = 1;
+    const USER = 0;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +26,7 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'profile_picture'
     ];
 
     /**
@@ -42,4 +47,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the user's first name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function getRoleLabelAttribute()
+    {
+        if ($this->role === User::SUPER_ADMIN) {
+            return 'Super Admin';
+        } elseif ($this->role === User::ADMIN) {
+            return 'Admin';
+        } else {
+            return 'User';
+        }
+    }
 }

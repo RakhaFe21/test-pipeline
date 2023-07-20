@@ -7,9 +7,20 @@ use Illuminate\Http\Request;
 use App\Models\VariableData;
 use mysql_xdevapi\Exception;
 use Phpml\Math\Matrix;
+use App\Models\AdditionalData;
+use App\Models\NegaraMaster;
+use Illuminate\Support\Facades\Route;
 
 class SignalingTresholdController extends Controller
 {
+    private $country;
+    public function __construct() {
+        $this->country =  NegaraMaster::where('code', Route::current()->parameter('code'))->first();
+        if (!$this->country) {
+            return abort(500, 'Something went wrong');
+        }
+    }
+    
     /**
      * Display a listing of the resource upper.
      *
@@ -18,8 +29,9 @@ class SignalingTresholdController extends Controller
     public function indexUpper()
     {
         $tahun = VariableData::select('tahun', 'variable_masters_id', 'nama_variable')
+            ->where('negara_masters_id', $this->country->id)
             ->join('variable_masters', 'variable_masters.id', '=', 'variable_data.variable_masters_id')
-            ->where('variable_masters_id', '!=', 5)
+            ->whereNotIn('variable_masters_id', [6,7,8,9,10])
             ->groupBy('variable_masters_id')
             ->groupBy('tahun')
             ->get();
@@ -30,141 +42,31 @@ class SignalingTresholdController extends Controller
     public function dataUpper(Request $request)
     {
         try {
+            $avg =  AdditionalData::where([
+                ['name' , '=', 'average_treshold'],
+                ['negara_masters_id' , '=', $this->country->id],
+                ['jenis' , '=', 'a']
+            ])->first();
+            $avg = $avg->value;
+            // Check if request is CI
             if(!empty($request->periode)) {
-
-                $variable = ['NPF','CAR','IPR','FDR'];
-
-                /*
-                 * Get matrix max
-                 * */
-                $totalMatrix = array();
-                foreach ($variable as $item) {
-                    $valNpf = ($item == $variable[0]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[0]);
-                    $valCar = ($item == $variable[1]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[1]);
-                    $valIpr = ($item == $variable[2]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[2]);
-                    $valFdr = ($item == $variable[3]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[3]);
-
-                    /* Get sum of matrix */
-                    $sumAll = $valNpf + $valCar + $valIpr + $valFdr;
-                    $totalMatrix['arrTotal'] = $sumAll;
-                }
-                /* End get matrix max */
-
-                /*
-                 * Get normalized data
-                 * */
-                $npfNormalized = array();
-                $carNormalized = array();
-                $iprNormalized = array();
-                $fdrNormalized = array();
-
-                $arrNpf = array();
-                $arrCar = array();
-                $arrIpr = array();
-                $arrFdr = array();
-
-                $sumNpf = 0;
-                foreach ($variable as $item) {
-                    $valNpf = ($item == $variable[0]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[0]);
-                    $valCar = ($item == $variable[1]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[1]);
-                    $valIpr = ($item == $variable[2]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[2]);
-                    $valFdr = ($item == $variable[3]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[3]);
-
-                    $countNpf = $valNpf / $totalMatrix['arrTotal'];
-                    $countCar = $valCar / $totalMatrix['arrTotal'];
-                    $countIpr = $valIpr / $totalMatrix['arrTotal'];
-                    $countFdr = $valFdr / $totalMatrix['arrTotal'];
-
-                    $fixedNpf = ($countNpf == 0) ? 0 : number_format($countNpf, 2);
-                    $fixedCar = ($countCar == 0) ? 0 : number_format($countCar, 2);
-                    $fixedIpr = ($countIpr == 0) ? 0 : number_format($countIpr, 2);
-                    $fixedFdr = ($countFdr == 0) ? 0 : number_format($countFdr, 2);
-
-                    $matrixIdentityNpf = ($countNpf == 0) ? 1 : app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
-                    $matrixIdentityCar = ($countCar == 0) ? 1 : app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
-                    $matrixIdentityIpr = ($countIpr == 0) ? 1 : app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
-                    $matrixIdentityFdr = ($countFdr == 0) ? 1 : app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
-
-                    $npfNormalized[] = $fixedNpf;
-                    $carNormalized[] = $fixedCar;
-                    $iprNormalized[] = $fixedIpr;
-                    $fdrNormalized[] = $fixedFdr;
-
-                    $arrNpf[] = $matrixIdentityNpf;
-                    $arrCar[] = $matrixIdentityCar;
-                    $arrIpr[] = $matrixIdentityIpr;
-                    $arrFdr[] = $matrixIdentityFdr;
-
-                    $sumNpf+= $matrixIdentityNpf;
-                }
-
-                $allNormalized = array($npfNormalized, $carNormalized, $iprNormalized, $fdrNormalized);
-                $normMatrix = new Matrix($allNormalized);
-                $normMatrixValues = $normMatrix->inverse();
-
-                //dump($allNormalized);
-
-                $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
-                $invMatrix = new Matrix($mergeMatrix);
-                /* End get normalized data */
-
-                $invMatrixValues = $invMatrix->inverse();
-
-                $mmultValue = $normMatrixValues->multiply($invMatrixValues)->toArray();
-
-                $mmultNpf = array_sum(array_filter($mmultValue[0], function ($num){
-                    return $num > 0;
-                }));
-
-                $mmultCar = array_sum(array_filter($mmultValue[1], function ($num){
-                    return $num > 0;
-                }));
-
-                $mmultIpr = array_sum(array_filter($mmultValue[2], function ($num){
-                    return $num > 0;
-                }));
-
-                $mmultFdr = array_sum(array_filter($mmultValue[3], function ($num){
-                    return $num > 0;
-                }));
-
-                $arrData = array(
-                    $mmultValue[0][0],
-                    $mmultValue[1][0],
-                    $mmultValue[2][0],
-                    $mmultValue[3][0],
-                    $mmultValue[0][1],
-                    $mmultValue[1][1],
-                    $mmultValue[2][1],
-                    $mmultValue[3][1],
-                    $mmultValue[0][2],
-                    $mmultValue[1][2],
-                    $mmultValue[2][2],
-                    $mmultValue[3][2],
-                    $mmultValue[0][3],
-                    $mmultValue[1][3],
-                    $mmultValue[2][3],
-                    $mmultValue[3][3]
-                );
-
-                $avg =  number_format(array_sum($arrData)/count($arrData), 2);
+                $explode_req = explode("-", $request->periode);
 
                 $key = explode("-", $request->periode);
-                $data = VariableData::join('variable_masters', 'variable_masters.id', '=', 'variable_data.variable_masters_id')
-                    ->when($key, function ($query, $key) {
-                        $query->where(['tahun' => $key[0], 'variable_masters_id' => $key[1]]);
-                    })->orderBy('bulan', 'asc')->get();
+                // $data = VariableData::join('variable_masters', 'variable_masters.id', '=', 'variable_data.variable_masters_id')
+                //     ->when($key, function ($query, $key) {
+                //         $query->where(['tahun' => $key[0], 'variable_masters_id' => $key[1]]);
+                //     })->orderBy('bulan', 'asc')->get();
 
-                $varData = VariableData::selectRaw('tahun')
-                    ->where('variable_masters_id', $key[1])
-                    ->havingRaw('count(bulan) = 12')
-                    ->groupBy('tahun')
-                    ->orderBy('tahun', 'desc')
-                    ->limit(1)
-                    ->first();
+                // $varData = VariableData::selectRaw('tahun')
+                //     ->where('variable_masters_id', $key[1])
+                //     ->havingRaw('count(bulan) = 12')
+                //     ->groupBy('tahun')
+                //     ->orderBy('tahun', 'desc')
+                //     ->limit(1)
+                //     ->first();
 
-                $devData = VariableData::where(['tahun' => $varData->tahun, 'variable_masters_id' => $key[1]])->get();
-
+                $devData = VariableData::where(['tahun' => $key[0], 'variable_masters_id' => $key[1],'negara_masters_id' => $this->country->id])->get();
                 $indexArray = array();
                 foreach ($devData as $v) {
                     $totalIndex[] = $v->value_index;
@@ -176,13 +78,13 @@ class SignalingTresholdController extends Controller
                 $stDev = number_format($this->stDev($totalIndex), 2);
 
                 /* get total signal */
-                $signal = VariableData::where('variable_masters_id', $key[1])->get();
+                $signal = VariableData::where('variable_masters_id', $key[1])->where('negara_masters_id', $this->country->id)->get();
 
-                return ['code' => 200, 'message' => 'success', 'data' => $data, 'average' => $avg, 'stdev' => $stDev, 'averageSignaling' => $average, 'varName' => $key[2], 'signal' => $signal];
+                return ['code' => 200, 'message' => 'success', 'data' => $devData, 'average' => round($avg, 2), 'stdev' => $stDev, 'averageSignaling' => $average, 'varName' => $key[2], 'signal' => $signal];
             } else {
                 return ['code' => 500, 'message' => 'Silahkan pilih periode', 'data' => ''];
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['code' => 500, 'message' => $e->getMessage(), 'data' => ''];
         }
     }
@@ -190,140 +92,30 @@ class SignalingTresholdController extends Controller
     public function dataLower(Request $request)
     {
         try {
+            $avg =  AdditionalData::where([
+                ['name' , '=', 'average_treshold'],
+                ['negara_masters_id' , '=', $this->country->id],
+                ['jenis' , '=', 'a']
+            ])->first();
+            $avg =$avg->value;
             if(!empty($request->periode)) {
-
-                $variable = ['NPF','CAR','IPR','FDR'];
-
-                /*
-                 * Get matrix max
-                 * */
-                $totalMatrix = array();
-                foreach ($variable as $item) {
-                    $valNpf = ($item == $variable[0]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[0]);
-                    $valCar = ($item == $variable[1]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[1]);
-                    $valIpr = ($item == $variable[2]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[2]);
-                    $valFdr = ($item == $variable[3]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[3]);
-
-                    /* Get sum of matrix */
-                    $sumAll = $valNpf + $valCar + $valIpr + $valFdr;
-                    $totalMatrix['arrTotal'] = $sumAll;
-                }
-                /* End get matrix max */
-
-                /*
-                 * Get normalized data
-                 * */
-                $npfNormalized = array();
-                $carNormalized = array();
-                $iprNormalized = array();
-                $fdrNormalized = array();
-
-                $arrNpf = array();
-                $arrCar = array();
-                $arrIpr = array();
-                $arrFdr = array();
-
-                $sumNpf = 0;
-                foreach ($variable as $item) {
-                    $valNpf = ($item == $variable[0]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[0]);
-                    $valCar = ($item == $variable[1]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[1]);
-                    $valIpr = ($item == $variable[2]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[2]);
-                    $valFdr = ($item == $variable[3]) ? 0: app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getProb($item.' Does not Granger Cause '.$variable[3]);
-
-                    $countNpf = $valNpf / $totalMatrix['arrTotal'];
-                    $countCar = $valCar / $totalMatrix['arrTotal'];
-                    $countIpr = $valIpr / $totalMatrix['arrTotal'];
-                    $countFdr = $valFdr / $totalMatrix['arrTotal'];
-
-                    $fixedNpf = ($countNpf == 0) ? 0 : number_format($countNpf, 2);
-                    $fixedCar = ($countCar == 0) ? 0 : number_format($countCar, 2);
-                    $fixedIpr = ($countIpr == 0) ? 0 : number_format($countIpr, 2);
-                    $fixedFdr = ($countFdr == 0) ? 0 : number_format($countFdr, 2);
-
-                    $matrixIdentityNpf = ($countNpf == 0) ? 1 : app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getIdentityMatrix(number_format($countNpf, 2)) - number_format($countNpf, 2);
-                    $matrixIdentityCar = ($countCar == 0) ? 1 : app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getIdentityMatrix(number_format($countCar, 2)) - number_format($countCar, 2);
-                    $matrixIdentityIpr = ($countIpr == 0) ? 1 : app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getIdentityMatrix(number_format($countIpr, 2)) - number_format($countIpr, 2);
-                    $matrixIdentityFdr = ($countFdr == 0) ? 1 : app(\App\Http\Controllers\Dashboard\Banking\Ibri\NullHypothesisDataController::class)->getIdentityMatrix(number_format($countFdr, 2)) - number_format($countFdr, 2);
-
-                    $npfNormalized[] = $fixedNpf;
-                    $carNormalized[] = $fixedCar;
-                    $iprNormalized[] = $fixedIpr;
-                    $fdrNormalized[] = $fixedFdr;
-
-                    $arrNpf[] = $matrixIdentityNpf;
-                    $arrCar[] = $matrixIdentityCar;
-                    $arrIpr[] = $matrixIdentityIpr;
-                    $arrFdr[] = $matrixIdentityFdr;
-
-                    $sumNpf+= $matrixIdentityNpf;
-                }
-
-                $allNormalized = array($npfNormalized, $carNormalized, $iprNormalized, $fdrNormalized);
-                $normMatrix = new Matrix($allNormalized);
-                $normMatrixValues = $normMatrix->inverse();
-
-                //dump($allNormalized);
-
-                $mergeMatrix = array($arrNpf, $arrCar, $arrIpr, $arrFdr);
-                $invMatrix = new Matrix($mergeMatrix);
-                /* End get normalized data */
-
-                $invMatrixValues = $invMatrix->inverse();
-
-                $mmultValue = $normMatrixValues->multiply($invMatrixValues)->toArray();
-
-                $mmultNpf = array_sum(array_filter($mmultValue[0], function ($num){
-                    return $num > 0;
-                }));
-
-                $mmultCar = array_sum(array_filter($mmultValue[1], function ($num){
-                    return $num > 0;
-                }));
-
-                $mmultIpr = array_sum(array_filter($mmultValue[2], function ($num){
-                    return $num > 0;
-                }));
-
-                $mmultFdr = array_sum(array_filter($mmultValue[3], function ($num){
-                    return $num > 0;
-                }));
-
-                $arrData = array(
-                    $mmultValue[0][0],
-                    $mmultValue[1][0],
-                    $mmultValue[2][0],
-                    $mmultValue[3][0],
-                    $mmultValue[0][1],
-                    $mmultValue[1][1],
-                    $mmultValue[2][1],
-                    $mmultValue[3][1],
-                    $mmultValue[0][2],
-                    $mmultValue[1][2],
-                    $mmultValue[2][2],
-                    $mmultValue[3][2],
-                    $mmultValue[0][3],
-                    $mmultValue[1][3],
-                    $mmultValue[2][3],
-                    $mmultValue[3][3]
-                );
-
-                $avg =  number_format(array_sum($arrData)/count($arrData), 2);
+                $explode_req = explode("-", $request->periode);
 
                 $key = explode("-", $request->periode);
-                $data = VariableData::join('variable_masters', 'variable_masters.id', '=', 'variable_data.variable_masters_id')
-                    ->when($key, function ($query, $key) {
-                        $query->where(['tahun' => $key[0], 'variable_masters_id' => $key[1]]);
-                    })->orderBy('bulan', 'asc')->get();
+                // $data = VariableData::join('variable_masters', 'variable_masters.id', '=', 'variable_data.variable_masters_id')
+                //     ->when($key, function ($query, $key) {
+                //         $query->where(['tahun' => $key[0], 'variable_masters_id' => $key[1]]);
+                //     })->orderBy('bulan', 'asc')->get();
 
-                $varData = VariableData::selectRaw('tahun')
-                    ->where('variable_masters_id', $key[1])
-                    ->havingRaw('count(bulan) = 12')
-                    ->groupBy('tahun')
-                    ->orderBy('tahun', 'desc')
-                    ->limit(1)
-                    ->first();
+                // $varData = VariableData::selectRaw('tahun')
+                //     ->where('variable_masters_id', $key[1])
+                //     ->havingRaw('count(bulan) = 12')
+                //     ->groupBy('tahun')
+                //     ->orderBy('tahun', 'desc')
+                //     ->limit(1)
+                //     ->first();
 
-                $devData = VariableData::where(['tahun' => $varData->tahun, 'variable_masters_id' => $key[1]])->get();
+                $devData = VariableData::where(['tahun' => $key[0], 'variable_masters_id' => $key[1], 'negara_masters_id' => $this->country->id])->get();
 
                 $indexArray = array();
                 foreach ($devData as $v) {
@@ -336,13 +128,13 @@ class SignalingTresholdController extends Controller
                 $stDev = number_format($this->stDev($totalIndex), 2);
 
                 /* get total signal */
-                $signal = VariableData::where('variable_masters_id', $key[1])->get();
+                $signal = VariableData::where('variable_masters_id', $key[1])->where('negara_masters_id', $this->country->id)->get();
 
-                return ['code' => 200, 'message' => 'success', 'data' => $data, 'average' => -$avg, 'stdev' => $stDev, 'averageSignaling' => $average, 'varName' => $key[2], 'signal' => $signal];
+                return ['code' => 200, 'message' => 'success', 'data' => $devData, 'average' => -(round($avg, 2)), 'stdev' => $stDev, 'averageSignaling' => $average, 'varName' => $key[2], 'signal' => $signal];
             } else {
                 return ['code' => 500, 'message' => 'Silahkan pilih periode', 'data' => ''];
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['code' => 500, 'message' => $e->getMessage(), 'data' => ''];
         }
     }
@@ -367,8 +159,9 @@ class SignalingTresholdController extends Controller
     public function indexLower()
     {
         $tahun = VariableData::select('tahun', 'variable_masters_id', 'nama_variable')
+            ->where('negara_masters_id', $this->country->id)
             ->join('variable_masters', 'variable_masters.id', '=', 'variable_data.variable_masters_id')
-            ->where('variable_masters_id', '!=', 5)
+            ->whereNotIn('variable_masters_id', [6,7,8,9,10])
             ->groupBy('variable_masters_id')
             ->groupBy('tahun')
             ->get();

@@ -8,7 +8,7 @@
 
     <title>{{ config('app.name') }}</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     @stack('styles')
 </head>
 
@@ -30,15 +30,23 @@
                 </div>
             </div>
             <div class="flex items-center p-4 pl-2 w-full text-base font-normal text-gray-1">
+                <span class="flex-1 ml-2 text-left whitespace-nowrap">Select Country</span>
+            </div>
+            <select class="bg-black-50 border text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2.5" name="negara" id="negara">
+                @foreach(list_country() as $country)
+                    <option value="{{ $country->code }}"  {{ $country->code ==  \Route::current()->parameter('code') ? 'selected' : '' }}>{{ $country->nama_negara }}</option>
+                @endforeach
+            </select>
+            <div class="flex items-center p-4 pl-2 w-full text-base font-normal text-gray-1">
                 <span class="flex-1 ml-2 text-left whitespace-nowrap">Overview</span>
             </div>
             <ul class="space-y-2">
                 <li>
                     <button type="button"
-                        class="flex items-center p-2 w-full text-base font-normal text-white-1 rounded-lg transition duration-75 group bg-blue-1 hover:bg-blue-1 hover:text-white-1"
+                        class="flex items-center p-2 w-full text-base font-normal rounded-lg transition duration-75 group hover:bg-blue-1 hover:text-white-1 parent-item {{str_contains(url()->current(), '/dashboard/bank/ibri') ? 'bg-blue-1 text-white-1' : 'text-gray-1'}}"
                         data-collapse-toggle="banking-dropdown">
                         <div class="flex justify-center w-[28px] h-[28px]">
-                            <img class="p-1 bg-white-1 rounded-full" src="{{ asset('img/icon-banking.png') }}"
+                            <img class="p-1 img-label {{str_contains(url()->current(), '/dashboard/bank/ibri') ? 'bg-white-1' : ''}} rounded-full" src="{{ asset('img/icon-banking.png') }}"
                                 alt="">
                         </div>
                         <span class="flex-1 ml-3 text-left whitespace-nowrap">Banking</span>
@@ -50,7 +58,7 @@
                     </button>
                     <ul id="banking-dropdown" class="py-2 space-y-2">
                         <li>
-                            <a href="{{ route('dashboard.bank.variable') }}"
+                            <a href="{{ route('dashboard.bank.variable' , ['code'  => \Route::current()->parameter('code')]) }}"
                                 class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                                 <div class="flex justify-center w-[28px] h-[28px]">
                                     <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
@@ -60,7 +68,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('dashboard.bank.data') }}"
+                            <a href="{{ route('dashboard.bank.data' , ['code'  => \Route::current()->parameter('code')]) }}"
                                 class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                                 <div class="flex justify-center w-[28px] h-[28px]">
                                     <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
@@ -83,6 +91,43 @@
                             </svg>
                         </button>
                         <ul id="data-dropdown" class="hidden py-2 space-y-2"></ul>
+                    </ul>
+                    <button type="button"
+                        class="flex items-center p-2 w-full text-base font-normal rounded-lg transition duration-75 group hover:bg-blue-1 parent-item hover:text-white-1 {{str_contains(url()->current(), '/dashboard/bank/macro') ? 'bg-blue-1 text-white-1' : 'text-gray-1'}}"
+                        data-collapse-toggle="macro-menu-dropdown">
+                        <div class="flex justify-center w-[28px] h-[28px]">
+                            <img class="p-1 img-label rounded-full {{str_contains(url()->current(), '/dashboard/bank/macro') ? 'bg-white-1' : ''}}" src="{{ asset('img/icon-banking.png') }}"
+                                alt="">
+                        </div>
+                        <span class="flex-1 ml-3 text-left whitespace-nowrap">Macro</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <ul id="macro-menu-dropdown">
+                        <li>
+                            <a href="{{ route('dashboard.bank.macro.variable', ['code'  => \Route::current()->parameter('code')]) }}"
+                                class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                                <div class="flex justify-center w-[28px] h-[28px]">
+                                    <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
+                                        alt="">
+                                </div>
+                                <span class="flex-1 ml-3 text-left whitespace-nowrap">Variable</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dashboard.bank.macro.data', ['code'  => \Route::current()->parameter('code')]) }}"
+                                class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                                <div class="flex justify-center w-[28px] h-[28px]">
+                                    <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
+                                        alt="">
+                                </div>
+                                <span class="flex-1 ml-3 text-left whitespace-nowrap">Data</span>
+                            </a>
+                        </li>
+                        <ul id="data-dropdown" class="hidden py-2 space-y-2"></ul>
                         <button type="button"
                             class="flex items-center p-2 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
                             aria-controls="macro-dropdown" data-collapse-toggle="macro-dropdown">
@@ -90,7 +135,7 @@
                                 <img class="p-1 rounded-full" src="{{ asset('img/icon-macro.png') }}" alt="">
                             </div>
                             <span class="flex-1 ml-3 text-left whitespace-nowrap"
-                                sidebar-toggle-item="macro-dropdown">Macro</span>
+                                sidebar-toggle-item="macro-dropdown">Step IBRI</span>
                             <svg sidebar-toggle-item="macro-dropdown" class="w-6 h-6" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
@@ -99,11 +144,13 @@
                             </svg>
                         </button>
                         <ul id="macro-dropdown" class="hidden py-2 space-y-2"></ul>
-                        <button type="button"
-                            class="flex items-center p-2 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                    </ul>
+                </li>
+                <button type="button"
+                            class="flex items-center p-2 w-full text-base font-normal rounded-lg transition duration-75 group hover:bg-blue-1 parent-item hover:text-white-1 {{str_contains(url()->current(), '/dashboard/integrasi/') ? 'bg-blue-1 text-white-1' : 'text-gray-1'}}"
                             aria-controls="integrasi-dropdown" data-collapse-toggle="integrasi-dropdown">
                             <div class="flex justify-center w-[28px] h-[28px]">
-                                <img class="p-1 rounded-full" src="{{ asset('img/icon-integrasi.png') }}"
+                                <img class="p-1 rounded-full img-label {{str_contains(url()->current(), '/dashboard/integrasi/') ? 'bg-white-1' : ''}}" src="{{ asset('img/icon-integrasi.png') }}"
                                     alt="">
                             </div>
                             <span class="flex-1 ml-3 text-left whitespace-nowrap"
@@ -117,7 +164,17 @@
                         </button>
                         <ul id="integrasi-dropdown" class="hidden py-2 space-y-2"></ul>
                         <li>
-                            <a href="#"
+                            <a href="{{ route('dashboard.negara.index', ['code' => \Route::current()->parameter('code')]) }}"
+                                class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                                <div class="flex justify-center w-[28px] h-[28px]">
+                                    <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
+                                        alt="">
+                                </div>
+                                <span class="flex-1 ml-3 text-left whitespace-nowrap">Negara</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dashboard.user.index', ['code' => \Route::current()->parameter('code')]) }}"
                                 class="flex items-center p-2 pl-2 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                                 <div class="flex justify-center w-[28px] h-[28px]">
                                     <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
@@ -135,8 +192,6 @@
                                 <span class="flex-1 ml-3 text-left whitespace-nowrap">Logout</span>
                             </button>
                         </li>
-                    </ul>
-                </li>
             </ul>
         </aside>
         <nav
@@ -191,79 +246,86 @@
     <script>
         $(document).ready(function() {
 
+            $('#negara').on('change', function () {
+                console.log('{{ Illuminate\Support\Facades\Route::currentRouteName() }}');
+                var route =  "{{ route(\Route::currentRouteName(), ':code:') }}"
+                var url = route.replace(":code:", $(this).val())
+                window.location = url
+            })
+
             /**
              * Set Menu List
              */
             const bankIbriMenuList = [{
-                    "url": "{{ route('dashboard.bank.ibri.theoretical') }}",
+                    "url": "{{ route('dashboard.bank.ibri.theoretical', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Theoretical Framework"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.ibri.transforming') }}",
+                    "url": "{{ route('dashboard.bank.ibri.transforming', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Transforming into Index"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.ibri.basedYear') }}",
+                    "url": "{{ route('dashboard.bank.ibri.basedYear', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Selecting Based Years"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.ibri.determining') }}",
+                    "url": "{{ route('dashboard.bank.ibri.determining', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Determining Weight"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.ibri.agregation') }}",
+                    "url": "{{ route('dashboard.bank.ibri.agregation', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Index Agregation"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.ibri.factorAnalysis') }}",
+                    "url": "{{ route('dashboard.bank.ibri.factorAnalysis', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Factor Analysis AHP"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.hypothesysdata') }}",
+                    "url": "{{ route('dashboard.bank.hypothesysdata', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Setting Treshold"
                 },
             ]
 
             const signalingTresholdChildMenu = [
                 {
-                    "url": "{{ route('dashboard.bank.ibri.signaling.upper') }}",
+                    "url": "{{ route('dashboard.bank.ibri.signaling.upper', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Upper Treshold"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.ibri.signaling.lower') }}",
+                    "url": "{{ route('dashboard.bank.ibri.signaling.lower', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Lower Treshold"
                 }
             ]
 
             const signalingHpChildMenu = [
                 {
-                    "url": "{{ route('dashboard.bank.ibri.sample.upper') }}",
+                    "url": "{{ route('dashboard.bank.ibri.sample.upper', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Upper Treshold"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.ibri.sample.lower') }}",
+                    "url": "{{ route('dashboard.bank.ibri.sample.lower', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Lower Treshold"
                 }
             ]
 
             const ewsChildMenu = [
                 {
-                    "url": "{{ route('dashboard.bank.ibri.ews.upper') }}",
+                    "url": "{{ route('dashboard.bank.ibri.ews.upper', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Upper Treshold"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.ibri.ews.lower') }}",
+                    "url": "{{ route('dashboard.bank.ibri.ews.lower', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Lower Treshold"
                 }
             ]
 
             const ospChildMenu = [
                 {
-                    "url": "{{ route('dashboard.bank.ibri.outsampleperf.upper') }}",
+                    "url": "{{ route('dashboard.bank.ibri.outsampleperf.upper', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Upper Treshold"
                 },
                 {
-                    "url": "{{ route('dashboard.bank.ibri.outsampleperf.lower') }}",
+                    "url": "{{ route('dashboard.bank.ibri.outsampleperf.lower', ['code'  => \Route::current()->parameter('code')]) }}",
                     "title": "Lower Treshold"
                 }
             ]
@@ -337,9 +399,27 @@
                         </button>
                         <ul id="osp-dropdown" class="px-4 space-y-4"></ul>
                         <li>
-                            <a href="{{ route('dashboard.bank.ibri.optimallevelindex') }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <a href="{{ route('dashboard.bank.ibri.optimallevelindex', ['code' => \Route::current()->parameter('code')]) }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                                 <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
                                 <span class="flex-1 ml-4 text-left whitespace-nowrap">Optimal Level In Index</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dashboard.bank.ibri.optimallevelreal', ['code' => \Route::current()->parameter('code')]) }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                                <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                                <span class="flex-1 ml-4 text-left whitespace-nowrap">Optimal Level In Real</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dashboard.bank.ibri.heat-map', ['code' => \Route::current()->parameter('code')]) }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                                <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                                <span class="flex-1 ml-4 text-left whitespace-nowrap">Setting The Heatmap</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dashboard.bank.ibri.visualization', ['code' => \Route::current()->parameter('code')]) }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                                <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                                <span class="flex-1 ml-4 text-left whitespace-nowrap">Visualization</span>
                             </a>
                         </li>
                         
@@ -389,31 +469,318 @@
                 `)
             })
 
-            const bankingMacroChild = []
+            const bankingMacroChild = [
+                {
+                    "url": "{{ route('dashboard.bank.macro.theoritical', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Theoretical Framework"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.macro.transforming', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Transforming Into Index"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.macro.basedYear', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Selecting Based Year"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.macro.determining', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Determining Weight"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.macro.agregation', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Index Agregation"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.macro.factorAnalysis', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Factor Analysis AHP"
+                },
+                ,
+                {
+                    "url": "{{ route('dashboard.bank.macro.hypothesysdata', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Setting Treshlod"
+                }
+            ]
 
+            const signalingTresholdChildMenuMacro = [
+                {
+                    "url": "{{ route('dashboard.bank.macro.signaling.upper', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Upper Treshold"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.macro.signaling.lower', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Lower Treshold"
+                }
+            ]
+
+            const signalingHpChildMenuMacro = [
+                {
+                    "url": "{{ route('dashboard.bank.macro.sample.upper', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Upper Treshold"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.macro.sample.lower', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Lower Treshold"
+                }
+            ]
+
+            const ewsChildMenuMacro = [
+                {
+                    "url": "{{ route('dashboard.bank.macro.ews.upper', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Upper Treshold"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.macro.ews.lower', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Lower Treshold"
+                }
+            ]
+
+            const ospChildMenuMacro = [
+                {
+                    "url": "{{ route('dashboard.bank.macro.outsampleperf.upper', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Upper Treshold"
+                },
+                {
+                    "url": "{{ route('dashboard.bank.macro.outsampleperf.lower', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Lower Treshold"
+                }
+            ]
+            
             Object.keys(bankingMacroChild).forEach((key, index) => {
                 $("#macro-dropdown").append(`
                     <li>
-                        <a href="dashboard/banking/macro/${bankingMacroChild[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                        <a href="${bankingMacroChild[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                             <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
                             <span class="flex-1 ml-4 text-left whitespace-nowrap">${bankingMacroChild[key].title}</span>
                         </a>
                     </li>
                 `)
             })
+            $('#macro-dropdown').append(`
+                <button type="button"
+                    class="flex items-center p-4 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                    aria-controls="signal-dropdown" data-collapse-toggle="signal-dropdown">
+                    <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                        sidebar-toggle-item="signal-dropdown">Signaling Treshold</span>
+                    <svg sidebar-toggle-item="signal-dropdown" class="w-6 h-6" fill="currentColor"
+                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <ul id="signal-dropdown-macro" class="px-4 space-y-4"></ul>
+                <button type="button"
+                    class="flex items-center p-4 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                    aria-controls="signal-hp-dropdown" data-collapse-toggle="signal-hp-dropdown">
+                    <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                        sidebar-toggle-item="signal-hp-dropdown">HP-In Sample Modal</span>
+                    <svg sidebar-toggle-item="signal-hp-dropdown" class="w-6 h-6" fill="currentColor"
+                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <ul id="signal-hp-dropdown-macro" class="px-4 space-y-4"></ul>
+                <button type="button"
+                    class="flex items-center p-4 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                    aria-controls="ews-dropdown" data-collapse-toggle="ews-dropdown">
+                    <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                        sidebar-toggle-item="ews-dropdown">EWS - Out Sample Model</span>
+                    <svg sidebar-toggle-item="ews-dropdown" class="w-6 h-6" fill="currentColor"
+                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <ul id="ews-macro-dropdown" class="px-4 space-y-4"></ul>
+                <button type="button"
+                    class="flex items-center p-4 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                    aria-controls="osp-dropdown" data-collapse-toggle="osp-dropdown">
+                    <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                        sidebar-toggle-item="osp-dropdown">Out Sample Performance</span>
+                    <svg sidebar-toggle-item="osp-dropdown" class="w-6 h-6" fill="currentColor"
+                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <ul id="osp-macro-dropdown" class="px-4 space-y-4"></ul>
+                <li>
+                    <a href="{{ route('dashboard.bank.macro.optimallevelindex', ['code'  => \Route::current()->parameter('code')]) }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                        <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                        <span class="flex-1 ml-4 text-left whitespace-nowrap">Optimal Level In Index</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('dashboard.bank.macro.optimallevelreal', ['code'  => \Route::current()->parameter('code')]) }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                        <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                        <span class="flex-1 ml-4 text-left whitespace-nowrap">Optimal Level In Real</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('dashboard.bank.macro.heat-map', ['code'  => \Route::current()->parameter('code')]) }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                        <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                        <span class="flex-1 ml-4 text-left whitespace-nowrap">Setting The Heatmap</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('dashboard.bank.macro.visualization', ['code'  => \Route::current()->parameter('code')]) }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                        <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                        <span class="flex-1 ml-4 text-left whitespace-nowrap">Visualization</span>
+                    </a>
+                </li>
+            `)
+            Object.keys(signalingTresholdChildMenuMacro).forEach((key, index) => {
+                $("#signal-dropdown-macro").append(`
+                    <li>
+                        <a href="${signalingTresholdChildMenuMacro[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                            <span class="flex-1 ml-4 text-left whitespace-nowrap">${signalingTresholdChildMenuMacro[key].title}</span>
+                        </a>
+                    </li>
+                `)
+            })
 
-            const bankingIntegrasiChild = []
+            Object.keys(signalingHpChildMenuMacro).forEach((key, index) => {
+                $("#signal-hp-dropdown-macro").append(`
+                    <li>
+                        <a href="${signalingHpChildMenuMacro[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                            <span class="flex-1 ml-4 text-left whitespace-nowrap">${signalingHpChildMenuMacro[key].title}</span>
+                        </a>
+                    </li>
+                `)
+            })
+
+            Object.keys(ewsChildMenuMacro).forEach((key, index) => {
+                $("#ews-macro-dropdown").append(`
+                    <li>
+                        <a href="${ewsChildMenuMacro[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                            <span class="flex-1 ml-4 text-left whitespace-nowrap">${ewsChildMenuMacro[key].title}</span>
+                        </a>
+                    </li>
+                `)
+            })
+
+            Object.keys(ospChildMenuMacro).forEach((key, index) => {
+                $("#osp-macro-dropdown").append(`
+                    <li>
+                        <a href="${ospChildMenuMacro[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                            <span class="flex-1 ml-4 text-left whitespace-nowrap">${ospChildMenuMacro[key].title}</span>
+                        </a>
+                    </li>
+                `)
+            })
+
+            const bankingIntegrasiChild = [
+                {
+                    "url": "{{ route('dashboard.integrasi.setting-composite', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Setting Composite Index"
+                }
+            ]
+
+            const integrasiSignalingTresholdChildMenu = [
+                {
+                    "url": "{{ route('dashboard.integrasi.signaling.upper', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Upper Treshold"
+                },
+                {
+                    "url": "{{ route('dashboard.integrasi.signaling.lower', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Lower Treshold"
+                }
+            ]
+
+            const integrasiPerformnaceChildMenu = [
+                {
+                    "url": "{{ route('dashboard.integrasi.performance.upper', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Upper Treshold"
+                },
+                {
+                    "url": "{{ route('dashboard.integrasi.performance.lower', ['code'  => \Route::current()->parameter('code')]) }}",
+                    "title": "Lower Treshold"
+                }
+            ]
 
             Object.keys(bankingIntegrasiChild).forEach((key, index) => {
                 $("#integrasi-dropdown").append(`
                     <li>
-                        <a href="dashboard/banking/integrasi/${bankingIntegrasiChild[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                        <a href="${bankingIntegrasiChild[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
                             <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
                             <span class="flex-1 ml-4 text-left whitespace-nowrap">${bankingIntegrasiChild[key].title}</span>
                         </a>
                     </li>
                 `)
             })
+
+            $('#integrasi-dropdown').append(`
+                <button type="button"
+                    class="flex items-center p-4 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                    aria-controls="signal-dropdown" data-collapse-toggle="signal-integrasi-dropdown">
+                    <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                        sidebar-toggle-item="signal-dropdown">Signaling</span>
+                    <svg sidebar-toggle-item="signal-dropdown" class="w-6 h-6" fill="currentColor"
+                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <ul id="signal-integrasi-dropdown" class="px-4 space-y-4"></ul>
+                <button type="button"
+                    class="flex items-center p-4 w-full text-base font-normal text-gray-1 rounded-lg transition duration-75 group hover:text-blue-1"
+                    aria-controls="signal-dropdown" data-collapse-toggle="signal-integrasi-dropdown">
+                    <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                        sidebar-toggle-item="signal-dropdown">Performance Evaluation</span>
+                    <svg sidebar-toggle-item="signal-dropdown" class="w-6 h-6" fill="currentColor"
+                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <ul id="performance-integrasi-dropdown" class="px-4 space-y-4"></ul>
+                <li>
+                    <a href="{{ route('dashboard.integrasi.visualization', ['code'  => \Route::current()->parameter('code')]) }}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                        <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                        <span class="flex-1 ml-4 text-left whitespace-nowrap">Visualization</span>
+                    </a>
+                </li>
+            `)
+
+            Object.keys(integrasiSignalingTresholdChildMenu).forEach((key, index) => {
+                $('#signal-integrasi-dropdown').append(`
+                    <li>
+                        <a href="${integrasiSignalingTresholdChildMenu[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                            <span class="flex-1 ml-4 text-left whitespace-nowrap">${integrasiSignalingTresholdChildMenu[key].title}</span>
+                        </a>
+                    </li>
+                `)
+            });
+
+            Object.keys(integrasiPerformnaceChildMenu).forEach((key, index) => {
+                $('#performance-integrasi-dropdown').append(`
+                    <li>
+                        <a href="${integrasiPerformnaceChildMenu[key].url}" class="flex items-center p-2 pl-3 w-full text-base font-normal text-gray-1 hover:text-blue-1 rounded-lg transition duration-75 group ">
+                            <img class="p-1 rounded-full" src="{{ asset('img/icon-list.png') }}" alt="">
+                            <span class="flex-1 ml-4 text-left whitespace-nowrap">${integrasiPerformnaceChildMenu[key].title}</span>
+                        </a>
+                    </li>
+                `)
+            });
+
+            
 
             /**
              * Logout
@@ -429,7 +796,7 @@
                         data: {}
                     })
 
-                    window.location = '{{ route('dashboard.home') }}'
+                    window.location = '{{ route('dashboard.home', ['code'  => \Route::current()->parameter('code')]) }}'
 
                 } catch (error) {
                     toastr.error(error.message)

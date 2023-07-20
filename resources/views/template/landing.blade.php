@@ -86,10 +86,10 @@
                             <a href="{{ route('bank.theoritical') }}" class="block py-2 px-4 hover:text-ld-yellow">Theoritical Framework</a>
                         </li>
                         <li>
-                            <a href="{{ route('bank.theheatmap') }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
+                            <a href="{{ route('bank.theheatmap', ['code' => 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
                         </li>
                         <li>
-                            <a href="{{ route('bank.visualization') }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>
+                            <a href="{{ route('bank.visualization', ['code' => 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>
                         </li>
                     </ul>
                 </div>
@@ -106,10 +106,10 @@
                             <a href="{{ route('macro.theoritical') }}" class="block py-2 px-4 hover:text-ld-yellow">Theoritical Framework</a>
                         </li>
                         <li>
-                            <a href="{{ route('macro.theheatmap') }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
+                            <a href="{{ route('macro.theheatmap', ['code' => 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
                         </li>
                         <li>
-                            <a href="{{ route('macro.visualization') }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>
+                            <a href="{{ route('macro.visualization', ['code' => 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>
                         </li>
                     </ul>
                 </div>
@@ -170,6 +170,13 @@
 
     <script>
         $(document).ready(function() {
+
+            $('#selectCountry').on('change', function () {
+                console.log('{{ Illuminate\Support\Facades\Route::currentRouteName() }}');
+                var route =  "{{ route(\Route::currentRouteName(), ':code:') }}"
+                var url = route.replace(":code:", $(this).val())
+                window.location = url
+            })
 
             const gabung = document.getElementById('gabung')
 

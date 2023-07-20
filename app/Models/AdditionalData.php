@@ -9,6 +9,8 @@ class AdditionalData extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function negaraMaster()
     {
         return $this->hasMany(NegaraMaster::class);

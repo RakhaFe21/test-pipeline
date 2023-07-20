@@ -3,29 +3,44 @@
 namespace App\Http\Controllers\Dashboard\Banking\Data;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Service\IndexServiceController;
+use App\Models\NegaraMaster;
 use App\Models\VariableData;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
 class BankDataController extends Controller
 {
-
+    private $country;
+    private $indexService;
+    public function __construct() {
+        $this->country =  NegaraMaster::where('code', Route::current()->parameter('code'))->first();
+        if (!$this->country) {
+            return abort(500, 'Something went wrong');
+        }
+        $this->indexService = new IndexServiceController($this->country->code);
+    }
+    
     public function index(Request $request)
     {
-        $tahun = VariableData::select('tahun')
+        $tahun = VariableData::select('tahun', 'negara_masters_id')
+            ->where('negara_masters_id', $this->country->id)
             ->groupBy('tahun')
             ->get();
 
         $year = $request->year ?? $tahun[0]->tahun ?? '';
 
-        $bulan = VariableData::select('bulan')
+        $bulan = VariableData::select('bulan', 'negara_masters_id')
+            ->where('negara_masters_id', $this->country->id)
             ->where('tahun', '=', $year)
             ->groupBy('bulan')
             ->get();
 
         $data = VariableData::where('tahun', '=', $year)
+            ->where('negara_masters_id', $this->country->id)
             ->orderBy('tahun', 'asc')
             ->orderBy('bulan', 'asc')
             ->orderBy('variable_masters_id', 'asc')
@@ -43,10 +58,12 @@ class BankDataController extends Controller
 
             $bulan = VariableData::select('bulan')
                 ->where('tahun', '=', $request->year)
+                ->where('negara_masters_id', $this->country->id)                
                 ->groupBy('bulan')
                 ->get();
 
             $data = VariableData::where('tahun', '=', $request->year)
+            ->where('negara_masters_id', $this->country->id)
                 ->orderBy('tahun', 'asc')
                 ->orderBy('bulan', 'asc')
                 ->orderBy('variable_masters_id', 'asc')
@@ -79,6 +96,7 @@ class BankDataController extends Controller
         }
 
         $check = VariableData::where('negara_masters_id', 1)
+        ->where('negara_masters_id', $this->country->id)
             ->whereIn('variable_masters_id', [1, 2, 3, 4])
             ->where('tahun', '=', $request->year)
             ->where('bulan', '=', $request->month)
@@ -90,7 +108,7 @@ class BankDataController extends Controller
 
         $insert = DB::transaction(function () use ($request) {
             $npf = new VariableData;
-            $npf->negara_masters_id = 1;
+            $npf->negara_masters_id = $this->country->id;
             $npf->variable_masters_id = 1;
             $npf->tahun = $request->year;
             $npf->bulan = $request->month;
@@ -98,7 +116,7 @@ class BankDataController extends Controller
             $npf->save();
 
             $car = new VariableData;
-            $car->negara_masters_id = 1;
+            $car->negara_masters_id = $this->country->id;
             $car->variable_masters_id = 2;
             $car->tahun = $request->year;
             $car->bulan = $request->month;
@@ -106,7 +124,7 @@ class BankDataController extends Controller
             $car->save();
 
             $ipr = new VariableData;
-            $ipr->negara_masters_id = 1;
+            $ipr->negara_masters_id = $this->country->id;
             $ipr->variable_masters_id = 3;
             $ipr->tahun = $request->year;
             $ipr->bulan = $request->month;
@@ -114,7 +132,7 @@ class BankDataController extends Controller
             $ipr->save();
 
             $fdr = new VariableData;
-            $fdr->negara_masters_id = 1;
+            $fdr->negara_masters_id = $this->country->id;
             $fdr->variable_masters_id = 4;
             $fdr->tahun = $request->year;
             $fdr->bulan = $request->month;
@@ -127,11 +145,12 @@ class BankDataController extends Controller
         return response()->json(['code' => 200, 'message' => $insert, 'data' => null], 200);
     }
 
-    public function edit(Request $request)
+    public function edit()
     {
-
-        $data = VariableData::where('tahun', '=', $request->tahun)
-            ->where('bulan', '=', $request->bulan)
+        // dd($bulan);
+        $data = VariableData::where('tahun', '=', Route::current()->parameter('tahun'))
+            ->where('bulan', '=', Route::current()->parameter('bulan'))
+            ->where('negara_masters_id', $this->country->id)
             ->whereIn('variable_masters_id', [1, 2, 3, 4])
             ->orderBy('tahun', 'asc')
             ->orderBy('bulan', 'asc')
@@ -156,21 +175,25 @@ class BankDataController extends Controller
 
         $update = DB::transaction(function () use ($request) {
             VariableData::where('tahun', request()->tahun)
+            ->where('negara_masters_id', $this->country->id)
                 ->where('bulan', request()->bulan)
                 ->where('variable_masters_id', 1)
                 ->update(['value' => $request->npf]);
 
             VariableData::where('tahun', request()->tahun)
+            ->where('negara_masters_id', $this->country->id)
                 ->where('bulan', request()->bulan)
                 ->where('variable_masters_id', 2)
                 ->update(['value' => $request->car]);
 
             VariableData::where('tahun', request()->tahun)
+            ->where('negara_masters_id', $this->country->id)
                 ->where('bulan', request()->bulan)
                 ->where('variable_masters_id', 3)
                 ->update(['value' => $request->ipr]);
 
             VariableData::where('tahun', request()->tahun)
+            ->where('negara_masters_id', $this->country->id)
                 ->where('bulan', request()->bulan)
                 ->where('variable_masters_id', 4)
                 ->update(['value' => $request->fdr]);
@@ -194,6 +217,7 @@ class BankDataController extends Controller
             }
 
             VariableData::where('tahun', $request->tahun)
+            ->where('negara_masters_id', $this->country->id)
                 ->where('bulan', $request->bulan)
                 ->delete();
 

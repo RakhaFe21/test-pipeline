@@ -25,7 +25,25 @@
                     </tr>
                 </thead>
                 <tbody id="tbody">
-
+                    @foreach ($data as $item)
+                        <tr>
+                            <td class="py-4 px-6">{{$item['tahun']}}</td>
+                            <td class="py-4 px-6">{{$item['NPF']}}</td>
+                            <td class="py-4 px-6">{{$item['CAR']}}</td>
+                            <td class="py-4 px-6">{{$item['IPR']}}</td>
+                            <td class="py-4 px-6">{{$item['FDR']}}</td>
+                        </tr>
+                    @endforeach
+                    @foreach ($add_on as $KeyAdd => $itemx)
+                        <tr>
+                            <td class="py-4 px-6">{{$KeyAdd}}</td>
+                            <td class="py-4 px-6">{{$itemx['npf']}}</td>
+                            <td class="py-4 px-6">{{$itemx['car']}}</td>
+                            <td class="py-4 px-6">{{$itemx['ipr']}}</td>
+                            <td class="py-4 px-6">{{$itemx['fdr']}}</td>
+                            <td class="py-4 px-6">{{$itemx['total']}}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -34,167 +52,6 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
 
-            const tahun = {!! json_encode($tahun) !!}
-            const bulan = {!! json_encode($bulan) !!}
-            const data = {!! json_encode($data) !!}
-
-            function dataObject(tahun, bulan, data) {
-                let arr = []
-                for (let t of tahun) {
-                    for (let b of bulan) {
-                        let obj = []
-                        let count = 1
-                        let bulan = 0
-                        for (let d of data) {
-                            if (t.tahun === d.tahun && b.bulan === d.bulan) {
-                                bulan = d.bulan
-                                if (count == 1) {
-                                    obj.push(d.tahun)
-                                }
-                                obj.push(d.value_index)
-                                if (count == 4) {
-                                    obj.push(d.bulan)
-                                }
-                                count++
-                            }
-                        }
-                        if (bulan != 0) {
-                            arr.push(obj)
-                        }
-                    }
-                }
-                return arr
-            }
-
-            dataDeviasi(tahun, bulan, dataObject(tahun, bulan, data))
-
-            function dataDeviasi(tahun, bulan, data) {
-
-                let dataVarsGroup = []
-                let dataVars = []
-                let npf = []
-                let car = []
-                let ipr = []
-                let fdr = []
-                let totalAverage = 0
-                let totalWeight = 0
-
-                Object.keys(tahun).forEach((keyTahun, indexTahun) => {
-
-                    Object.keys(data).forEach((keyData, indexData) => {
-                        if (tahun[keyTahun].tahun === data[keyData][0]) {
-                            npf.push(data[keyData][1])
-                            car.push(data[keyData][2])
-                            ipr.push(data[keyData][3])
-                            fdr.push(data[keyData][4])
-                        }
-                    })
-
-                    dataVars.push(tahun[keyTahun].tahun)
-                    dataVars.push(variance(npf).toFixed(3))
-                    dataVars.push(variance(car).toFixed(3))
-                    dataVars.push(variance(ipr).toFixed(3))
-                    dataVars.push(variance(fdr).toFixed(3))
-                    dataVarsGroup.push(dataVars)
-
-                    dataVars = []
-                    npf = []
-                    car = []
-                    ipr = []
-                    fdr = []
-                })
-
-                Object.keys(dataVarsGroup).forEach((key, index) => {
-                    npf.push(parseInt(dataVarsGroup[key][1]))
-                    car.push(parseInt(dataVarsGroup[key][2]))
-                    ipr.push(parseInt(dataVarsGroup[key][3]))
-                    fdr.push(parseInt(dataVarsGroup[key][4]))
-                })
-
-                dataVars.push('Average')
-                dataVars.push(average(npf).toFixed(3))
-                dataVars.push(average(car).toFixed(3))
-                dataVars.push(average(ipr).toFixed(3))
-                dataVars.push(average(fdr).toFixed(3))
-                totalAverage = sum([average(npf), average(car), average(ipr), average(fdr)])
-                dataVars.push(totalAverage.toFixed(3))
-                dataVarsGroup.push(dataVars)
-
-                let npfWeight = average(npf) / totalAverage
-                let carWeight = average(car) / totalAverage
-                let iprWeight = average(ipr) / totalAverage
-                let fdrWeight = average(fdr) / totalAverage
-
-                dataVars = []
-                dataVars.push('Weight')
-                dataVars.push(npfWeight.toFixed(3))
-                dataVars.push(carWeight.toFixed(3))
-                dataVars.push(iprWeight.toFixed(3))
-                dataVars.push(fdrWeight.toFixed(3))
-                totalWeight = sum([npfWeight, carWeight, iprWeight, fdrWeight])
-                dataVars.push(totalWeight.toFixed(3))
-                dataVarsGroup.push(dataVars)
-
-                $('#tbody').html('')
-                Object.keys(dataVarsGroup).forEach((key, index) => {
-                    let value = dataVarsGroup[key]
-
-                    $('#tbody').append(`
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="py-4 px-6">${value[0]}</td>
-                            <td class="py-4 px-6">${value[1]}</td>
-                            <td class="py-4 px-6">${value[2]}</td>
-                            <td class="py-4 px-6">${value[3]}</td>
-                            <td class="py-4 px-6">${value[4]}</td>
-                            <td class="py-4 px-6">${(value[5]) ? value[5] : ''}</td>
-                        </tr>
-                    `)
-                })
-
-                setTimeout(function() {
-                    insert(npfWeight, carWeight, iprWeight, fdrWeight)
-                }, 1000)
-            }
-
-            async function insert(npf, car, ipr, fdr) {
-                try {
-                    const post = await axios({
-                        method: 'post',
-                        url: '{{ route('dashboard.bank.ibri.determining.store') }}',
-                        headers: {},
-                        data: {
-                            npf: npf.toFixed(3),
-                            car: car.toFixed(3),
-                            ipr: ipr.toFixed(3),
-                            fdr: fdr.toFixed(3),
-                        }
-                    })
-
-                    const data = post.data
-
-                    if (data.code === 200) {
-                        toastr.success(data.message)
-                    } else {
-                        toastr.warning(data.message)
-                    }
-                } catch (error) {
-                    toastr.error(error.message)
-                }
-            }
-
-            function variance(arr) {
-                return mathjs.variance(arr)
-            }
-
-            function average(arr) {
-                return arr.reduce((a, b) => a + b, 0) / arr.length
-            }
-
-            function sum(arr) {
-                return mathjs.sum(arr)
-            }
-        })
     </script>
 @endpush

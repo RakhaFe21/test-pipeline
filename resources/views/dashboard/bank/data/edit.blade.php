@@ -10,7 +10,7 @@
         </div>
 
         <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md">
-            <form id="formCreate" method="POST" action="{{ route('dashboard.bank.data.update', ['tahun' => request()->tahun, 'bulan' => request()->bulan]) }}">
+            <form id="formCreate" method="POST" action="{{ route('dashboard.bank.data.update', ['tahun' => \Route::current()->parameter('tahun'), 'bulan' => \Route::current()->parameter('bulan'), 'code' => \Route::current()->parameter('code')]) }}">
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">YEAR & MONTH</label>
                     <div class="flex flex-row gap-4">
@@ -151,7 +151,7 @@
              * Back
              */
             $('#cancel').on('click', function() {
-                window.location = '{{ route('dashboard.bank.data') }}'
+                window.location = '{{ route('dashboard.bank.data', ['code' => \Route::current()->parameter('code')]) }}'
             })
 
         })

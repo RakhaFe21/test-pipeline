@@ -15,6 +15,7 @@
         "markbaker/matrix": "3.0",
         "numphp/numphp": "*",
         "php-ai/php-ml": "^0.10.0",
+        "phpoffice/phpspreadsheet": "^1.28",
         "yoeunes/toastr": "^2.0"
     },
     "require-dev": {
@@ -30,7 +31,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files":[
+            "app/Helpers/helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

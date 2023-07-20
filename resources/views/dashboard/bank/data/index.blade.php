@@ -11,7 +11,7 @@
 
         <div class="flex flex-row justify-between items-center content-center w-full mb-6">
             <select id="selectYears" class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[100px] p-2.5"></select>
-            <a id="addNew" href="{{ route('dashboard.bank.data.create') }}" class="text-white bg-ds-blue hover:bg-ds-blue-hover font-medium rounded-lg text-sm px-5 py-2.5"><i class="fa-solid fa-plus"></i> Add New</a>
+            <a id="addNew" href="{{ route('dashboard.bank.data.create' , ['code'  => \Route::current()->parameter('code')]) }}" class="text-white bg-ds-blue hover:bg-ds-blue-hover font-medium rounded-lg text-sm px-5 py-2.5"><i class="fa-solid fa-plus"></i> Add New</a>
         </div>
 
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
@@ -43,7 +43,7 @@
                     <span class="sr-only">Close modal</span>
                 </button>
                 <div class="p-6 text-center">
-                    <form id="formDelete" action="{{ route('dashboard.bank.data.delete') }}" method="post">
+                    <form id="formDelete" action="{{ route('dashboard.bank.data.delete' , ['code'  => \Route::current()->parameter('code')]) }}" method="post">
                         <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -137,7 +137,7 @@
                             <td class="py-4 px-6">${data[3]}</td>
                             <td class="py-4 px-6">${data[4]}</td>
                             <td class="py-4 px-6 flex flex-row gap-2 items-center justify-center">
-                                <a href="/dashboard/bank/data/edit/${data[5]}/${data[6]}" class="py-0.5 px-2 bg-ds-yellow/20 text-ds-yellow rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i> Edit</a>
+                                <a href="/{{ \Route::current()->parameter('code') }}/dashboard/bank/data/edit/${data[5]}/${data[6]}" class="py-0.5 px-2 bg-ds-yellow/20 text-ds-yellow rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i> Edit</a>
                                 <button type="button" class="py-0.5 px-2 bg-ds-red/20 text-ds-red rounded-lg cursor-pointer" onclick="deleteData(${data[5]}, ${data[6]})">
                                     <i class="fa-regular fa-trash-can"></i> Delete
                                 </button>
@@ -161,7 +161,7 @@
 
                     const post = await axios({
                         method: 'post',
-                        url: '{{ route('dashboard.bank.data.getByYear') }}',
+                        url: '{{ route('dashboard.bank.data.getByYear' , ['code'  => \Route::current()->parameter('code')]) }}',
                         headers: {},
                         data: {
                             'year': year

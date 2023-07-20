@@ -30,6 +30,7 @@
     <script>
         $(document).ready(function() {
 
+            let arr_composite = @json($arr_composite);
             let weight = {!! json_encode($weight) !!}
             let tahun = {!! json_encode($tahun) !!}
             let bulan = {!! json_encode($bulan) !!}
@@ -98,6 +99,7 @@
                     </tr>
                 `)
 
+                var j = 0
                 for (let t of tahun) {
                     for (let b of bulan) {
                         let obj = []
@@ -112,7 +114,7 @@
                                 }
                                 obj.push(d.value_index)
                                 if (count == 4) {
-                                    let composite = (obj[2] * weightArr[0]) + (obj[3] * weightArr[1]) + (obj[4] * weightArr[2]) + (obj[5] * weightArr[3])
+                                    let composite = arr_composite[j]
                                     obj.push(parseFloat(composite.toFixed(3)))
                                 }
                                 count++
@@ -120,6 +122,7 @@
                         }
                         if (bulan != 0) {
                             dataComposite.push(obj)
+                            j++
                         }
                     }
                 }
@@ -143,7 +146,7 @@
                 })
 
                 setTimeout(function() {
-                    insert(dataComposite)
+                    // insert(dataComposite)
                 }, 1000)
             }
 
