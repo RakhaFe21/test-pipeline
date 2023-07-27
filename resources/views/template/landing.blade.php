@@ -31,7 +31,7 @@
                             <a href="#" class="block py-2 pr-4 pl-3 text-ld-green font-medium">Bahasa</a>
                         </li>
                         <li>
-                            <a href="#" class="block py-2 pr-4 pl-3 text-ld-green font-medium">Kontak</a>
+                            <a href="#kontak" class="block py-2 pr-4 pl-3 text-ld-green font-medium">Kontak</a>
                         </li>
                     </ul>
                 </div>
@@ -45,6 +45,9 @@
                             <div class="py-3 px-4">
                                 <span class="block text-sm text-gray-900 dark:text-white">{{ Auth::user()->name }}</span>
                                 <span class="block text-sm font-medium text-gray-500 truncate dark:text-gray-400 mb-2">{{ Auth::user()->email }}</span>
+                                @if (Auth::user()->role == 1 || Auth::user()->role == 2)
+                                    <a href="{{ route('dashboard.home', 'id') }}" class="text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-3 py-1 focus:outline-none">Dashboard</a>   
+                                @endif
                                 <a href="{{ route('profile') }}" class="text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-3 py-1 focus:outline-none">Sunting Profil</a>
                             </div>
                             <ul class="py-1" aria-labelledby="user-menu-button">
@@ -57,7 +60,7 @@
                             </ul>
                         </div>
                     @else
-                        <button id="gabung" type="button" class="text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-3 py-1 ml-5 focus:outline-none">Gabung</button>
+                        <button id="gabung" type="button" class="gabung text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-3 py-1 ml-5 focus:outline-none">Gabung</button>
                     @endif
                     <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden focus:outline-none" aria-controls="mobile-menu-2" aria-expanded="false">
                         <span class="sr-only">Open main menu</span>
@@ -120,7 +123,7 @@
 
     @yield('content')
 
-    <footer class="w-full bg-ld-green pt-[50px]">
+    <footer class="w-full bg-ld-green pt-[50px]" id="kontak">
         <div class="container mx-auto grid grid-cols-1 gap-10 md:grid-cols-3 px-4 lg:px-[100px]">
             <div class="w-full flex flex-row mt-3">
                 <img src="{{ asset('img/logo.png') }}" class="min-w-[130px] h-[70px]" alt="" />
@@ -178,7 +181,7 @@
                 window.location = url
             })
 
-            const gabung = document.getElementById('gabung')
+            const gabung = document.getElementsByClassName('gabung')
 
             const formLoginModal = document.getElementById('formLoginModal')
             const formLoginModalClose = document.getElementById('formLoginModalClose')

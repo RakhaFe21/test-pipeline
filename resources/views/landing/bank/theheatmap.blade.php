@@ -32,7 +32,7 @@
                         <th class="p-4">Sep</th>
                         <th class="p-4">Okt</th>
                         <th class="p-4">Nov</th>
-                        <th class="p-4">Nov</th>
+                        <th class="p-4">Des</th>
                     </tr>
                 </thead>
                 <tbody class="skalz-tbody">

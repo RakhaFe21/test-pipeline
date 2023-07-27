@@ -32,7 +32,7 @@
                         <th class="p-4">Sep</th>
                         <th class="p-4">Okt</th>
                         <th class="p-4">Nov</th>
-                        <th class="p-4">Nov</th>
+                        <th class="p-4">Des</th>
                     </tr>
                 </thead>
                 <tbody class="skalz-tbody">
@@ -339,7 +339,6 @@
                 dataAll.forEach(data => {
                     console.log(data);
                     let upper = data.mean + (averageGlobal * data.stDev)
-                    console.log(data.stDev);
                     let lower = data.meanLow - (averageGlobal * data.stDevLow)
                     var desc
                     $('.skalz-tbody').append(`<tr style="background-color:rgb(0 64 41 / 0.1)">`)
