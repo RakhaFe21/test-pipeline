@@ -81,16 +81,16 @@ Route::prefix('bank')->group(function () {
     Route::get('data', [DataController::class, 'index'])->name('bank.data');
     Route::post('data', [DataController::class, 'getByYear'])->name('bank.data.getByYear');
     Route::get('theoritical', [TheoriticalController::class, 'index'])->name('bank.theoritical');
-    Route::get('theheatmap/{code}', [TheheatmapController::class, 'index'])->name('bank.theheatmap')->middleware('check');
-    Route::get('visualization/{code}', [VisualizationController::class, 'index'])->name('bank.visualization')->middleware('check');
+    Route::get('theheatmap/{code}', [TheheatmapController::class, 'index'])->name('bank.theheatmap');
+    Route::get('visualization/{code}', [VisualizationController::class, 'index'])->name('bank.visualization');
 });
 
 Route::prefix('macro')->group(function () {
     Route::get('variable', [VariableMacroController::class, 'index'])->name('macro.variable');
     Route::get('data', [DataMacroController::class, 'index'])->name('macro.data');
     Route::get('theoritical', [TheoriticalMacroController::class, 'index'])->name('macro.theoritical');
-    Route::get('theheatmap/{code}', [TheheatmapMacroController::class, 'index'])->name('macro.theheatmap')->middleware('check');
-    Route::get('visualization/{code}', [VisualizationMacroController::class, 'index'])->name('macro.visualization')->middleware('check');
+    Route::get('theheatmap/{code}', [TheheatmapMacroController::class, 'index'])->name('macro.theheatmap');
+    Route::get('visualization/{code}', [VisualizationMacroController::class, 'index'])->name('macro.visualization');
 });
 
 Route::prefix('{code}')->group(function() {
@@ -151,8 +151,8 @@ Route::prefix('{code}')->group(function() {
     
         Route::get('bank/ibri/ews/upper', [OutSampleController::class, 'indexUpper'])->name('bank.ibri.ews.upper');
         Route::get('bank/ibri/ews/lower', [OutSampleController::class, 'indexLower'])->name('bank.ibri.ews.lower');
-        Route::get('bank/ibri/ews/signal', [OutSampleController::class, 'signalData'])->name('bank.ibri.ews.signal');
-        Route::get('bank/ibri/ews/signal/lower', [OutSampleController::class, 'signalDataLower'])->name('bank.ibri.ews.signal-lower');
+        Route::get('bank/ibri/ews/signal', [OutSampleController::class, 'signalData'])->withoutMiddleware('auth')->name('bank.ibri.ews.signal');
+        Route::get('bank/ibri/ews/signal/lower', [OutSampleController::class, 'signalDataLower'])->withoutMiddleware('auth')->name('bank.ibri.ews.signal-lower');
     
         Route::get('bank/ibri/osp/upper', [OutSamplePerformanceController::class, 'indexUpper'])->name('bank.ibri.outsampleperf.upper');
         Route::get('bank/ibri/osp/lower', [OutSamplePerformanceController::class, 'indexLower'])->name('bank.ibri.outsampleperf.lower');
@@ -160,9 +160,9 @@ Route::prefix('{code}')->group(function() {
         Route::get('bank/ibri/optimal-index', [OptimalLevelIndexController::class, 'index'])->name('bank.ibri.optimallevelindex');
         
         Route::get('bank/ibri/optimal-real', [OptimalLevelRealController::class, 'index'])->name('bank.ibri.optimallevelreal');
-        Route::get('bank/ibri/optimal-real-data', [OptimalLevelRealController::class, 'getData'])->name('bank.ibri.optimallevelreal.data');
+        Route::get('bank/ibri/optimal-real-data', [OptimalLevelRealController::class, 'getData'])->withoutMiddleware('auth')->name('bank.ibri.optimallevelreal.data');
     
-        Route::get('bank/ibri/stdev', [OptimalLevelIndexController::class, 'getStdev'])->name('stdev');
+        Route::get('bank/ibri/stdev', [OptimalLevelIndexController::class, 'getStdev'])->withoutMiddleware('auth')->name('stdev');
     
         Route::get('bank/ibri/heat-map', [HeatMapController::class, 'index'])->name('bank.ibri.heat-map');
     
@@ -209,8 +209,8 @@ Route::prefix('{code}')->group(function() {
     
                 Route::get('ews/upper', [MacroOutSampleController::class, 'indexUpper'])->name('bank.macro.ews.upper');
                 Route::get('ews/lower', [MacroOutSampleController::class, 'indexLower'])->name('bank.macro.ews.lower');
-                Route::get('ews/signal', [MacroOutSampleController::class, 'signalData'])->name('bank.macro.ews.signal');
-                Route::get('ews/signal/lower', [MacroOutSampleController::class, 'signalDataLower'])->name('bank.macro.ews.signal-lower');
+                Route::get('ews/signal', [MacroOutSampleController::class, 'signalData'])->withoutMiddleware('auth')->name('bank.macro.ews.signal');
+                Route::get('ews/signal/lower', [MacroOutSampleController::class, 'signalDataLower'])->withoutMiddleware('auth')->name('bank.macro.ews.signal-lower');
     
                 Route::get('optimal-index', [MacroOptimalLevelInIndexController::class, 'index'])->name('bank.macro.optimallevelindex');
     
@@ -218,9 +218,9 @@ Route::prefix('{code}')->group(function() {
                 Route::get('osp/lower', [MacroOutSamplePerformanceController::class, 'indexLower'])->name('bank.macro.outsampleperf.lower');
     
                 Route::get('optimal-real', [MacroOptimalLevelInRealController::class, 'index'])->name('bank.macro.optimallevelreal');
-                Route::get('optimal-real-data', [MacroOptimalLevelInRealController::class, 'getData'])->name('bank.macro.optimallevelreal.data');
+                Route::get('optimal-real-data', [MacroOptimalLevelInRealController::class, 'getData'])->withoutMiddleware('auth')->name('bank.macro.optimallevelreal.data');
     
-                Route::get('stdev', [MacroOptimalLevelInIndexController::class, 'getStdev'])->name('macro.stdev');
+                Route::get('stdev', [MacroOptimalLevelInIndexController::class, 'getStdev'])->withoutMiddleware('auth')->name('macro.stdev');
     
                 Route::get('heat-map', [MacroHeatMapController::class, 'index'])->name('bank.macro.heat-map');
     

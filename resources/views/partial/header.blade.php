@@ -7,7 +7,7 @@
 
             <span class="text-white-2 text-[18px] max-w-[550px]">Kami hadir untuk memberikan informasi terbaru terkait penilaian perbankan saat ini di seluruh Indonesia. Sejauh manakah pengetahuan anda tentang kondisi perbankan di Indonesia saat ini, dan apakah sedang baik-baik saja atau tidak?</span>
             <div class="mt-5">
-                <button type="button" class="text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-4 focus:outline-none">Lihat di sini</button>
+                <a href="{{ Auth::user() ? route('dashboard.home', 'id')  : '#'}}" class=" {{ Auth::user() ? '' : 'gabung' }} text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-4 focus:outline-none">Lihat di sini</a>
             </div>
         </div>
     </div>
