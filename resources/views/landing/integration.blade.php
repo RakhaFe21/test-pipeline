@@ -3,7 +3,7 @@
 @section('content')
     <section class="flex flex-col gap-2 container mx-auto px-4 py-10 lg:px-[100px]  h-full min-h-screen">
         <h1 class="text-[30px] font-medium text-ld-green">Visualization</h1>
-        <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nisl amet dignissim purus vestibulum ac suscipit imperdiet quisque vulputate. Egestas neque adipiscing lorem non praesent faucibus. Blandit ornare dui vestibulum mauris nec.</p>
+        <p class="mb-5">{{ __('integration.desc') }}</p>
 
         <div class="overflow-auto w-full flex flex-row text-center text-ld-green">
             <table class="w-full">
@@ -34,7 +34,7 @@
         </div>
 
         <div class="flex flex-row justify-center items-center p-5 bg-ld-yellow mt-[100px]">
-            <span class="text-ld-red text-[24px] font-medium">Tingkat Ketahanan Perbankan di Indonesia berada pada Resilience Level 93%-100% !!</span>
+            <span class="text-ld-red text-[24px] font-medium">{{ __('integration.attention') }} 93%-100% !!</span>
         </div>
     </section>
 @endsection

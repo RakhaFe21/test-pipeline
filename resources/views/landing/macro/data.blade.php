@@ -3,7 +3,7 @@
 @section('content')
     <section class="flex flex-col gap-2 container mx-auto px-4 py-10 lg:px-[100px] h-full min-h-screen">
         <h1 class="text-[30px] font-medium text-ld-green">Data</h1>
-        <p class="mb-5">Menampilkan data setiap bulan dari sebuah variabel. Data berupa angka yang di tampilkan berbeda setiap bulannya, mulai dari angka yang paling rendah maupun angka yang paling tinggi. Data yang kami kumpulkan mulai tahun 2010 hingga saat ini.</p>
+        <p class="mb-5">{{ __('data.desc') }}</p>
 
         <select id="selectYears" class="bg-gray-50 border border-ld-green/50 mb-4 text-gray-900 text-sm rounded-lg focus:ring-ld-green/50 focus:border-ld-green/50 block w-[100px] p-2.5"></select>
 

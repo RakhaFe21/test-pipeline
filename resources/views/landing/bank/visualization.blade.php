@@ -3,7 +3,7 @@
 @section('content')
     <section class="flex flex-col gap-2 container mx-auto px-4 py-10 lg:px-[100px]  h-full min-h-screen">
         <h1 class="text-[30px] font-medium text-ld-green">Visualization</h1>
-        <p class="mb-5">Memberikan informasi penting dari kondisi perbankan islam. Disajikan dengan menampilkan beberapa rekomendasi & kondisi yang perlu dicapai bagi indikator utama makroekonomi dan internal perbankan untuk mencapai dan memelihara tingkat ketahanan perbankan. Perbankan dapat mencapai dan memelihara tingkat ketahanan dengan menempatkan indikator utama makroekonomi dan variable terpilih internal perbankan dalam kondisi yang optimal dalam rentang tertentu.</p>
+        <p class="mb-5">{{ __('visualization.desc') }}</p>
 
         <select id="selectCountry" class="bg-gray-50 mb-4 border border-ld-green/50 text-gray-900 text-sm rounded-lg focus:ring-ld-green/50 focus:border-ld-green/50 block w-[100px] p-2.5">
             @foreach(list_country() as $country)

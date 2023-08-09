@@ -5,9 +5,9 @@
 
     <section class="container mx-auto py-[50px] px-4 py-10 lg:px-[100px] ">
         <div class="flex flex-col items-center content-center text-center">
-            <span class="font-medium text-[30px] text-ld-green">Pahami Data Kami</span>
-            <span class="font-medium text-[18px] text-ld-red">Sistem Penilaian Perbankan Indonesia</span>
-            <span class="text-[18px] max-w-[500px]">Perhitungan Banking, Macroeconomic dan Integrasi (Bank & Macro) merupakan cara kami untuk menilai perbankan saat ini. Kami mengabil sampel informasi di setiap data</span>
+            <span class="font-medium text-[30px] text-ld-green">{{ __('home.title') }}</span>
+            <span class="font-medium text-[18px] text-ld-red">{{ __('home.sub_title') }}</span>
+            <span class="text-[18px] max-w-[500px]">{{ __('home.description') }}</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-[50px]">
             <div class="bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -15,7 +15,7 @@
                     <a href="#"><span>Variable</span></a>
                 </div>
                 <div class="p-5">
-                    <span>Urutan dari Variable Indonesia Banking (NPF, CAR, IPR dan FDR). Sedangkan Urutan dari Variable Indonesia Macro Yaitu (GDP, INF, ER, JII). Kedua Variable antara Bankin & Macro akan berintegrasi</span>
+                    <span>{{ __('home.variable') }}</span>
                 </div>
             </div>
             <div class="bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -23,7 +23,7 @@
                     <a href="#"><span>Data</span></a>
                 </div>
                 <div class="p-5">
-                    <span>Data variable akan diupdate setiap bulan satu sampai dua belas. Jadi kemungkinan besar data variable bisa saja naik ataupun turun perbulannya</span>
+                    <span>{{ __('home.data') }}</span>
                 </div>
             </div>
             <div class="bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -31,7 +31,7 @@
                     <a href="#"><span>Theoritical Framework</span></a>
                 </div>
                 <div class="p-5">
-                    <span>Kerangkan teori SIP. Membangun Indeks ketahanan Perbankan syariah dan membangun indeks kerentanan ekonomi Makro</span>
+                    <span>{{ __('home.theoritical') }}</span>
                 </div>
             </div>
             <div class="bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -39,7 +39,7 @@
                     <a href="#"><span>The Heat Map</span></a>
                 </div>
                 <div class="p-5">
-                    <span>Melihat ketahanan data variable di setiap bulannya dengan memberikan petunjuk warna apakah sehat, cukup, rentang atau ketat.</span>
+                    <span>{{ __('home.heat_map') }}</span>
                 </div>
             </div>
             <div class="bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -47,7 +47,7 @@
                     <a href="#"><span>Visualization</span></a>
                 </div>
                 <div class="p-5">
-                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nisl amet dignissim purus vestibulum ac suscipit imperdiet quisque vulputate. Egestas neque adipiscing lorem non praesent faucibus. Blandit ornare dui vestibulum mauris nec.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nisl amet dignissim purus vestibulum ac suscipit imperdiet quisque vulputate. Egestas neque adipiscing lorem non praesent faucibus. Blandit ornare dui vestibulum mauris nec.</span>
+                    <span>{{ __('home.visualization') }}</span>
                 </div>
             </div>
         </div>

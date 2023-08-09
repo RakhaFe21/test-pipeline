@@ -5,14 +5,20 @@ namespace App\Http\Controllers\Landing;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Rules\Password;
 
 class ProfileController extends Controller
 {
+    public function __construct() {
+        App::setLocale(Route::current()->parameter('locale') ?? 'id');
+    }
+    
     public function index()
     {
         return view('landing.profile');
