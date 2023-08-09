@@ -32,14 +32,14 @@
                         <div class="flex w-full justify-center mt-2 mb-5">
                             <span class="text-sm">Atau Masuk Dengan</span>
                         </div>
-                        <div class="flex flex-row justify-between">
+                        {{-- <div class="flex flex-row justify-between">
                             <button type="button" class="flex flex-row gap-1 items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:outline-none font-medium rounded-xl text-sm px-5 py-2.5 mr-2 mb-2">
                                 <img src="{{ asset('img/icon-goole.png') }}" alt="" class="w-md h-md"> Google
                             </button>
                             <button type="button" class="flex flex-row gap-1 items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:outline-none font-medium rounded-xl text-sm px-5 py-2.5 mr-2 mb-2">
                                 <img src="{{ asset('img/icon-facebook.png') }}" alt="" class="w-md h-md"> Facebook
                             </button>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>
