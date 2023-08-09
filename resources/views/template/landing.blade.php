@@ -169,13 +169,13 @@
                     </div>
                     <div class="flex flex-col text-center">
                         <a href="#"><i class="fa-brands fa-instagram fa-3x mb-1"></i></a>
-                        <span>Intagram</span>
+                        <span>Instagram</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="text-center w-full text-[12px] text-white-1 bg-black-1 mt-[50px] p-5">
-            <span>Hak Cipta SIP 2022 | Peta Situs</span>
+            <span>Hak Cipta SIP <script>document.write(new Date().getFullYear());</script> | Peta Situs</span>
         </div>
     </footer>
 
