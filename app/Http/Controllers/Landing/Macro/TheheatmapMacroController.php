@@ -8,12 +8,14 @@ use App\Models\NegaraMaster;
 use App\Models\VariableData;
 use App\Models\VariableMaster;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 class TheheatmapMacroController extends Controller
 {
     private $country;
     public function __construct() {
+        App::setLocale(Route::current()->parameter('locale') ?? 'id');
         $this->country =  NegaraMaster::where('code', Route::current()->parameter('code'))->first();
         if (!$this->country) {
             return abort(500, 'Something went wrong');

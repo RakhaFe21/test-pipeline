@@ -3,7 +3,7 @@
 @section('content')
     <section class="flex flex-col gap-2 container mx-auto px-4 py-10 lg:px-[100px] h-full min-h-screen">
         <h1 class="text-[30px] font-medium text-ld-green">Data</h1>
-        <p class="mb-5">Menampilkan data setiap bulan dari sebuah variabel. Data berupa angka yang di tampilkan berbeda setiap bulannya, mulai dari angka yang paling rendah maupun angka yang paling tinggi. Data yang kami kumpulkan mulai tahun 2010 hingga saat ini.</p>
+        <p class="mb-5">{{ __('data.desc') }}</p>
 
         <select id="selectYears" class="bg-gray-50 border border-ld-green/50 mb-4 text-gray-900 text-sm rounded-lg focus:ring-ld-green/50 focus:border-ld-green/50 block w-[100px] p-2.5"></select>
 
@@ -30,58 +30,114 @@
     <script>
         $(document).ready(function() {
 
-            const data = [{
-                    "month": "JANUARI",
-                    "npf": "4,36",
-                    "car": "11,26",
-                    "ipr": "35,89",
-                    "fdr": "35,89",
-                },
-                {
-                    "month": "FEBRUARI",
-                    "npf": "4,36",
-                    "car": "11,26",
-                    "ipr": "35,89",
-                    "fdr": "35,89",
-                },
-                {
-                    "month": "MARET",
-                    "npf": "4,36",
-                    "car": "11,26",
-                    "ipr": "35,89",
-                    "fdr": "35,89",
-                },
-                {
-                    "month": "APRIL",
-                    "npf": "4,36",
-                    "car": "11,26",
-                    "ipr": "35,89",
-                    "fdr": "35,89",
-                },
-            ]
+            let tahun = {!! json_encode($tahun) !!}
+            let bulan = {!! json_encode($bulan) !!}
+            let data = {!! json_encode($data) !!}
 
-            Object.keys(data).forEach((key, index) => {
-                $('#tbody').append(`
-                    <tr>
-                        <td class="colspan-13 p-2"></td>
-                    </tr>
-                    <tr class="bg-ld-green/10">
-                        <td class="p-2">${data[key].month}</td>
-                        <td class="p-2">${data[key].npf}</td>
-                        <td class="p-2">${data[key].car}</td>
-                        <td class="p-2">${data[key].ipr}</td>
-                        <td class="p-2">${data[key].fdr}</td>
-                    </tr>
-                `)
+            years(tahun)
+            setTable(dataObject(bulan, data))
+
+            /**
+             * Set list years
+             */
+            function years(data) {
+                Object.keys(data).forEach((key, index) => {
+                    $('#selectYears').append(`<option value="${data[key].tahun}">${data[key].tahun}</option>`)
+                })
+            }
+
+            /**
+             * Get Months
+             */
+            function months() {
+                let result = []
+                let i = 0
+                while (i < 12) {
+                    let data = moment().month(i).locale('{{ config('app.locale') }}').format('MMMM')
+                    result.push(data)
+                    i++
+                }
+                return result
+            }
+
+            /**
+             * Get data object
+             */
+            function dataObject(bulan, data) {
+                let arr = []
+                for (let a of bulan) {
+                    let obj = []
+                    obj.push(months()[a.bulan - 1])
+
+                    let count = 1
+                    for (let b of data) {
+                        if (a.bulan === b.bulan) {
+                            obj.push(b.value)
+                            if (count == 4) {
+                                obj.push(b.tahun)
+                                obj.push(b.bulan)
+                            }
+                            count++
+                        }
+                    }
+                    arr.push(obj)
+                }
+                return arr
+            }
+
+            /**
+             * Set data table
+             */
+            function setTable(obj) {
+                $('#tbody').html('')
+                Object.keys(obj).forEach((key, index) => {
+                    let data = obj[key]
+                    $('#tbody').append(`
+                        <tr>
+                            <td class="colspan-13 p-2"></td>
+                        </tr>
+                        <tr class="bg-ld-green/10 rounded-lg">
+                            <td class="py-2">${data[0]}</td>
+                            <td class="py-2">${data[1]}</td>
+                            <td class="py-2">${data[2]}</td>
+                            <td class="py-2">${(data[3]).toFixed(2)}</td>
+                            <td class="py-2">${data[4]}</td>
+                        </tr>
+                    `)
+                })
+            }
+
+            /**
+             * Year Change
+             */
+            $('#selectYears').on('change', async function() {
+                getByYear($('#selectYears').val())
             })
 
-            const years = ['2010', '2011', '2012', '2013', '2014', '2015']
+            async function getByYear(year) {
+                try {
+                    const year = $('#selectYears').val()
 
-            years.forEach(function(value, index) {
-                $('#selectYears').append(`
-                    <option value='${value}'>${value}</option>
-                `)
-            })
+                    const post = await axios({
+                        method: 'post',
+                        url: '{{ route('bank.data.getByYear', ['locale' =>  \Route::current()->parameter('locale')]) }}',
+                        headers: {},
+                        data: {
+                            'year': year
+                        }
+                    })
+
+                    const data = post.data
+
+                    if (data.code === 200) {
+                        setTable(dataObject(data.bulan, data.data))
+                    } else {
+                        toastr.warning(data.message)
+                    }
+                } catch (error) {
+                    toastr.error(error.message)
+                }
+            }
 
         })
     </script>

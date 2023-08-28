@@ -55,11 +55,11 @@ use App\Http\Controllers\Dashboard\IntegrasiBankMacro\{
     SignalingController, VisualizationController as IntegrasiBankMacroVisualizationController};
 use App\Http\Controllers\Dashboard\NegaraController;
 use App\Http\Controllers\Dashboard\UserController;
+use Illuminate\Support\Facades\App;
 
-
-	Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/tentang-kami', [TentangKamiController::class, 'index'])->name('tentang.kami');
-Route::get('/integration', [IntegrationController::class, 'index'])->name('integration');
+Route::get('/', function(){
+    return redirect()->route('home', 'id');
+})->name('welcome');
 
 Route::prefix('auth')->middleware(['guest'])->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('auth.login');
@@ -76,24 +76,7 @@ Route::prefix('profile')->middleware(['auth'])->group(function () {
     Route::post('delete', [ProfileController::class, 'delete'])->name('profile.delete');
 });
 
-Route::prefix('bank')->group(function () {
-    Route::get('variable', [VariableController::class, 'index'])->name('bank.variable');
-    Route::get('data', [DataController::class, 'index'])->name('bank.data');
-    Route::post('data', [DataController::class, 'getByYear'])->name('bank.data.getByYear');
-    Route::get('theoritical', [TheoriticalController::class, 'index'])->name('bank.theoritical');
-    Route::get('theheatmap/{code}', [TheheatmapController::class, 'index'])->name('bank.theheatmap');
-    Route::get('visualization/{code}', [VisualizationController::class, 'index'])->name('bank.visualization');
-});
-
-Route::prefix('macro')->group(function () {
-    Route::get('variable', [VariableMacroController::class, 'index'])->name('macro.variable');
-    Route::get('data', [DataMacroController::class, 'index'])->name('macro.data');
-    Route::get('theoritical', [TheoriticalMacroController::class, 'index'])->name('macro.theoritical');
-    Route::get('theheatmap/{code}', [TheheatmapMacroController::class, 'index'])->name('macro.theheatmap');
-    Route::get('visualization/{code}', [VisualizationMacroController::class, 'index'])->name('macro.visualization');
-});
-
-Route::prefix('{code}')->group(function() {
+Route::prefix('backoffice/{code}')->group(function() {
     Route::prefix('dashboard')->middleware(['auth', 'redirect'])->name('dashboard.')->group(function () {
         Route::get('home', [DashboardController::class, 'index'])->name('home');
         Route::get('bank/variable', [BankVariableController::class, 'index'])->name('bank.variable');
@@ -261,3 +244,32 @@ Route::prefix('{code}')->group(function() {
         });
     });
 });
+
+
+Route::prefix('{locale}')->group(function() {
+    Route::prefix('bank')->group(function () {
+        Route::get('variable', [VariableController::class, 'index'])->name('bank.variable');
+        Route::get('data', [DataController::class, 'index'])->name('bank.data');
+        Route::post('data', [DataController::class, 'getByYear'])->name('bank.data.getByYear');
+        Route::get('theoritical', [TheoriticalController::class, 'index'])->name('bank.theoritical');
+        Route::get('theheatmap/{code}', [TheheatmapController::class, 'index'])->name('bank.theheatmap');
+        Route::get('visualization/{code}', [VisualizationController::class, 'index'])->name('bank.visualization');
+    });
+    
+    Route::prefix('macro')->group(function () {
+        Route::get('variable', [VariableMacroController::class, 'index'])->name('macro.variable');
+        Route::get('data', [DataMacroController::class, 'index'])->name('macro.data');
+        Route::get('theoritical', [TheoriticalMacroController::class, 'index'])->name('macro.theoritical');
+        Route::get('theheatmap/{code}', [TheheatmapMacroController::class, 'index'])->name('macro.theheatmap');
+        Route::get('visualization/{code}', [VisualizationMacroController::class, 'index'])->name('macro.visualization');
+    });
+
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/tentang-kami', [TentangKamiController::class, 'index'])->name('tentang.kami');
+    Route::get('/integration', [IntegrationController::class, 'index'])->name('integration');
+});
+
+
+
+
+

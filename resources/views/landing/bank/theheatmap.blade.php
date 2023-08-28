@@ -3,7 +3,7 @@
 @section('content')
     <section class="flex flex-col gap-2 container mx-auto px-4 py-10 lg:px-[100px] h-full min-h-screen">
         <h1 class="text-[30px] font-medium text-ld-green">Setting the Heat Map</h1>
-        <p class="mb-5">Data yang kami tampilkan berupa kondisi perbankan apakah dalam keadaan sehat atau tidak. Data yang kami tampilkan mulai tahun 2010 dari bulan Januari sampai Desember hingga saat ini.</p>
+        <p class="mb-5">{{ __('heatmap.desc') }}</p>
 
         <div class="inline-block flex">
             

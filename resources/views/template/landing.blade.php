@@ -25,10 +25,20 @@
                 <div class="hidden justify-between items-center w-full md:flex md:w-auto z-[0] absolute md:static top-[90px] left-0 right-0" id="mobile-menu-2">
                     <ul class="flex flex-col p-4 bg-ld-navbar md:flex-row md:gap-5">
                         <li>
-                            <a href="{{ route('tentang.kami') }}" class="block py-2 pr-4 pl-3 text-ld-green font-medium">Tentang Kami</a>
+                            <a href="{{ route('tentang.kami',['locale'  => \Route::current()->parameter('locale') ?? 'id'] ) }}" class="block py-2 pr-4 pl-3 text-ld-green font-medium">Tentang Kami</a>
                         </li>
                         <li>
-                            <a href="#" class="block py-2 pr-4 pl-3 text-ld-green font-medium">Bahasa</a>
+                            <a href="#"  data-dropdown-toggle="dropdownMenuButton" class="block py-2 pr-4 pl-3 font-medium">Bahasa</a>
+                            <div id="dropdownMenuButton" class="hidden z-10 w-44 font-normal bg-ld-white">
+                                <ul class="py-1 text-sm" aria-labelledby="dropdownMenuButton">
+                                    <li>
+                                        <a href="{{ route(\Route::currentRouteName() ,['locale'  => 'id', 'code'  => \Route::current()->parameter('code')]) }}" class="block py-2 px-4 hover:text-ld-yellow">Indonesia</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route(\Route::currentRouteName() ,['locale'  => 'en', 'code'  => \Route::current()->parameter('code')]) }}" class="block py-2 px-4 hover:text-ld-yellow">English</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                         <li>
                             <a href="#kontak" class="block py-2 pr-4 pl-3 text-ld-green font-medium">Kontak</a>
@@ -46,7 +56,7 @@
                                 <span class="block text-sm text-gray-900 dark:text-white">{{ Auth::user()->name }}</span>
                                 <span class="block text-sm font-medium text-gray-500 truncate dark:text-gray-400 mb-2">{{ Auth::user()->email }}</span>
                                 @if (Auth::user()->role == 1 || Auth::user()->role == 2)
-                                    <a href="{{ route('dashboard.home', 'id') }}" class="text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-3 py-1 focus:outline-none">Dashboard</a>   
+                                    <a href="{{ route('dashboard.home', ['locale'  => \Route::current()->parameter('locale') ?? 'id', 'code' => 'id']) }}" class="text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-3 py-1 focus:outline-none">Dashboard</a>   
                                 @endif
                                 <a href="{{ route('profile') }}" class="text-white bg-ld-yellow hover:bg-ld-yellow shadow-lg font-medium rounded-lg text-sm px-3 py-1 focus:outline-none">Sunting Profil</a>
                             </div>
@@ -75,24 +85,24 @@
     <nav class="flex flex-col bg-ld-green w-full items-center whitespace-nowrap z-10">
         <div class="flex flex-row w-full h-[70px] overflow-auto">
             <div class="container mx-auto flex flex-row gap-5 items-center text-white-1 px-4 lg:px-[100px]">
-                <a href="{{ route('home') }}" class="font-base pr-4 hover:text-ld-yellow">Home</a>
+                <a href="{{ route('home', ['locale'  => \Route::current()->parameter('locale') ?? 'id', 'code' => 'id']) }}" class="font-base pr-4 hover:text-ld-yellow">Home</a>
                 <a data-dropdown-toggle="bankDrobdown" class="font-base px-4 hover:text-ld-yellow cursor-pointer">Bank</a>
                 <div id="bankDrobdown" class="hidden z-10 w-44 font-normal bg-ld-green">
                     <ul class="py-1 text-sm" aria-labelledby="dropdownLargeButton">
                         <li>
-                            <a href="{{ route('bank.variable') }}" class="block py-2 px-4 hover:text-ld-yellow">Variable Used</a>
+                            <a href="{{ route('bank.variable',['locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Variable Used</a>
                         </li>
                         <li>
-                            <a href="{{ route('bank.data') }}" class="block py-2 px-4 hover:text-ld-yellow">Data</a>
+                            <a href="{{ route('bank.data',['locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Data</a>
                         </li>
                         <li>
-                            <a href="{{ route('bank.theoritical') }}" class="block py-2 px-4 hover:text-ld-yellow">Theoritical Framework</a>
+                            <a href="{{ route('bank.theoritical',['locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Theoritical Framework</a>
                         </li>
                         <li>
-                            <a href="{{ route('bank.theheatmap', ['code' => 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
+                            <a href="{{ route('bank.theheatmap', ['code' => \Route::current()->parameter('code') ?? 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
                         </li>
                         <li>
-                            <a href="{{ route('bank.visualization', ['code' => 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>
+                            <a href="{{ route('bank.visualization', ['code' => \Route::current()->parameter('code') ?? 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>
                         </li>
                     </ul>
                 </div>
@@ -100,23 +110,23 @@
                 <div id="macroDrobdown" class="hidden z-10 w-44 font-normal bg-ld-green">
                     <ul class="py-1 text-sm" aria-labelledby="dropdownLargeButton">
                         <li>
-                            <a href="{{ route('macro.variable') }}" class="block py-2 px-4 hover:text-ld-yellow">Variable Used</a>
+                            <a href="{{ route('macro.variable', ['locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Variable Used</a>
                         </li>
                         <li>
-                            <a href="{{ route('macro.data') }}" class="block py-2 px-4 hover:text-ld-yellow">Data</a>
+                            <a href="{{ route('macro.data', ['locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Data</a>
                         </li>
                         <li>
-                            <a href="{{ route('macro.theoritical') }}" class="block py-2 px-4 hover:text-ld-yellow">Theoritical Framework</a>
+                            <a href="{{ route('macro.theoritical', ['locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Theoritical Framework</a>
                         </li>
                         <li>
-                            <a href="{{ route('macro.theheatmap', ['code' => 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
+                            <a href="{{ route('macro.theheatmap', ['code' => 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
                         </li>
                         <li>
-                            <a href="{{ route('macro.visualization', ['code' => 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>
+                            <a href="{{ route('macro.visualization', ['code' => 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>
                         </li>
                     </ul>
                 </div>
-                <a href="{{ route('integration') }}" class="text-white-1 font-base px-4 hover:text-ld-yellow">Integrasi Bank & Macro</a>
+                <a href="{{ route('integration', ['locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="text-white-1 font-base px-4 hover:text-ld-yellow">Integrasi Bank & Macro</a>
             </div>
         </div>
     </nav>
@@ -129,7 +139,7 @@
                 <img src="{{ asset('img/logo.png') }}" class="min-w-[130px] h-[70px]" alt="" />
             </div>
             <div class="flex flex-col gap-2 w-full text-white-1">
-                <span class="text-[22px] font-medium">Layanan Kami</span>
+                <span class="text-[22px] font-medium">{{ __('home.phone') }}</span>
                 <div class="grid grid-flow-col auto-cols-max">
                     <span class="w-[80px]">Phone 1</span>
                     <span class="w-[10px]">:</span>
@@ -147,7 +157,7 @@
                 </div>
             </div>
             <div class="flex flex-col gap-2 w-full text-white-1">
-                <span class="text-[22px] font-medium">Ikuti Kami</span>
+                <span class="text-[22px] font-medium">{{ __('home.follow') }}</span>
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-col text-center">
                         <a href="#"><i class="fa-brands fa-square-facebook fa-3x mb-1"></i></a>
@@ -159,13 +169,13 @@
                     </div>
                     <div class="flex flex-col text-center">
                         <a href="#"><i class="fa-brands fa-instagram fa-3x mb-1"></i></a>
-                        <span>Intagram</span>
+                        <span>Instagram</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="text-center w-full text-[12px] text-white-1 bg-black-1 mt-[50px] p-5">
-            <span>Hak Cipta SIP 2022 | Peta Situs</span>
+            <span>Hak Cipta SIP <script>document.write(new Date().getFullYear());</script> | Peta Situs</span>
         </div>
     </footer>
 
@@ -175,8 +185,7 @@
         $(document).ready(function() {
 
             $('#selectCountry').on('change', function () {
-                console.log('{{ Illuminate\Support\Facades\Route::currentRouteName() }}');
-                var route =  "{{ route(\Route::currentRouteName(), ':code:') }}"
+                var route =  "{{ route(\Route::currentRouteName(), ['locale' => \Route::current()->parameter('locale') ?? 'id' , 'code' => ':code:']) }}"
                 var url = route.replace(":code:", $(this).val())
                 window.location = url
             })

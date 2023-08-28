@@ -3,7 +3,7 @@
 @section('content')
     <section class="flex flex-col gap-2 container mx-auto px-4 py-10 lg:px-[100px]  h-full min-h-screen">
         <h1 class="text-[30px] font-medium text-ld-green">Theoritical Framework</h1>
-        <p class="mb-5">Berikut ini ada 15 step untuk membangun Indeks Ketahanan Perbankan Syariah. Data yang kami sajikan berupa Tabel (Constructing The Islamic Banking Resilience Index ) dan gambar (Constructing The Islamic Banking Resilience Index )</p>
+        <p class="mb-5">{{ __('theoritical.desc') }}</p>
 
         <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
             <ul class="flex flex-wrap text-sm font-medium text-center" id="tab" data-tabs-toggle="#tabContent" role="tablist">
