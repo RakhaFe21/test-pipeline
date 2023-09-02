@@ -10,7 +10,7 @@
         </div>
 
         <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md">
-            <form id="formCreate" method="POST" action="{{ route('dashboard.bank.hypothesisdata.store') }}">
+            <form id="formCreate" method="POST" action="{{ route('dashboard.bank.hypothesisdata.store', ['code'  => \Route::current()->parameter('code')]) }}">
                 <div class="flex">
                     <div class="flex-1 w-64 mr-2">
                         <span class="text-lg">Null Hypothesis 1</span>
@@ -184,7 +184,7 @@
              * Back
              */
             $('#cancel').on('click', function() {
-                window.location = '{{ route('dashboard.bank.hypothesysdata') }}'
+                window.location = '{{ route('dashboard.bank.hypothesysdata', ['code'  => \Route::current()->parameter('code')]) }}'
             })
 
         })

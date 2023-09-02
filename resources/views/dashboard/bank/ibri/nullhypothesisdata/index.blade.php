@@ -13,7 +13,7 @@
             <select
                 class="bg-gray-50 border border-ds-gray text-sm rounded-lg focus:ring-ds-gray focus:border-ds-gray block w-[120px] p-2.5" id="selectTabs">
             </select>
-            <a id="addNew" href="{{ route('dashboard.bank.hypothesysdata.create') }}"
+            <a id="addNew" href="{{ route('dashboard.bank.hypothesysdata.create', ['code'  => \Route::current()->parameter('code')]) }}"
                 class="text-white bg-ds-blue hover:bg-ds-blue-hover font-medium rounded-lg text-sm px-5 py-2.5"><i
                     class="fa-solid fa-plus"></i> Add New</a>
         </div>
@@ -27,7 +27,7 @@
                             <th scope="col" class="py-3 px-6">Obs</th>
                             <th scope="col" class="py-3 px-6">F-Statistic</th>
                             <th scope="col" class="py-3 px-6">Prob</th>
-                            <th scope="col" class="py-3 px-6">Aksi</th>
+                            <th scope="col" class="py-3 px-6">Action</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
@@ -104,7 +104,7 @@
                     <span class="sr-only">Close modal</span>
                 </button>
                 <div class="p-6 text-center">
-                    <form id="formDelete" action="{{ route('dashboard.bank.nullhypothesisdata.delete') }}" method="post">
+                    <form id="formDelete" action="{{ route('dashboard.bank.nullhypothesisdata.delete', ['code'  => \Route::current()->parameter('code')]) }}" method="post">
                         <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -200,7 +200,7 @@
             function getActionBtn(groupId, dataId) {
                 if(dataId % 2) {
                     return `<td rowspan="2" class="py-4 px-6 border">
-                        <a href="/dashboard/bank/nullhypothesisdata/edit/`+groupId+`/`+dataId+`" class="py-0.5 px-2 bg-ds-yellow/20 text-ds-yellow rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i> Edit</a>
+                        <a href="/backoffice/{{Route::current()->parameter('code') }}/dashboard/bank/nullhypothesisdata/edit/`+groupId+`/`+dataId+`" class="py-0.5 px-2 bg-ds-yellow/20 text-ds-yellow rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i> Edit</a>
                         <button type="button" class="py-0.5 px-2 bg-ds-red/20 text-ds-red rounded-lg cursor-pointer" onclick="deleteData(`+groupId+`)">
                             <i class="fa-regular fa-trash-can"></i> Delete
                         </button>

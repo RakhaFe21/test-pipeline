@@ -33,7 +33,8 @@ class UserController extends Controller
             'email'     => 'required|email',
             'password'  => 'required|string',
             'role'      => 'required|int',
-            'address' => 'required|string',
+            'address'   => 'required|string',
+            'image'     => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -78,6 +79,7 @@ class UserController extends Controller
             'email'     => 'required|email',
             'role'      => 'required|int',
             'address' => 'required|string',
+            'image'     => 'required'
         ]);
 
         if ($validator->fails()) {

@@ -28,10 +28,10 @@
                     @foreach ($data as $item)
                         <tr>
                             <td class="py-4 px-6">{{$item['tahun']}}</td>
-                            <td class="py-4 px-6">{{$item['GDP']}}</td>
-                            <td class="py-4 px-6">{{$item['INF']}}</td>
-                            <td class="py-4 px-6">{{$item['ER']}}</td>
-                            <td class="py-4 px-6">{{$item['JII']}}</td>
+                            <td class="py-4 px-6">{{number_format($item['GDP'], 3)}}</td>
+                            <td class="py-4 px-6">{{number_format($item['INF'], 3)}}</td>
+                            <td class="py-4 px-6">{{number_format($item['ER'], 3)}}</td>
+                            <td class="py-4 px-6">{{number_format($item['JII'], 3)}}</td>
                         </tr>
                     @endforeach
                     @foreach ($add_on as $KeyAdd => $itemx)

@@ -31,18 +31,18 @@
                             @foreach ($weights as $key => $weight)
                                 <tr>
                                     <td class="py-4 px-6">I{{strtoupper($weight->nama_variable)}}</td>
-                                    <td class="py-4 px-6 {{ $gdp[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($gdp[$key], 2)}}</td>
-                                    <td class="py-4 px-6 {{ $inf[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($inf[$key], 2)}}</td>
-                                    <td class="py-4 px-6 {{ $er[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($er[$key], 2)}}</td>
-                                    <td class="py-4 px-6 {{ $jii[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{round($jii[$key], 2)}}</td>
+                                    <td class="py-4 px-6 {{ $gdp[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{number_format($gdp[$key], 3)}}</td>
+                                    <td class="py-4 px-6 {{ $inf[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{number_format($inf[$key], 3)}}</td>
+                                    <td class="py-4 px-6 {{ $er[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{number_format($er[$key], 3)}}</td>
+                                    <td class="py-4 px-6 {{ $jii[$key] == 1 ? 'text-ds-yellow font-medium' : ''}}">{{number_format($jii[$key], 3)}}</td>
                                 </tr>
                             @endforeach
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td class="py-4 px-6"><strong>TOTAL</strong></td>
-                                <td class="py-4 px-6 ">{{round($total[0], 2)}}</td>
-                                <td class="py-4 px-6 ">{{round($total[1], 2)}}</td>
-                                <td class="py-4 px-6 ">{{round($total[2], 2)}}</td>
-                                <td class="py-4 px-6 ">{{round($total[3], 2)}}</td>
+                                <td class="py-4 px-6 ">{{number_format($total[0], 3)}}</td>
+                                <td class="py-4 px-6 ">{{number_format($total[1], 3)}}</td>
+                                <td class="py-4 px-6 ">{{number_format($total[2], 3)}}</td>
+                                <td class="py-4 px-6 ">{{number_format($total[3], 3)}}</td>
                             </tr>
                         @endif
                     </tbody>
@@ -60,7 +60,7 @@
                         @foreach ($weightRank as $item)
                             <tr>
                                 <td class="py-4 px-6">I{{strtoupper($item->nama_variable)}}</td>
-                                <td class="py-4 px-6">{{round($item->weight, 3)}}</td>
+                                <td class="py-4 px-6">{{number_format($item->weight, 3)}}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -85,20 +85,20 @@
                         @foreach ($weights as $key => $weight)
                             <tr>
                                 <td class="py-4 px-6">I{{strtoupper($weight->nama_variable)}}</td>
-                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_gdp[$key], 2)}}</td>
-                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_inf[$key], 2)}}</td>
-                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_er[$key], 2)}}</td>
-                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{round($normalized_jii[$key], 2)}}</td>
-                                <td class="py-4 px-6 ">{{round($criteria_weights[$key], 2)}}</td>
+                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{number_format($normalized_gdp[$key], 3)}}</td>
+                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{number_format($normalized_inf[$key], 3)}}</td>
+                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{number_format($normalized_er[$key], 3)}}</td>
+                                <td class="py-4 px-6 text-ds-yellow font-medium ">{{number_format($normalized_jii[$key], 3)}}</td>
+                                <td class="py-4 px-6 ">{{number_format($criteria_weights[$key], 3)}}</td>
                             </tr>
                         @endforeach
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6"><strong>TOTAL</strong></td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[0], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[1], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[2], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[3], 2)}}</td>
-                            <td class="py-4 px-6 ">{{round($total_normalized[4], 2)}}</td>
+                            <td class="py-4 px-6 ">{{number_format($total_normalized[0], 3)}}</td>
+                            <td class="py-4 px-6 ">{{number_format($total_normalized[1], 3)}}</td>
+                            <td class="py-4 px-6 ">{{number_format($total_normalized[2], 3)}}</td>
+                            <td class="py-4 px-6 ">{{number_format($total_normalized[3], 3)}}</td>
+                            <td class="py-4 px-6 ">{{number_format($total_normalized[4], 3)}}</td>
                         </tr>
                         @endif
                     </tbody>
@@ -113,7 +113,7 @@
                             <th scope="col" class="py-3 px-6">CRITERIA WEIGHT</th>
                             @if($criteria_weights)
                             @foreach ($criteria_weights as $criteria)
-                                <th scope="col" class="py-3 px-6">{{round($criteria, 2);}}</th>
+                                <th scope="col" class="py-3 px-6">{{number_format($criteria, 2);}}</th>
                             @endforeach
                             @else
                                 <td class="py-4 px-6"></td>
@@ -135,10 +135,10 @@
                         @foreach ($weights as $key => $weight)
                             <tr>
                                 <td class="py-4 px-6">I{{strtoupper($weight->nama_variable)}}</td>
-                                <td class="py-4 px-6 ">{{round($chy_gdp[$key], 2)}}</td>
-                                <td class="py-4 px-6 ">{{round($chy_inf[$key], 2)}}</td>
-                                <td class="py-4 px-6 ">{{round($chy_er[$key], 2)}}</td>
-                                <td class="py-4 px-6 ">{{round($chy_jii[$key], 2)}}</td>
+                                <td class="py-4 px-6 ">{{number_format($chy_gdp[$key], 3)}}</td>
+                                <td class="py-4 px-6 ">{{number_format($chy_inf[$key], 3)}}</td>
+                                <td class="py-4 px-6 ">{{number_format($chy_er[$key], 3)}}</td>
+                                <td class="py-4 px-6 ">{{number_format($chy_jii[$key], 3)}}</td>
                             </tr>
                         @endforeach
                         @endif
@@ -158,9 +158,9 @@
                         @if($weight_sum_values)
                             @foreach ($weight_sum_values as $keyW => $weight_sum_value)
                             <tr>
-                                <td class="py-4 px-6">{{round($weight_sum_values[$keyW], 2)}}</td>
-                                <td class="py-4 px-6">{{round($criteria_weights[$keyW], 2)}}</td>
-                                <td class="py-4 px-6">{{round($ratio[$keyW], 2)}}</td>
+                                <td class="py-4 px-6">{{number_format($weight_sum_values[$keyW], 3)}}</td>
+                                <td class="py-4 px-6">{{number_format($criteria_weights[$keyW], 3)}}</td>
+                                <td class="py-4 px-6">{{number_format($ratio[$keyW], 3)}}</td>
                             </tr>
                             @endforeach
                         @else
@@ -183,19 +183,19 @@
                     <tbody id="tbodyLamda">
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">Lamnda Max</td>
-                            <td class="py-4 px-6">{{@round($lamda_max, 2)}}</td>
+                            <td class="py-4 px-6">{{@number_format($lamda_max, 3)}}</td>
                         </tr>
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">CI</td>
-                            <td class="py-4 px-6">{{@round($ci, 2)}}</td>
+                            <td class="py-4 px-6">{{@number_format($ci, 3)}}</td>
                         </tr>
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">Random Index</td>
-                            <td class="py-4 px-6">{{@round($ri, 2)}}</td>
+                            <td class="py-4 px-6">{{@number_format($ri, 3)}}</td>
                         </tr>
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">Consistency Ration</td>
-                            <td class="py-4 px-6">{{@round($consistency_ratio, 2)}}</td>
+                            <td class="py-4 px-6">{{@number_format($consistency_ratio, 3)}}</td>
                         </tr>
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6">%</td>

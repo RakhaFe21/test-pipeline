@@ -99,7 +99,7 @@
                             <a href="{{ route('bank.theoritical',['locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Theoritical Framework</a>
                         </li>
                         <li>
-                            <a href="{{ route('bank.theheatmap', ['code' => \Route::current()->parameter('code') ?? 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
+                            <a href="{{ route('bank.theheatmap', ['code' => \Route::current()->parameter('code') ?? 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Setting The Heat Map</a>
                         </li>
                         <li>
                             <a href="{{ route('bank.visualization', ['code' => \Route::current()->parameter('code') ?? 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>
@@ -119,7 +119,7 @@
                             <a href="{{ route('macro.theoritical', ['locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Theoritical Framework</a>
                         </li>
                         <li>
-                            <a href="{{ route('macro.theheatmap', ['code' => 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">The Heat Map</a>
+                            <a href="{{ route('macro.theheatmap', ['code' => 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Setting The Heat Map</a>
                         </li>
                         <li>
                             <a href="{{ route('macro.visualization', ['code' => 'id', 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}" class="block py-2 px-4 hover:text-ld-yellow">Visualization</a>

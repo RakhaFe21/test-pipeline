@@ -90,7 +90,7 @@
                 let result = []
                 let i = 0
                 while (i < 12) {
-                    let data = moment().month(i).locale('{{ config('app.locale') }}').format('MMMM')
+                    let data = moment().month(i).locale('en').format('MMMM')
                     result.push(data)
                     i++
                 }
@@ -137,7 +137,7 @@
                             <td class="py-4 px-6">${data[3]}</td>
                             <td class="py-4 px-6">${data[4]}</td>
                             <td class="py-4 px-6 flex flex-row gap-2 items-center justify-center">
-                                <a href="/{{ \Route::current()->parameter('code') }}/dashboard/bank/data/edit/${data[5]}/${data[6]}" class="py-0.5 px-2 bg-ds-yellow/20 text-ds-yellow rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i> Edit</a>
+                                <a href="/backoffice/{{ \Route::current()->parameter('code') }}/dashboard/bank/data/edit/${data[5]}/${data[6]}" class="py-0.5 px-2 bg-ds-yellow/20 text-ds-yellow rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i> Edit</a>
                                 <button type="button" class="py-0.5 px-2 bg-ds-red/20 text-ds-red rounded-lg cursor-pointer" onclick="deleteData(${data[5]}, ${data[6]})">
                                     <i class="fa-regular fa-trash-can"></i> Delete
                                 </button>

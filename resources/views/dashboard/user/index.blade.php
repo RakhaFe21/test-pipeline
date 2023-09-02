@@ -21,7 +21,7 @@
                         <th scope="col" class="py-3 px-6">Name</th>
                         <th scope="col" class="py-3 px-6">Email</th>
                         <th scope="col" class="py-3 px-6">Role</th>
-                        <th scope="col" class="py-3 px-6">Aksi</th>
+                        <th scope="col" class="py-3 px-6">Action</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">

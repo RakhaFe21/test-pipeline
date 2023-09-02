@@ -22,7 +22,7 @@ class BankDeterminingController extends Controller
         if (!$this->country) {
             return abort(500, 'Something went wrong');
         }
-        $this->indexService = new IndexServiceController($this->country->code);
+        $this->indexService = new IndexServiceController($this->country->id);
     }
 
     public function index()
@@ -40,17 +40,17 @@ class BankDeterminingController extends Controller
             $i = 0;
             foreach ($tahuns as $tahunKey => $tahun) {
                 $data[$tahunKey]['tahun'] = $tahun->tahun;
-                $data[$tahunKey]['NPF'] = round($vars['NPF'][$i], 3);
-                $data[$tahunKey]['CAR'] = round($vars['CAR'][$i], 3);
-                $data[$tahunKey]['IPR'] = round($vars['IPR'][$i], 3);
-                $data[$tahunKey]['FDR'] = round($vars['FDR'][$i], 3);
+                $data[$tahunKey]['NPF'] = number_format($vars['NPF'][$i], 3);
+                $data[$tahunKey]['CAR'] = number_format($vars['CAR'][$i], 3);
+                $data[$tahunKey]['IPR'] = number_format($vars['IPR'][$i], 3);
+                $data[$tahunKey]['FDR'] = number_format($vars['FDR'][$i], 3);
                 $i++;
             }
     
-            $add_on['Average']['npf'] = round($vars['average_npf'], 3);
-            $add_on['Average']['car'] = round($vars['average_car'], 3);
-            $add_on['Average']['ipr'] = round($vars['average_ipr'], 3);
-            $add_on['Average']['fdr'] = round($vars['average_fdr'], 3);
+            $add_on['Average']['npf'] = number_format($vars['average_npf'], 3);
+            $add_on['Average']['car'] = number_format($vars['average_car'], 3);
+            $add_on['Average']['ipr'] = number_format($vars['average_ipr'], 3);
+            $add_on['Average']['fdr'] = number_format($vars['average_fdr'], 3);
             $add_on['Average']['total'] = array_sum([
                 $add_on['Average']['npf'],
                 $add_on['Average']['car'],
@@ -58,10 +58,10 @@ class BankDeterminingController extends Controller
                 $add_on['Average']['fdr']
             ]);
     
-            $add_on['Average']['npf'] = round($vars['average_npf'], 3);
-            $add_on['Average']['car'] = round($vars['average_car'], 3);
-            $add_on['Average']['ipr'] = round($vars['average_ipr'], 3);
-            $add_on['Average']['fdr'] = round($vars['average_fdr'], 3);
+            $add_on['Average']['npf'] = number_format($vars['average_npf'], 3);
+            $add_on['Average']['car'] = number_format($vars['average_car'], 3);
+            $add_on['Average']['ipr'] = number_format($vars['average_ipr'], 3);
+            $add_on['Average']['fdr'] = number_format($vars['average_fdr'], 3);
             $add_on['Average']['total'] = array_sum([
                 $add_on['Average']['npf'],
                 $add_on['Average']['car'],
@@ -69,10 +69,10 @@ class BankDeterminingController extends Controller
                 $add_on['Average']['fdr']
             ]);
     
-            $add_on['Weight']['npf'] = round( $add_on['Average']['npf']/ $add_on['Average']['total'], 3);
-            $add_on['Weight']['car'] = round( $add_on['Average']['car']/  $add_on['Average']['total'], 3);
-            $add_on['Weight']['ipr'] = round( $add_on['Average']['ipr']/  $add_on['Average']['total'], 3);
-            $add_on['Weight']['fdr'] = round( $add_on['Average']['fdr']/  $add_on['Average']['total'], 3);
+            $add_on['Weight']['npf'] = number_format( $add_on['Average']['npf']/ $add_on['Average']['total'], 3);
+            $add_on['Weight']['car'] = number_format( $add_on['Average']['car']/  $add_on['Average']['total'], 3);
+            $add_on['Weight']['ipr'] = number_format( $add_on['Average']['ipr']/  $add_on['Average']['total'], 3);
+            $add_on['Weight']['fdr'] = number_format( $add_on['Average']['fdr']/  $add_on['Average']['total'], 3);
             $add_on['Weight']['total'] = array_sum([
                 $add_on['Weight']['npf'],
                 $add_on['Weight']['car'],

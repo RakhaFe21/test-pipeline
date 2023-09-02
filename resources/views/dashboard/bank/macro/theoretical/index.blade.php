@@ -15,7 +15,7 @@
                     <button class="inline-block p-4 rounded-t-lg border-b-2" id="table-tab" data-tabs-target="#table" type="button" role="tab" aria-controls="table" aria-selected="false">Table</button>
                 </li>
                 <li class="mr-2" role="presentation">
-                    <button class="inline-block p-4 rounded-t-lg border-b-2" id="gambar-tab" data-tabs-target="#gambar" type="button" role="tab" aria-controls="gambar" aria-selected="false">Gambar</button>
+                    <button class="inline-block p-4 rounded-t-lg border-b-2" id="gambar-tab" data-tabs-target="#gambar" type="button" role="tab" aria-controls="gambar" aria-selected="false">Image</button>
                 </li>
             </ul>
         </div>
