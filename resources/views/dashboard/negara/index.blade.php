@@ -3,14 +3,14 @@
 @section('content')
     <section class="p-5">
         <div class="fle flex-col w-full mb-6">
-            <h1 class="text-3xl font-medium">Negara</h1>
+            <h1 class="text-3xl font-medium">Country</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Negara Master</span>
+                <span>Country Master</span>
             </div>
         </div>
 
         <div class="flex flex-row justify-between items-center content-center w-full mb-6">
-            <a id="addNew" href="{{ route('dashboard.bank.data.create' , ['code'  => \Route::current()->parameter('code')]) }}" class="text-white bg-ds-blue hover:bg-ds-blue-hover font-medium rounded-lg text-sm px-5 py-2.5"><i class="fa-solid fa-plus"></i> Add New</a>
+            <a id="addNew" href="{{ route('dashboard.negara.create' , ['code'  => \Route::current()->parameter('code')]) }}" class="text-white bg-ds-blue hover:bg-ds-blue-hover font-medium rounded-lg text-sm px-5 py-2.5"><i class="fa-solid fa-plus"></i> Add New</a>
         </div>
 
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
@@ -18,9 +18,9 @@
                 <thead class="text-xs uppercase bg-gray-200">
                     <tr>
                         <th scope="col" class="py-3 px-6">No</th>
-                        <th scope="col" class="py-3 px-6">Negara</th>
+                        <th scope="col" class="py-3 px-6">Country</th>
                         <th scope="col" class="py-3 px-6">Code</th>
-                        <th scope="col" class="py-3 px-6">Aksi</th>
+                        <th scope="col" class="py-3 px-6">Action</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">

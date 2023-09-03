@@ -57,7 +57,7 @@
                 let result = []
                 let i = 0
                 while (i < 12) {
-                    let data = moment().month(i).locale('{{ config('app.locale') }}').format('MMMM')
+                    let data = moment().month(i).locale('en').format('MMMM')
                     result.push(data)
                     i++
                 }
@@ -174,31 +174,30 @@
                 })
             })
 
-            /**
-             * Insert
-             */
-            async function insert(arr) {
-                try {
-                    const post = await axios({
-                        method: 'post',
-                        url: '{{ route('dashboard.bank.ibri.agregation.store') }}',
-                        headers: {},
-                        data: {
-                            data: JSON.stringify(arr)
-                        }
-                    })
+            // /**
+            //  * Insert
+            //  */
+            // async function insert(arr) {
+            //     try {
+            //         const post = await axios({
+            //             method: 'post',
+            //             headers: {},
+            //             data: {
+            //                 data: JSON.stringify(arr)
+            //             }
+            //         })
 
-                    const data = post.data
+            //         const data = post.data
 
-                    if (data.code === 200) {
-                        toastr.success(data.message)
-                    } else {
-                        toastr.warning(data.message)
-                    }
-                } catch (error) {
-                    toastr.error(error.message)
-                }
-            }
+            //         if (data.code === 200) {
+            //             toastr.success(data.message)
+            //         } else {
+            //             toastr.warning(data.message)
+            //         }
+            //     } catch (error) {
+            //         toastr.error(error.message)
+            //     }
+            // }
 
         })
     </script>

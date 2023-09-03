@@ -3,9 +3,9 @@
 @section('content')
     <section class="p-5">
         <div class="fle flex-col w-full mb-6">
-            <h1 class="text-3xl font-medium">Negara</h1>
+            <h1 class="text-3xl font-medium">Country</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Master Data, Create</span>
+                <span>Country Data, Create</span>
             </div>
         </div>
 
@@ -14,14 +14,14 @@
               
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">Nama</label>
-                    <input id="npf" type="text" name="name" value="" placeholder="Masukkan Nama Negara"
+                    <input id="npf" type="text" name="name" value="" 
                         class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5"
                         required>
                     <span id="npfMsg" class="hidden mt-2 text-xs text-red-500"></span>
                 </div>
                 <div class="mb-5">
                     <label class="block mb-2 text-sm font-normal">Code</label>
-                    <input id="car" type="text" name="code" value="" placeholder="Masukkan Code Negara"
+                    <input id="car" type="text" name="code" value="" 
                         class="bg-gray-50 border border-gray-300 text-sm rounded-xl focus:ring-ds-gray focus:border-ds-gray block w-full p-2.5"
                         required>
                     <span id="carMsg" class="hidden mt-2 text-xs text-red-500"></span>

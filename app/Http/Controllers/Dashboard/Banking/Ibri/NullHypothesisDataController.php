@@ -24,7 +24,7 @@ class NullHypothesisDataController extends Controller
         if (!$this->country) {
             return abort(500, 'Something went wrong');
         }
-        $this->indexService = new IndexServiceController($this->country->code);
+        $this->indexService = new IndexServiceController($this->country->id);
     }
     
     /**
@@ -115,14 +115,14 @@ class NullHypothesisDataController extends Controller
      * @param  \App\Models\NullHypothesisData  $nullHypothesisData
      * @return \Illuminate\Http\Response
      */
-    public function edit($grupId, $dataId)
+    public function edit($code, $grupId = null, $dataId = null)
     {
         $nullHypothesis = NullHypothesisData::where('group_id', $grupId)->get()->toArray();
-
+        
         $data = array();
         $getNull1 = explode(" ", $nullHypothesis[0]['null_hypothesis']);
         $getNull2 = explode(" ", $nullHypothesis[1]['null_hypothesis']);
-
+        
         /* Get Null Hypothesis 1 */
         $data['nullId1'] = $nullHypothesis[0]['id'];
         $data['nullA_1'] = $getNull1[0];
@@ -130,16 +130,16 @@ class NullHypothesisDataController extends Controller
         $data['obs'] = $nullHypothesis[0]['obs'];
         $data['fStatic1'] = $nullHypothesis[0]['fStatic'];
         $data['prob1'] = $nullHypothesis[0]['prob'];
-
+        
         /* Get Null Hypothesis 2 */
         $data['nullId2'] = $nullHypothesis[1]['id'];
         $data['nullB_1'] = $getNull2[0];
         $data['nullB_2'] = $getNull2[5];
         $data['fStatic2'] = $nullHypothesis[1]['fStatic'];
         $data['prob2'] = $nullHypothesis[1]['prob'];
-
+        
         $var = VariableMaster::all();
-        return view('dashboard.bank.ibri.nullhypothesisdata.edit', compact('nullHypothesis','var', 'data', 'grupId', 'dataId'));
+        return view('dashboard.bank.ibri.nullhypothesisdata.edit', compact('nullHypothesis','var', 'data', 'grupId', 'dataId', 'code'));
     }
 
     /**

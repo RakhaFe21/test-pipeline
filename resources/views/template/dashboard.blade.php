@@ -170,7 +170,7 @@
                                     <img class="p-1 rounded-full" src="{{ asset('img/icon-variable.png') }}"
                                         alt="">
                                 </div>
-                                <span class="flex-1 ml-3 text-left whitespace-nowrap">Negara</span>
+                                <span class="flex-1 ml-3 text-left whitespace-nowrap">Country</span>
                             </a>
                         </li>
                         <li>

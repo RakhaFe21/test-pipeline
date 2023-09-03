@@ -57,7 +57,7 @@
                 let result = []
                 let i = 0
                 while (i < 12) {
-                    let data = moment().month(i).locale('{{ config('app.locale') }}').format('MMMM')
+                    let data = moment().month(i).locale('en').format('MMMM')
                     result.push(data)
                     i++
                 }

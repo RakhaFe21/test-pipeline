@@ -41,14 +41,14 @@
                     @foreach ($years as $key => $year)
                     <tr>  
                         <td class="py-4 px-6">{{$year[0]->tahun}}</td>  
-                        <td class="py-4 px-6 {{ $min_gpd == $stdevs[0][$i] ? 'text-ds-red font-bold' : ''}}">{{round($stdevs[0][$i], 3)}}</td>  
-                        <td class="py-4 px-6 ">{{round($means[0][$i], 3)}}</td> 
-                        <td class="py-4 px-6 {{ $min_inf == $stdevs[1][$i] ? 'text-ds-red font-bold' : '' }}">{{round($stdevs[1][$i], 3)}}</td>  
-                        <td class="py-4 px-6 ">{{round($means[1][$i], 3)}}</td>
-                        <td class="py-4 px-6 {{ $min_er == $stdevs[2][$i] ? 'text-ds-red font-bold' : '' }}">{{round($stdevs[2][$i], 3)}}</td>  
-                        <td class="py-4 px-6 ">{{round($means[2][$i], 3)}}</td>
-                        <td class="py-4 px-6 {{ $min_jii == $stdevs[3][$i] ? 'text-ds-red font-bold' : '' }}">{{round($stdevs[3][$i], 3)}}</td>  
-                        <td class="py-4 px-6 ">{{round($means[3][$i], 3)}}</td>    
+                        <td class="py-4 px-6 {{ $min_gpd == $stdevs[0][$i] ? 'text-ds-red font-bold' : ''}}">{{number_format($stdevs[0][$i], 3)}}</td>  
+                        <td class="py-4 px-6 ">{{number_format($means[0][$i], 3)}}</td> 
+                        <td class="py-4 px-6 {{ $min_inf == $stdevs[1][$i] ? 'text-ds-red font-bold' : '' }}">{{number_format($stdevs[1][$i], 3)}}</td>  
+                        <td class="py-4 px-6 ">{{number_format($means[1][$i], 3)}}</td>
+                        <td class="py-4 px-6 {{ $min_er == $stdevs[2][$i] ? 'text-ds-red font-bold' : '' }}">{{number_format($stdevs[2][$i], 3)}}</td>  
+                        <td class="py-4 px-6 ">{{number_format($means[2][$i], 3)}}</td>
+                        <td class="py-4 px-6 {{ $min_jii == $stdevs[3][$i] ? 'text-ds-red font-bold' : '' }}">{{number_format($stdevs[3][$i], 3)}}</td>  
+                        <td class="py-4 px-6 ">{{number_format($means[3][$i], 3)}}</td>    
                     </tr>
                     @php $i++ @endphp
                     @endforeach

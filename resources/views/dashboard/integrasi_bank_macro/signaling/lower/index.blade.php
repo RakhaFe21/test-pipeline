@@ -132,7 +132,7 @@
                 const date = new Date()
                 date.setMonth(month - 1)
 
-                return date.toLocaleString('{{ config('app.locale') }}', {
+                return date.toLocaleString('en', {
                     month: 'long',
                 })
             }

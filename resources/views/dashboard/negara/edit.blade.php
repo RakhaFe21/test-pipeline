@@ -3,9 +3,9 @@
 @section('content')
     <section class="p-5">
         <div class="fle flex-col w-full mb-6">
-            <h1 class="text-3xl font-medium">Negara</h1>
+            <h1 class="text-3xl font-medium">Country</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Negara Master, Edit Negara</span>
+                <span>Country Master, Edit Country</span>
             </div>
         </div>
 
