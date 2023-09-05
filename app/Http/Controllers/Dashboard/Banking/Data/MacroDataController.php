@@ -22,7 +22,11 @@ class MacroDataController extends Controller
         if (!$this->country) {
             return abort(500, 'Something went wrong');
         }
-        $this->indexService = new IndexBServiceController($this->country->code);
+        try {
+            $this->indexService = new IndexBServiceController($this->country->code);
+        } catch (\Throwable $th) {
+            return abort(500, 'Something went wrong');
+        }
     }
     
     public function index(Request $request)

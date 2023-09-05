@@ -23,7 +23,11 @@ class BankAgregationController extends Controller
         if (!$this->country) {
             return abort(500, 'Something went wrong');
         }
-        $this->indexService = new IndexServiceController($this->country->id);
+        try {
+            $this->indexService = new IndexServiceController($this->country->id);
+        } catch (\Throwable $th) {
+            return abort(500, 'Something went wrong');
+        }
     }
 
     public function index(Request $request)

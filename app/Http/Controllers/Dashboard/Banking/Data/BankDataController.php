@@ -21,12 +21,17 @@ class BankDataController extends Controller
         if (!$this->country) {
             return abort(500, 'Something went wrong');
         }
-        $this->indexService = new IndexServiceController($this->country->id);
+        try {
+            $this->indexService = new IndexServiceController($this->country->id);
+        } catch (\Throwable $th) {
+            return abort(500, 'Something went wrong');
+        }
     }
     
     public function index(Request $request)
     {
         $tahun = VariableData::select('tahun', 'negara_masters_id')
+            ->whereIn('variable_masters_id', [1, 2, 3, 4])
             ->where('negara_masters_id', $this->country->id)
             ->groupBy('tahun')
             ->get();
@@ -34,12 +39,14 @@ class BankDataController extends Controller
         $year = $request->year ?? $tahun[0]->tahun ?? '';
 
         $bulan = VariableData::select('bulan', 'negara_masters_id')
+            ->whereIn('variable_masters_id', [1, 2, 3, 4])
             ->where('negara_masters_id', $this->country->id)
             ->where('tahun', '=', $year)
             ->groupBy('bulan')
             ->get();
 
         $data = VariableData::where('tahun', '=', $year)
+            ->whereIn('variable_masters_id', [1, 2, 3, 4])
             ->where('negara_masters_id', $this->country->id)
             ->orderBy('tahun', 'asc')
             ->orderBy('bulan', 'asc')
@@ -57,12 +64,14 @@ class BankDataController extends Controller
             }
 
             $bulan = VariableData::select('bulan')
+                ->whereIn('variable_masters_id', [1, 2, 3, 4])
                 ->where('tahun', '=', $request->year)
                 ->where('negara_masters_id', $this->country->id)                
                 ->groupBy('bulan')
                 ->get();
 
             $data = VariableData::where('tahun', '=', $request->year)
+            ->whereIn('variable_masters_id', [1, 2, 3, 4])
             ->where('negara_masters_id', $this->country->id)
                 ->orderBy('tahun', 'asc')
                 ->orderBy('bulan', 'asc')
