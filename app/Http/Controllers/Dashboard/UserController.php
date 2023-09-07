@@ -79,7 +79,6 @@ class UserController extends Controller
             'email'     => 'required|email',
             'role'      => 'required|int',
             'address' => 'required|string',
-            'image'     => 'required'
         ]);
 
         if ($validator->fails()) {

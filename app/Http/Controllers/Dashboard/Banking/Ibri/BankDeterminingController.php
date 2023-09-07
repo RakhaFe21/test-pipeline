@@ -22,66 +22,74 @@ class BankDeterminingController extends Controller
         if (!$this->country) {
             return abort(500, 'Something went wrong');
         }
-        $this->indexService = new IndexServiceController($this->country->id);
+        try {
+            $this->indexService = new IndexServiceController($this->country->id);
+        } catch (\Throwable $th) {
+            return abort(500, 'Something went wrong');
+        }
     }
 
     public function index()
     {
-        $this->indexService->transform_to_index();
-        $tahuns = VariableData::select('tahun')
-            ->groupBy('tahun')
-            ->where('negara_masters_id', $this->country->id)
-            ->get();
-            $data = [];
-            $add_on = [];
-        if (!$tahuns->isEmpty()) {
-            collect($data);
-            $vars = $this->indexService->get_vars();
-            $i = 0;
-            foreach ($tahuns as $tahunKey => $tahun) {
-                $data[$tahunKey]['tahun'] = $tahun->tahun;
-                $data[$tahunKey]['NPF'] = number_format($vars['NPF'][$i], 3);
-                $data[$tahunKey]['CAR'] = number_format($vars['CAR'][$i], 3);
-                $data[$tahunKey]['IPR'] = number_format($vars['IPR'][$i], 3);
-                $data[$tahunKey]['FDR'] = number_format($vars['FDR'][$i], 3);
-                $i++;
+        try {
+            $this->indexService->transform_to_index();
+            $tahuns = VariableData::select('tahun')
+                ->groupBy('tahun')
+                ->where('negara_masters_id', $this->country->id)
+                ->get();
+                $data = [];
+                $add_on = [];
+            if (!$tahuns->isEmpty()) {
+                collect($data);
+                $vars = $this->indexService->get_vars();
+                $i = 0;
+                foreach ($tahuns as $tahunKey => $tahun) {
+                    $data[$tahunKey]['tahun'] = $tahun->tahun;
+                    $data[$tahunKey]['NPF'] = number_format($vars['NPF'][$i], 3);
+                    $data[$tahunKey]['CAR'] = number_format($vars['CAR'][$i], 3);
+                    $data[$tahunKey]['IPR'] = number_format($vars['IPR'][$i], 3);
+                    $data[$tahunKey]['FDR'] = number_format($vars['FDR'][$i], 3);
+                    $i++;
+                }
+        
+                $add_on['Average']['npf'] = number_format($vars['average_npf'], 3);
+                $add_on['Average']['car'] = number_format($vars['average_car'], 3);
+                $add_on['Average']['ipr'] = number_format($vars['average_ipr'], 3);
+                $add_on['Average']['fdr'] = number_format($vars['average_fdr'], 3);
+                $add_on['Average']['total'] = array_sum([
+                    $add_on['Average']['npf'],
+                    $add_on['Average']['car'],
+                    $add_on['Average']['ipr'],
+                    $add_on['Average']['fdr']
+                ]);
+        
+                $add_on['Average']['npf'] = number_format($vars['average_npf'], 3);
+                $add_on['Average']['car'] = number_format($vars['average_car'], 3);
+                $add_on['Average']['ipr'] = number_format($vars['average_ipr'], 3);
+                $add_on['Average']['fdr'] = number_format($vars['average_fdr'], 3);
+                $add_on['Average']['total'] = array_sum([
+                    $add_on['Average']['npf'],
+                    $add_on['Average']['car'],
+                    $add_on['Average']['ipr'],
+                    $add_on['Average']['fdr']
+                ]);
+        
+                $add_on['Weight']['npf'] = number_format( $add_on['Average']['npf']/ $add_on['Average']['total'], 3);
+                $add_on['Weight']['car'] = number_format( $add_on['Average']['car']/  $add_on['Average']['total'], 3);
+                $add_on['Weight']['ipr'] = number_format( $add_on['Average']['ipr']/  $add_on['Average']['total'], 3);
+                $add_on['Weight']['fdr'] = number_format( $add_on['Average']['fdr']/  $add_on['Average']['total'], 3);
+                $add_on['Weight']['total'] = array_sum([
+                    $add_on['Weight']['npf'],
+                    $add_on['Weight']['car'],
+                    $add_on['Weight']['ipr'],
+                    $add_on['Weight']['fdr']
+                ]);    
             }
-    
-            $add_on['Average']['npf'] = number_format($vars['average_npf'], 3);
-            $add_on['Average']['car'] = number_format($vars['average_car'], 3);
-            $add_on['Average']['ipr'] = number_format($vars['average_ipr'], 3);
-            $add_on['Average']['fdr'] = number_format($vars['average_fdr'], 3);
-            $add_on['Average']['total'] = array_sum([
-                $add_on['Average']['npf'],
-                $add_on['Average']['car'],
-                $add_on['Average']['ipr'],
-                $add_on['Average']['fdr']
-            ]);
-    
-            $add_on['Average']['npf'] = number_format($vars['average_npf'], 3);
-            $add_on['Average']['car'] = number_format($vars['average_car'], 3);
-            $add_on['Average']['ipr'] = number_format($vars['average_ipr'], 3);
-            $add_on['Average']['fdr'] = number_format($vars['average_fdr'], 3);
-            $add_on['Average']['total'] = array_sum([
-                $add_on['Average']['npf'],
-                $add_on['Average']['car'],
-                $add_on['Average']['ipr'],
-                $add_on['Average']['fdr']
-            ]);
-    
-            $add_on['Weight']['npf'] = number_format( $add_on['Average']['npf']/ $add_on['Average']['total'], 3);
-            $add_on['Weight']['car'] = number_format( $add_on['Average']['car']/  $add_on['Average']['total'], 3);
-            $add_on['Weight']['ipr'] = number_format( $add_on['Average']['ipr']/  $add_on['Average']['total'], 3);
-            $add_on['Weight']['fdr'] = number_format( $add_on['Average']['fdr']/  $add_on['Average']['total'], 3);
-            $add_on['Weight']['total'] = array_sum([
-                $add_on['Weight']['npf'],
-                $add_on['Weight']['car'],
-                $add_on['Weight']['ipr'],
-                $add_on['Weight']['fdr']
-            ]);    
+            // dd($add_on);
+            return view('dashboard.bank.ibri.determining.index', compact('data', 'add_on'));
+        } catch (\Throwable $th) {
+            return abort(500, 'Something went wrong');
         }
-        // dd($add_on);
-        return view('dashboard.bank.ibri.determining.index', compact('data', 'add_on'));
     }
 
     public function store(Request $request)

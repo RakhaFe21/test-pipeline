@@ -796,7 +796,7 @@
                         data: {}
                     })
 
-                    window.location = '{{ route('dashboard.home', ['code'  => \Route::current()->parameter('code')]) }}'
+                    window.location = '{{ route('dashboard.home', ['code'  => \Route::current()->parameter('code'), 'locale'  => \Route::current()->parameter('locale') ?? 'id']) }}'
 
                 } catch (error) {
                     toastr.error(error.message)
