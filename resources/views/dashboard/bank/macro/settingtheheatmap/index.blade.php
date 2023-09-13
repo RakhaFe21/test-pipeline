@@ -5,7 +5,7 @@
         <div class="fle flex-col w-full mb-6">
             <h1 class="text-3xl font-medium">Setting The Heatmap</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Banking, Step Macro, Setting The Heatmap</span>
+                <span>Macro, Data, Setting The Heatmap</span>
             </div>
         </div>
 

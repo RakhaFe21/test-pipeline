@@ -5,7 +5,7 @@
         <div class="fle flex-col w-full mb-6">
             <h1 class="text-3xl font-medium">Transforming into Index</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Banking, Step Macro, Transforming into Index</span>
+                <span>Macro, Data, Transforming into Index</span>
             </div>
         </div>
 

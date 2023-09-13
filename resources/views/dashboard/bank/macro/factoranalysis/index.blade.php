@@ -5,7 +5,7 @@
         <div class="fle flex-col w-full mb-6">
             <h1 class="text-3xl font-medium">Factor Analysis-AHP</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Banking, Step Macro, Factor Analysis-AHP</span>
+                <span>Macro, Data, Factor Analysis-AHP</span>
             </div>
         </div>
 

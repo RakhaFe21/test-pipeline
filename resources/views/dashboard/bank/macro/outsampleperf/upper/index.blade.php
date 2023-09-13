@@ -5,7 +5,7 @@
         <div class="fle flex-col w-full mb-6">
             <h1 class="text-3xl font-medium">Upper Threshold</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Banking, Step Macro, Out Sample Performance, Upper Threshold</span>
+                <span>Macro, Data, Out Sample Performance, Upper Threshold</span>
             </div>
         </div>
 

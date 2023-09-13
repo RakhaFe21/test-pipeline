@@ -5,7 +5,7 @@
         <div class="fle flex-col w-full mb-6">
             <h1 class="text-3xl font-medium">Setting Treshold</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Banking, Step Macro, Setting Treshold</span>
+                <span>Macro, Data, Setting Treshold</span>
             </div>
         </div>
 
