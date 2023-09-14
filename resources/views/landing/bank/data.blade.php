@@ -98,10 +98,10 @@
                         </tr>
                         <tr class="bg-ld-green/10 rounded-lg">
                             <td class="py-2">${data[0]}</td>
-                            <td class="py-2">${data[1]}</td>
-                            <td class="py-2">${data[2]}</td>
+                            <td class="py-2">${(data[1]).toFixed(2)}</td>
+                            <td class="py-2">${(data[2]).toFixed(2)}</td>
                             <td class="py-2">${(data[3]).toFixed(2)}</td>
-                            <td class="py-2">${data[4]}</td>
+                            <td class="py-2">${(data[4]).toFixed(2)}</td>
                         </tr>
                     `)
                 })

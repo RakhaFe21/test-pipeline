@@ -24,6 +24,7 @@ class DataMacroController extends Controller
 
         $bulan = VariableData::select('bulan')
             ->where('tahun', '=', $year)
+            ->where('bulan', '<=', 12)
             ->groupBy('bulan')
             ->get();
 

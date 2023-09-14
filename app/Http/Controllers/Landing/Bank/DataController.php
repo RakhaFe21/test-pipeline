@@ -25,6 +25,7 @@ class DataController extends Controller
 
         $bulan = VariableData::select('bulan')
             ->where('tahun', '=', $year)
+            ->where('bulan', '<=', 12)
             ->groupBy('bulan')
             ->get();
 

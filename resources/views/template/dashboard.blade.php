@@ -791,7 +791,7 @@
                 try {
                     const post = await axios({
                         method: 'post',
-                        url: '{{ route('logout') }}',
+                        url: '{{ route('logout', ['locale' => ( \Route::current()->parameter('locale') ?? 'id') ]) }}',
                         headers: {},
                         data: {}
                     })
