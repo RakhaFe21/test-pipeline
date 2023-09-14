@@ -5,7 +5,7 @@
         <div class="fle flex-col w-full mb-6">
             <h1 class="text-3xl font-medium">Determining Weight</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Banking, Step Macro, Determining Weight</span>
+                <span>Macro, Data, Determining Weight</span>
             </div>
         </div>
 

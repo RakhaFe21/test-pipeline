@@ -5,7 +5,7 @@
         <div class="fle flex-col w-full mb-6">
             <h1 class="text-3xl font-medium">Theoritical Framework</h1>
             <div class="flex flex-row gap-2 mt-1">
-                <span>Banking, Step Macro, Theoritical Framework</span>
+                <span>Macro, Data, Theoritical Framework</span>
             </div>
         </div>
 
