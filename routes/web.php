@@ -259,6 +259,7 @@ Route::prefix('{locale}')->group(function() {
     Route::prefix('macro')->group(function () {
         Route::get('variable', [VariableMacroController::class, 'index'])->name('macro.variable');
         Route::get('data', [DataMacroController::class, 'index'])->name('macro.data');
+        Route::post('data', [DataMacroController::class, 'getByYear'])->name('macro.data.getByYear');
         Route::get('theoritical', [TheoriticalMacroController::class, 'index'])->name('macro.theoritical');
         Route::get('theheatmap/{code}', [TheheatmapMacroController::class, 'index'])->name('macro.theheatmap');
         Route::get('visualization/{code}', [VisualizationMacroController::class, 'index'])->name('macro.visualization');

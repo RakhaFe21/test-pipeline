@@ -120,7 +120,7 @@
 
                     const post = await axios({
                         method: 'post',
-                        url: '{{ route('dashboard.bank.macro.data.getByYear', ['locale' =>  \Route::current()->parameter('locale'), 'code' => 'id']) }}',
+                        url: '{{ route('macro.data.getByYear', ['locale' =>  \Route::current()->parameter('locale'), 'code' => 'id']) }}',
                         headers: {},
                         data: {
                             'year': year
