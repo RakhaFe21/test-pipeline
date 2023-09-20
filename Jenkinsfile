@@ -7,7 +7,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout kode sumber dari repositori git
-                git 'https://github.com/RakhaFe21/sip-perbankan.git'
+                git 'https://github.com/RakhaFe21/test-pipeline'
             }
         }
         
